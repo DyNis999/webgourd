@@ -1,0 +1,30 @@
+.profile-container {
+    margin-top: 20px;
+  }
+  
+  .profile-sidebar {
+    margin-bottom: 20px;
+    padding-left: 20px; /* Add some space on the left side */
+  }
+  
+  .profile-card {
+    border: none; /* Remove border */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add soft shadow */
+  }
+  
+  .profile-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 20px;
+  }
+  
+  .profile-details {
+    margin-bottom: 20px;
+    text-align: left; /* Align text to the left */
+    margin-left: 20px; /* Adjust the left margin */
+  }
+  
+  .profile-posts {
+    margin-bottom: 20px;
+  }

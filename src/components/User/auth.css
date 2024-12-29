@@ -1,0 +1,28 @@
+.card-custom {
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.auth-button {
+  display: block;
+  margin: 20px auto;
+  width: 50%; /* Adjust as needed */
+  max-width: 300px; /* Optional: limits max width */
+  background-color: #28a745 !important; /* Green background */
+  color: white; /* White text */
+  border: none; /* Remove border */
+  padding: 10px 20px; /* Add padding */
+  font-size: 16px; /* Adjust font size */
+  border-radius: 5px; /* Rounded corners */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+.auth-button:hover {
+  background-color: #218838 !important; /* Darker green on hover */
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+}
+
+  
+  
