@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Image, Card } from 'react-bootstrap';
 import { getUser } from '../../utils/helpers';
+import UserPost from '../Post/UserPost'; // Import the UserPost component
+import CreatePost from '../Post/CreatePost'; // Import the CreatePost component
 import './Profile.css'; // Assuming you have a CSS file for styling
 
 const Profile = () => {
@@ -46,12 +48,18 @@ const Profile = () => {
               </div>
             </Card.Body>
           </Card>
+          <Card className="profile-card mt-4"> {/* Add shadow to the card */}
+            <Card.Body>
+              <Card.Title>Create Post</Card.Title>
+              <CreatePost /> 
+            </Card.Body>
+          </Card>
         </Col>
         <Col md={8} className="profile-posts">
           <Card className="profile-card"> {/* Add shadow to the card */}
             <Card.Body>
               <Card.Title>Posts</Card.Title>
-              {/* Add content for posts here */}
+              <UserPost />
             </Card.Body>
           </Card>
         </Col>

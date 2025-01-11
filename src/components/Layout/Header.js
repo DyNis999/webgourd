@@ -71,10 +71,23 @@ const Header = () => {
 
                                 <Dropdown.Menu>
                                     {user.isAdmin && ( // Check if user.isAdmin is true
-                                        <Dropdown.Item as={Link} to="/profile">
-                                            Profile
-                                        </Dropdown.Item>
+                                        <Dropdown drop="right">
+                                            <Dropdown.Toggle as="div" className="dropdown-item">
+                                                Admin Options
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item as={Link} to="/createCategory">
+                                                    Create Category
+                                                </Dropdown.Item>
+                                                <Dropdown.Item as={Link} to="/ViewCategory">
+                                                    View Category
+                                                </Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
                                     )}
+                                    <Dropdown.Item as={Link} to="/profile">
+                                        Profile
+                                    </Dropdown.Item>
                                     <Dropdown.Item as={Link} to="/" onClick={logoutHandler} className="text-danger">
                                         Logout
                                     </Dropdown.Item>

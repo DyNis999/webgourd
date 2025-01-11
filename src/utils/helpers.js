@@ -2,8 +2,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const authenticate = (data, next) => {
-    if (window !== 'undefined') {
-        // console.log('authenticate', response)
+    if (typeof window !== 'undefined') {
         sessionStorage.setItem('token', JSON.stringify(data.token));
         sessionStorage.setItem('user', JSON.stringify(data.user));
     }
@@ -11,7 +10,7 @@ export const authenticate = (data, next) => {
 };
 
 export const getToken = () => {
-    if (window !== 'undefined') {
+    if (typeof window !== 'undefined') {
         if (sessionStorage.getItem('token')) {
             return JSON.parse(sessionStorage.getItem('token'));
         } else {
@@ -20,22 +19,28 @@ export const getToken = () => {
     }
 };
 
+export const isAdminUser = () => {
+    const user = getUser();
+    return user && user.role === 'admin';
+};
 
-
-// access user name from session storage
 export const getUser = () => {
-    if (window !== 'undefined') {
-        if (sessionStorage.getItem('user')) {
-            return JSON.parse(sessionStorage.getItem('user'));
+    if (typeof window !== 'undefined') {
+        const user = sessionStorage.getItem('user');
+        if (user) {
+            console.log('Retrieved user from sessionStorage:', JSON.parse(user));
+            return JSON.parse(user);
         } else {
+            console.error('No user found in sessionStorage');
             return false;
         }
     }
+    console.error('window is undefined');
+    return false;
 };
 
-// remove token from session storage
 export const logout = next => {
-    if (window !== 'undefined') {
+    if (typeof window !== 'undefined') {
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('user');
     }
@@ -45,6 +50,7 @@ export const logout = next => {
 export const errMsg = (message = '') => toast.error(message, {
     position: 'bottom-right'
 });
+
 export const successMsg = (message = '') => toast.success(message, {
     position: 'bottom-right'
 });

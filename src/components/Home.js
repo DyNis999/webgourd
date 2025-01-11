@@ -1,4 +1,5 @@
 import React from 'react';
+import Socialmedia from './Post/Socialmedia'; // Adjust the import path as necessary
 
 const Home = () => {
     return (
@@ -7,6 +8,7 @@ const Home = () => {
                 <h1>Welcome to Gourdtify</h1>
                 <p>Navbar with Login button is now implemented!</p>
             </div>
+            <Socialmedia />
         </div>
     );
 };
