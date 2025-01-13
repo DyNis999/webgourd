@@ -14,6 +14,9 @@ import PostCreate from './components/Post/CreatePost';
 import UpdatePost from './components/Post/UpdatePost';
 import Newsfeed from './components/Post/Socialmedia';
 import Userfeed from './components/Post/UserPost';
+import AdminView from './components/Post/Adminview'; 
+import Topcontributor from './components/Layout/Topcontributor';
+import UserManagement from './components/User/AdminUserManagement';
 
 const App = () => {
   return (
@@ -35,7 +38,9 @@ const App = () => {
           <Route path="/updatePost/:postId" element={<UpdatePost />} />
           <Route path="/newsfeed" element={<Newsfeed />} />
           <Route path="/Userfeed" element={<Userfeed />} />
-
+          <Route path="/adminfeed" element={<AdminView />} /> 
+          <Route path="/top-contributor" element={<Topcontributor/>} />
+          <Route path="/UserManagement" element={<UserManagement/>} />
         </Routes>
       </div>
     </Router>

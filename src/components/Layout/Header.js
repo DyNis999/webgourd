@@ -76,6 +76,12 @@ const Header = () => {
                                                 Admin Options
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu>
+                                            <Dropdown.Item as={Link} to="/UserManagement">
+                                                   User Management
+                                                </Dropdown.Item>
+                                            <Dropdown.Item as={Link} to="/adminfeed">
+                                                    Post Management
+                                                </Dropdown.Item>
                                                 <Dropdown.Item as={Link} to="/createCategory">
                                                     Create Category
                                                 </Dropdown.Item>

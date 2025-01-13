@@ -28,10 +28,8 @@ export const getUser = () => {
     if (typeof window !== 'undefined') {
         const user = sessionStorage.getItem('user');
         if (user) {
-            console.log('Retrieved user from sessionStorage:', JSON.parse(user));
             return JSON.parse(user);
         } else {
-            console.error('No user found in sessionStorage');
             return false;
         }
     }
