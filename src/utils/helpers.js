@@ -4,7 +4,9 @@ import 'react-toastify/dist/ReactToastify.css';
 export const authenticate = (data, next) => {
     if (typeof window !== 'undefined') {
         sessionStorage.setItem('token', JSON.stringify(data.token));
-        sessionStorage.setItem('user', JSON.stringify(data.user));
+        // sessionStorage.setItem('user', JSON.stringify(data.user));
+        sessionStorage.setItem('user', JSON.stringify({ userId: data.user._id, ...data.user }));
+
     }
     next();
 };
@@ -28,7 +30,8 @@ export const getUser = () => {
     if (typeof window !== 'undefined') {
         const user = sessionStorage.getItem('user');
         if (user) {
-            return JSON.parse(user);
+            const parsedUser = JSON.parse(user);
+            return { userId: parsedUser.id, ...parsedUser }; // Rename 'id' to 'userId'
         } else {
             return false;
         }
@@ -36,6 +39,7 @@ export const getUser = () => {
     console.error('window is undefined');
     return false;
 };
+
 
 export const logout = next => {
     if (typeof window !== 'undefined') {

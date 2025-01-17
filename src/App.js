@@ -17,6 +17,9 @@ import Userfeed from './components/Post/UserPost';
 import AdminView from './components/Post/Adminview'; 
 import Topcontributor from './components/Layout/Topcontributor';
 import UserManagement from './components/User/AdminUserManagement';
+import ChatScreen from './components/chat/chatapp';
+import Chatbox from './components/chat/Chatbox';
+import GourdChat from './components/chat/GourdChat';
 
 const App = () => {
   return (
@@ -41,6 +44,15 @@ const App = () => {
           <Route path="/adminfeed" element={<AdminView />} /> 
           <Route path="/top-contributor" element={<Topcontributor/>} />
           <Route path="/UserManagement" element={<UserManagement/>} />
+
+          <Route path="/chat" element={<ChatScreen/>} />
+          <Route path="/Gourdchat" element={<GourdChat />} />
+          {/* <Route path="/chatbox" element={<Chatbox/>} /> */}
+          <Route path="/user-chat/:userId/:userName" element={<Chatbox />} />
+          <Route path="/user-chat/:chatId/:userId/:userName" element={<Chatbox />} />
+       
+
+
         </Routes>
       </div>
     </Router>

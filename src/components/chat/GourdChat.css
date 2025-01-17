@@ -1,0 +1,19 @@
+.chat-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 100vh;
+  }
+  
+  .chat-screen-container {
+    flex: 0.4; /* Takes up 40% of the container */
+    padding: 10px;
+    border-right: 2px solid #ddd;
+    overflow-y: auto;
+  }
+  .chatbox-container {
+    flex: 1; /* Takes up 50% of the container */
+    padding: 10px;
+    overflow-y: auto;
+  }
+  
