@@ -16,8 +16,9 @@ const Chatbox = ({ chat }) => {
   const messageListRef = useRef(null); // Ref for the message list
   const [isScrolledUp, setIsScrolledUp] = useState(false); // Track if the user scrolled up
 
+  // Fetch messages from the server
   const fetchMessages = async () => {
-    setLoading(true);
+    // setLoading(true);
     setError(null);
     try {
       const token = sessionStorage.getItem('token');
@@ -33,36 +34,36 @@ const Chatbox = ({ chat }) => {
       );
 
       setMessages(response.data.messages || []);
-      
-      // Mark all fetched messages as read
-      markMessagesAsRead(response.data.messages);
+      markMessagesAsRead(response.data.messages); // Mark all fetched messages as read
     } catch (err) {
       setError(err.message || 'Failed to load messages');
     } finally {
       setLoading(false);
     }
   };
+
+  // Mark messages as read
   const markMessagesAsRead = async (messages) => {
     const token = getToken();
     const senderId = getUser()?.id;
-  
+
     if (!senderId || !token) {
       console.error('Authentication failed');
       return;
     }
-  
+
     try {
-      // Make API request to mark messages as read
-      const messageIds = messages.filter(msg => msg.user !== senderId && !msg.read).map(msg => msg._id);
-  
+      const messageIds = messages
+        .filter((msg) => msg.user !== senderId && !msg.read)
+        .map((msg) => msg._id);
+
       if (messageIds.length > 0) {
         await axios.put(
           'http://localhost:4000/api/v1/chat/messages/read',
-          { messages: messageIds },  // Update the key to 'messages'
+          { messages: messageIds },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        
-        // Update message state to mark messages as read
+
         setMessages((prevMessages) =>
           prevMessages.map((msg) =>
             messageIds.includes(msg._id) ? { ...msg, read: true } : msg
@@ -73,39 +74,59 @@ const Chatbox = ({ chat }) => {
       console.error('Error marking messages as read:', err.message);
     }
   };
-  
+
+  // Fetch messages when receiverId changes
+
+  // useEffect(() => {
+  //   const userId = getUser()?.id;
+  //   if (userId) {
+  //     socket.emit("joinRoom", { userId });
+  //   }
+  // }, []);
 
   useEffect(() => {
     fetchMessages();
   }, [receiverId]);
 
   useEffect(() => {
-    socket.on('receiveMessage', (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-      markMessagesAsRead([message]); // Mark the newly received message as read
-      scrollToBottom(); // Scroll to bottom when a new message is received
-    });
+    if (messageListRef.current) {
+        messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+    }
+}, [messages]);
 
+  // Socket event listener for new messages
+  useEffect(() => {
+
+    let unsubsribe = socket.on('receiveMessage', (message) => {
+      console.log('Received message:', message);
+      // setMessages((prevMessages) => [...prevMessages, message]);
+      fetchMessages();
+      markMessagesAsRead([message]);
+      scrollToBottom(); // Scroll to bottom for new messages
+    });
     return () => {
-      socket.disconnect();
+      unsubsribe = null;
     };
   }, []);
 
+  // Scroll to the bottom of the chat
   const scrollToBottom = () => {
     messageListRef.current?.scrollTo({
       top: messageListRef.current.scrollHeight,
       behavior: 'smooth',
     });
-    setIsScrolledUp(false); // Reset scrolled state
+    setIsScrolledUp(false);
   };
 
+  // Handle user scrolling
   const handleScroll = () => {
     if (messageListRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = messageListRef.current;
-      setIsScrolledUp(scrollTop + clientHeight < scrollHeight - 50); // Check if user scrolled up
+      setIsScrolledUp(scrollTop + clientHeight < scrollHeight - 50);
     }
   };
 
+  // Send a new message
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
 
@@ -113,6 +134,8 @@ const Chatbox = ({ chat }) => {
       _id: new Date().toISOString(),
       sender: { _id: getUser()?.id },
       message: newMessage.trim(),
+      createdAt: new Date(), // Add this
+      timestamp: new Date()
     };
 
     setMessages((prevMessages) => [...prevMessages, tempMessage]);
@@ -136,8 +159,15 @@ const Chatbox = ({ chat }) => {
         { headers: { Authorization: `Bearer ${storedToken}` } }
       );
 
-      socket.emit('sendMessage', { ...response.data.chat, id: response.data.chat.user });
-      markMessagesAsRead([response.data.chat]); // Mark the sent message as read
+      const socketdata = {
+        recipientId: response.data.chat.user,
+        message: response.data.chat.message,
+        senderId: response.data.chat.sender._id,
+      };
+
+      console.log('Message sent:', response.data);
+      socket.emit('sendMessage', socketdata);
+      markMessagesAsRead([response.data.chat]);
     } catch (err) {
       console.error('Error sending message:', err.message);
     }
@@ -168,10 +198,13 @@ const Chatbox = ({ chat }) => {
     setDeleteModalVisible(true);
   };
 
+  // Render a single message
   const renderMessage = (message) => {
     const senderId = message.sender?._id || message.sender?.id;
     const currentUserId = getUser()?.id;
     const isMyMessage = senderId === currentUserId;
+
+    const messageTime = message.timestamp || message.createdAt;
 
     return (
       <div
