@@ -1,0 +1,42 @@
+.admin-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 250px;
+    background-color: #343a40;
+    color: white;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 1050;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(-100%); /* Hidden by default */
+}
+
+.admin-sidebar.show {
+    transform: translateX(0); /* Slide in when visible */
+}
+
+.sidebar-title {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-menu li {
+    margin-bottom: 10px;
+}
+
+.sidebar-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.sidebar-menu a:hover {
+    text-decoration: underline;
+}

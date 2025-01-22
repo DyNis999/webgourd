@@ -1,0 +1,59 @@
+/* Resetting some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Full-screen container */
+.landing-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #a8e6cf, #ffb6b9); /* Soft, nature-inspired gradient */
+}
+
+/* Content Styling */
+.content {
+    text-align: center;
+    color: #fff;
+    max-width: 800px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent dark background */
+    border-radius: 10px;
+}
+
+/* Main Title Styling */
+.main-title {
+    font-size: 3.5em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+/* Subtitle Styling */
+.sub-title {
+    font-size: 1.5em;
+    margin-bottom: 30px;
+    color: #fff;
+    opacity: 0.9;
+}
+
+/* Call-to-Action Button */
+.cta-button {
+    background-color: #ff9f00; /* Vibrant yellow/orange */
+    color: white;
+    font-size: 1.2em;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #ff7b00; /* Darker shade on hover */
+}

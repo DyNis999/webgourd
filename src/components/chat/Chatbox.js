@@ -11,6 +11,8 @@ const Chatbox = ({ chat }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [newMessage, setNewMessage] = useState('');
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [messageToDelete, setMessageToDelete] = useState(null);
   const messageListRef = useRef(null); // Ref for the message list
   const [isScrolledUp, setIsScrolledUp] = useState(false); // Track if the user scrolled up
 
@@ -141,6 +143,31 @@ const Chatbox = ({ chat }) => {
     }
   };
 
+  const deleteMessage = async (messageId) => {
+    try {
+      const storedToken = sessionStorage.getItem('token');
+      if (!storedToken) throw new Error('Authentication failed');
+
+      const response = await axios.delete(`http://localhost:4000/api/v1/chat/${messageId}`, {
+        headers: { Authorization: `Bearer ${storedToken}` },
+      });
+
+      if (response.data.success) {
+        setMessages((prevMessages) =>
+          prevMessages.filter((chat) => chat._id !== messageId)
+        );
+        setDeleteModalVisible(false); // Close modal after deletion
+      }
+    } catch (err) {
+      console.error('Error deleting message:', err.message);
+    }
+  };
+
+  const handleEllipsisClick = (messageId) => {
+    setMessageToDelete(messageId);
+    setDeleteModalVisible(true);
+  };
+
   const renderMessage = (message) => {
     const senderId = message.sender?._id || message.sender?.id;
     const currentUserId = getUser()?.id;
@@ -161,6 +188,14 @@ const Chatbox = ({ chat }) => {
         <div className={`message-container ${isMyMessage ? 'my-message' : 'other-message'}`}>
           <p className="message-text">{message.message}</p>
           <p className="timestamp">{new Date(message.createdAt).toLocaleTimeString()}</p>
+          {isMyMessage && ( // Conditionally render the ellipsis button
+          <button
+            className="ellipsis-button"
+            onClick={() => handleEllipsisClick(message._id)}
+          >
+            •••
+          </button>
+        )}
         </div>
       </div>
     );
@@ -168,38 +203,56 @@ const Chatbox = ({ chat }) => {
 
   return (
     <div className="chatbox-container">
-      {loading ? (
-        <div>Loading...</div>
-      ) : error ? (
-        <div>{error}</div>
-      ) : (
-        <div
-          className="message-list"
-          ref={messageListRef}
-          onScroll={handleScroll}
-        >
-          {messages.map((message) => renderMessage(message))}
-        </div>
-      )}
-
-      {isScrolledUp && (
-        <button className="scroll-to-bottom" onClick={scrollToBottom}>
-          ⬇
-        </button>
-      )}
-
-      <div className="input-container">
-        <input
-          type="text"
-          className="text-input"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Type your message..."
-        />
-        <button className="send-button" onClick={sendMessage}>Send</button>
+    {loading ? (
+      <div>Loading...</div>
+    ) : error ? (
+      <div>{error}</div>
+    ) : (
+      <div
+        className="message-list"
+        ref={messageListRef}
+        onScroll={handleScroll}
+      >
+        {messages.map((message) => renderMessage(message))}
       </div>
+    )}
+
+    {isScrolledUp && (
+      <button className="scroll-to-bottom" onClick={scrollToBottom}>
+        ⬇
+      </button>
+    )}
+
+    <div className="input-container">
+      <input
+        type="text"
+        className="text-input"
+        value={newMessage}
+        onChange={(e) => setNewMessage(e.target.value)}
+        placeholder="Type your message..."
+      />
+      <button className="send-button" onClick={sendMessage}>Send</button>
     </div>
-  );
+
+    {deleteModalVisible && (
+      <div className="delete-modal">
+        <p>Are you sure you want to delete this message?</p>
+        <button
+          className="confirm-delete"
+          onClick={() => deleteMessage(messageToDelete)}
+        >
+          Yes
+        </button>
+        <button
+          className="cancel-delete"
+          onClick={() => setDeleteModalVisible(false)}
+        >
+          No
+        </button>
+      </div>
+    )}
+  </div>
+);
 };
 
 export default Chatbox;

@@ -6,7 +6,7 @@ const Home = () => {
         <div>
             <div className="container mt-4">
                 <h1>Welcome to Gourdtify</h1>
-                <p>Navbar with Login button is now implemented!</p>
+                {/* <p>Navbar with Login button is now implemented!</p> */}
             </div>
             <Socialmedia />
         </div>

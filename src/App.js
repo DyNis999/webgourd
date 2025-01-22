@@ -20,6 +20,10 @@ import UserManagement from './components/User/AdminUserManagement';
 import ChatScreen from './components/chat/chatapp';
 import Chatbox from './components/chat/Chatbox';
 import GourdChat from './components/chat/GourdChat';
+import Landing from './components/Layout/Landingpage';
+import GourdType from './components/Monitoring/GourdTypeCreate';
+import GourdVariety from './components/Monitoring/GourdVarietyCreate';
+import MonitoringList from './components/Monitoring/MonitoringTable';
 
 const App = () => {
   return (
@@ -27,7 +31,8 @@ const App = () => {
       <div>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
+        <Route path="/" element={<Landing />} />
+          <Route path="/Home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
@@ -51,8 +56,9 @@ const App = () => {
           <Route path="/user-chat/:userId/:userName" element={<Chatbox />} />
           <Route path="/user-chat/:chatId/:userId/:userName" element={<Chatbox />} />
        
-
-
+          <Route path="/gourdType" element={<GourdType />} />
+          <Route path="/gourdVariety" element={<GourdVariety />} />
+          <Route path="/Monitoring" element={<MonitoringList />} />
         </Routes>
       </div>
     </Router>
