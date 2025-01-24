@@ -222,6 +222,7 @@ const Header = () => {
                                 <>
                                     <Nav.Link as={Link} to="/Gourdchat">Chat</Nav.Link>
                                     <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
+                                    <Nav.Link as={Link} to="/Monitoring">Monitoring</Nav.Link>
                                 </>
                             )}
                             <Nav.Link as={Link} to="/learn">Learn</Nav.Link>

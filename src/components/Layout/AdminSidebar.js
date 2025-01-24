@@ -13,6 +13,9 @@ const AdminSidebar = ({ show }) => {
                 <li><Link to="/ViewCategory">View Category</Link></li>
                 <li><Link to="/gourdType">Gourd Type Management</Link></li>
                 <li><Link to="/gourdVariety">Gourd Variety Management</Link></li>
+                <li><Link to="/Polinatedbymonth">Number Of Pollinated Flowers</Link></li>
+                <li><Link to="/Completedbymonth">Completed Pollination</Link></li>
+                <li><Link to="/Failedbymonth">Failed Pollination</Link></li>
             </ul>
         </div>
     );

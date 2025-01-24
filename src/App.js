@@ -24,6 +24,9 @@ import Landing from './components/Layout/Landingpage';
 import GourdType from './components/Monitoring/GourdTypeCreate';
 import GourdVariety from './components/Monitoring/GourdVarietyCreate';
 import MonitoringList from './components/Monitoring/MonitoringTable';
+import PollinatedBymonth from './components/Dashboards/PollinatedFlowersByMonth';
+import Completed from './components/Dashboards/CompletedpollinationDashboard';
+import Failed from './components/Dashboards/FailedpollinationDashboard';
 
 const App = () => {
   return (
@@ -59,6 +62,10 @@ const App = () => {
           <Route path="/gourdType" element={<GourdType />} />
           <Route path="/gourdVariety" element={<GourdVariety />} />
           <Route path="/Monitoring" element={<MonitoringList />} />
+
+          <Route path="/Polinatedbymonth" element={<PollinatedBymonth />} />
+          <Route path="/Completedbymonth" element={<Completed />} />
+          <Route path="/Failedbymonth" element={<Failed />} />
         </Routes>
       </div>
     </Router>
