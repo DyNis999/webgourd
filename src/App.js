@@ -14,7 +14,7 @@ import PostCreate from './components/Post/CreatePost';
 import UpdatePost from './components/Post/UpdatePost';
 import Newsfeed from './components/Post/Socialmedia';
 import Userfeed from './components/Post/UserPost';
-import AdminView from './components/Post/Adminview'; 
+import AdminView from './components/Post/Adminview';
 import Topcontributor from './components/Layout/Topcontributor';
 import UserManagement from './components/User/AdminUserManagement';
 import ChatScreen from './components/chat/chatapp';
@@ -24,17 +24,19 @@ import Landing from './components/Layout/Landingpage';
 import GourdType from './components/Monitoring/GourdTypeCreate';
 import GourdVariety from './components/Monitoring/GourdVarietyCreate';
 import MonitoringList from './components/Monitoring/MonitoringTable';
-import PollinatedBymonth from './components/Dashboards/PollinatedFlowersByMonth';
-import Completed from './components/Dashboards/CompletedpollinationDashboard';
-import Failed from './components/Dashboards/FailedpollinationDashboard';
-
+import PollinatedBymonth from './components/AdminDashboards/PollinatedFlowersByMonth';
+import Completed from './components/AdminDashboards/CompletedpollinationDashboard';
+import Failed from './components/AdminDashboards/FailedpollinationDashboard';
+import UserPollinatedBymonth from './components/UserDashboards/PollinatedFlowersByMonth';
+import UserCompleted from './components/UserDashboards/CompletedpollinationDashboard';
+import UserFailed from './components/UserDashboards/FailedpollinationDashboard';
 const App = () => {
   return (
     <Router>
       <div>
         <Navbar />
         <Routes>
-        <Route path="/" element={<Landing />} />
+          <Route path="/" element={<Landing />} />
           <Route path="/Home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -49,23 +51,29 @@ const App = () => {
           <Route path="/updatePost/:postId" element={<UpdatePost />} />
           <Route path="/newsfeed" element={<Newsfeed />} />
           <Route path="/Userfeed" element={<Userfeed />} />
-          <Route path="/adminfeed" element={<AdminView />} /> 
-          <Route path="/top-contributor" element={<Topcontributor/>} />
-          <Route path="/UserManagement" element={<UserManagement/>} />
+          <Route path="/adminfeed" element={<AdminView />} />
+          <Route path="/top-contributor" element={<Topcontributor />} />
+          <Route path="/UserManagement" element={<UserManagement />} />
 
-          <Route path="/chat" element={<ChatScreen/>} />
+          <Route path="/chat" element={<ChatScreen />} />
           <Route path="/Gourdchat" element={<GourdChat />} />
           {/* <Route path="/chatbox" element={<Chatbox/>} /> */}
           <Route path="/user-chat/:userId/:userName" element={<Chatbox />} />
           <Route path="/user-chat/:chatId/:userId/:userName" element={<Chatbox />} />
-       
+
           <Route path="/gourdType" element={<GourdType />} />
           <Route path="/gourdVariety" element={<GourdVariety />} />
           <Route path="/Monitoring" element={<MonitoringList />} />
 
+          {/* Admin Dashboard */}
           <Route path="/Polinatedbymonth" element={<PollinatedBymonth />} />
           <Route path="/Completedbymonth" element={<Completed />} />
           <Route path="/Failedbymonth" element={<Failed />} />
+          {/* User Dashboard */}
+          <Route path="/User/Polinatedbymonth" element={<UserPollinatedBymonth />} />
+          <Route path="/User/Completedbymonth" element={<UserCompleted />} />
+          <Route path="/User/Failedbymonth" element={<UserFailed />} />
+
         </Routes>
       </div>
     </Router>

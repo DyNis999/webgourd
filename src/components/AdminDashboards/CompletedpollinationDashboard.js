@@ -11,7 +11,7 @@ const PollinationDashboard = () => {
   useEffect(() => {
     const fetchPollinationData = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/v1/Dashboard/pollination/month');
+        const response = await axios.get('http://localhost:4000/api/v1/Dashboard/Admincompleted/month');
         setPollinationData(response.data);
       } catch (error) {
         console.error('Error fetching pollination data:', error);
@@ -27,17 +27,17 @@ const PollinationDashboard = () => {
 
     // Group data by GourdType and Variety
     pollinationData.forEach((item) => {
-      const { gourdType, variety, month, year, day, totalPollinated } = item;
+      const { gourdType, variety, month, year, day, totalCompleted } = item;
       const key = `${gourdType}-${variety}`;
 
       if (!groupedData[key]) {
         groupedData[key] = [];
       }
 
-      // Add data point for each month and year
+      // Add data point for each day, month, and year
       groupedData[key].push({
         name: `${day}/${month}/${year}`,
-        totalPollinated,
+        totalCompleted,
       });
     });
 
@@ -66,7 +66,7 @@ const PollinationDashboard = () => {
                 <Legend />
                 <Line
                   type="monotone"
-                  dataKey="totalPollinated"
+                  dataKey="totalCompleted"
                   stroke={blue[500]}
                   activeDot={{ r: 8 }}
                 />
@@ -81,7 +81,7 @@ const PollinationDashboard = () => {
   return (
     <Container maxWidth="lg" sx={{ marginTop: 4 }}>
       <Typography variant="h4" sx={{ marginBottom: 4, fontWeight: 'bold', color: purple[700], textAlign: 'center' }}>
-        Pollination Dashboard
+        Completed Pollination Dashboard
       </Typography>
       <Grid container spacing={3}>
         {renderCharts()}

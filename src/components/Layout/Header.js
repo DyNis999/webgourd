@@ -201,12 +201,12 @@ const Header = () => {
             {user?.isAdmin && <AdminSidebar show={showSidebar} />}
             <Navbar bg="dark" variant="dark" expand="lg">
                 <Container>
-                {user?.isAdmin && <div style={{ display: 'flex', flex: 0.5 }}>
+                    {user?.isAdmin && <div style={{ display: 'flex', flex: 0.5 }}>
                         <Button
                             variant="outline-light"
                             onClick={toggleSidebar}
                             className="me-2"
-                            style={{ zIndex: 1100, marginRight: '20px' }} 
+                            style={{ zIndex: 1100, marginRight: '20px' }}
                         >
                             ☰
                         </Button>
@@ -242,6 +242,17 @@ const Header = () => {
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
                                         <Dropdown.Item as={Link} to="/profile">Profile</Dropdown.Item>
+
+                                        {/* My Dashboards Dropdown Toggle */}
+                                        <Dropdown.Item as="button" className="dropdown-toggle" disabled>
+                                            My Dashboards
+                                        </Dropdown.Item>
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item as={Link} to="/User/Polinatedbymonth">Pollinated by Month</Dropdown.Item>
+                                            <Dropdown.Item as={Link} to="/User/Completedbymonth">Completed by Month</Dropdown.Item>
+                                            <Dropdown.Item as={Link} to="/User/Failedbymonth">Failed by Month</Dropdown.Item>
+                                        </Dropdown.Menu>
+
                                         <Dropdown.Item as={Link} to="/" onClick={logoutHandler} className="text-danger">
                                             Logout
                                         </Dropdown.Item>
@@ -253,6 +264,7 @@ const Header = () => {
                                 </Button>
                             )}
                         </Nav>
+
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
