@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
+import AdminSidebar from '../Layout/AdminSidebar';
 
 const AdminView = () => {
     const [posts, setPosts] = useState([]);
@@ -38,6 +39,7 @@ const AdminView = () => {
     };
 
     return (
+        <AdminSidebar>
         <div className="container mt-4">
             <h1>Admin View</h1>
             <Table striped bordered hover>
@@ -75,6 +77,7 @@ const AdminView = () => {
                 </tbody>
             </Table>
         </div>
+        </AdminSidebar>
     );
 };
 

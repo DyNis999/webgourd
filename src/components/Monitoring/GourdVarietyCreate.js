@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
+import { Table, Button, Modal, Form, Alert } from 'react-bootstrap';
 import { FaTrash, FaPen, FaPlus } from 'react-icons/fa';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import AdminSidebar from '../Layout/AdminSidebar';
 
 const VarietyList = () => {
     const [varieties, setVarieties] = useState([]);
     const [gourdTypes, setGourdTypes] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [createModalVisible, setCreateModalVisible] = useState(false);
@@ -32,8 +32,6 @@ const VarietyList = () => {
                 setGourdTypes(gourdTypesResponse.data);
             } catch (err) {
                 setError('Error fetching data.');
-            } finally {
-                setLoading(false);
             }
         };
 
@@ -106,10 +104,10 @@ const VarietyList = () => {
         }
     };
 
-    if (loading) return <Spinner animation="border" variant="primary" />;
     if (error) return <Alert variant="danger">{error}</Alert>;
 
     return (
+        <AdminSidebar>
         <div className="container mt-4">
             <h2>Variety List</h2>
             <Button variant="success" onClick={() => setCreateModalVisible(true)}>
@@ -241,6 +239,7 @@ const VarietyList = () => {
                 </Modal.Footer>
             </Modal>
         </div>
+        </AdminSidebar>
     );
 };
 

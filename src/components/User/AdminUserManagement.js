@@ -3,6 +3,7 @@ import { Table, Button, Alert } from 'react-bootstrap';
 import { FaTrash, FaPen } from 'react-icons/fa';
 import axios from 'axios';
 import { toast } from 'react-toastify'; // Add this for toast notifications
+import AdminSidebar from '../Layout/AdminSidebar';
 
 const UserManagement = () => {
     const [users, setUsers] = useState([]);
@@ -105,44 +106,46 @@ const UserManagement = () => {
     };
 
     return (
-        <div className="container">
-            <h2>User Management</h2>
-            {error && <Alert variant="danger">{error}</Alert>}
-            <Table striped bordered hover responsive>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.map((user) => (
-                        <tr key={user._id}>
-                            <td>{user.name}</td>
-                            <td>{user.email}</td>
-                            <td>{user.isAdmin ? 'Admin' : 'User'}</td>
-                            <td>
-                                <Button
-                                    variant={user.isAdmin ? 'warning' : 'success'}
-                                    onClick={() => handleToggleAdmin(user._id, user.isAdmin)}
-                                >
-                                    {user.isAdmin ? "Revoke Admin" : "Make Admin"}
-                                </Button>
-                                <Button
-                                    variant="danger"
-                                    onClick={() => handleDeleteUser(user._id)}
-                                    className="ms-2"
-                                >
-                                    <FaTrash /> Delete
-                                </Button>
-                            </td>
+        <AdminSidebar>
+            <div className="container">
+                <h2>User Management</h2>
+                {error && <Alert variant="danger">{error}</Alert>}
+                <Table striped bordered hover responsive>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </Table>
-        </div>
+                    </thead>
+                    <tbody>
+                        {users.map((user) => (
+                            <tr key={user._id}>
+                                <td>{user.name}</td>
+                                <td>{user.email}</td>
+                                <td>{user.isAdmin ? 'Admin' : 'User'}</td>
+                                <td>
+                                    <Button
+                                        variant={user.isAdmin ? 'warning' : 'success'}
+                                        onClick={() => handleToggleAdmin(user._id, user.isAdmin)}
+                                    >
+                                        {user.isAdmin ? "Revoke Admin" : "Make Admin"}
+                                    </Button>
+                                    <Button
+                                        variant="danger"
+                                        onClick={() => handleDeleteUser(user._id)}
+                                        className="ms-2"
+                                    >
+                                        <FaTrash /> Delete
+                                    </Button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            </div>
+        </AdminSidebar>
     );
 };
 

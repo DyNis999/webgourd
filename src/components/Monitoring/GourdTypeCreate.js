@@ -3,10 +3,10 @@ import { Table, Button, Modal, Form, Alert } from 'react-bootstrap';
 import { FaTrash, FaPen, FaPlus } from 'react-icons/fa';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import AdminSidebar from '../Layout/AdminSidebar';
 
 const GourdTypeList = () => {
     const [gourdTypes, setGourdTypes] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [createModalVisible, setCreateModalVisible] = useState(false);
@@ -24,8 +24,6 @@ const GourdTypeList = () => {
                 setGourdTypes(response.data);
             } catch (err) {
                 setError('Error fetching gourd types');
-            } finally {
-                setLoading(false);
             }
         };
         fetchData();
@@ -90,109 +88,109 @@ const GourdTypeList = () => {
         }
     };
 
-    if (loading) return <div>Loading...</div>;
     if (error) return <Alert variant="danger">{error}</Alert>;
 
     return (
-        <div className="container mt-4">
-            <h2 className="mb-4">Gourd Type Management</h2>
-            <Button variant="success" onClick={() => setCreateModalVisible(true)}>
-                <FaPlus /> Add Gourd Type
-            </Button>
-            <Table striped bordered hover className="mt-3">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {gourdTypes.map((type) => (
-                        <tr key={type._id}>
-                            <td>{type.name}</td>
-                            <td>{type.description}</td>
-                            <td>
-                                <Button
-                                    variant="primary"
-                                    className="me-2"
-                                    onClick={() => openEditModal(type)}
-                                >
-                                    <FaPen />
-                                </Button>
-                                <Button
-                                    variant="danger"
-                                    onClick={() => deleteGourdType(type._id)}
-                                >
-                                    <FaTrash />
-                                </Button>
-                            </td>
+        <AdminSidebar>
+            <div className="container mt-4">
+                <h2 className="mb-4">Gourd Type Management</h2>
+                <Button variant="success" onClick={() => setCreateModalVisible(true)}>
+                    <FaPlus /> Add Gourd Type
+                </Button>
+                <Table striped bordered hover className="mt-3">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </Table>
+                    </thead>
+                    <tbody>
+                        {gourdTypes.map((type) => (
+                            <tr key={type._id}>
+                                <td>{type.name}</td>
+                                <td>{type.description}</td>
+                                <td>
+                                    <Button
+                                        variant="primary"
+                                        className="me-2"
+                                        onClick={() => openEditModal(type)}
+                                    >
+                                        <FaPen />
+                                    </Button>
+                                    <Button
+                                        variant="danger"
+                                        onClick={() => deleteGourdType(type._id)}
+                                    >
+                                        <FaTrash />
+                                    </Button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
 
-            {/* Edit Modal */}
-            <Modal show={modalVisible} onHide={() => setModalVisible(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Edit Gourd Type</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={gourdTypeName}
-                                onChange={(e) => setGourdTypeName(e.target.value)}
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={gourdTypeDescription}
-                                onChange={(e) => setGourdTypeDescription(e.target.value)}
-                            />
-                        </Form.Group>
-                        <Button variant="primary" onClick={updateGourdType}>
-                            Save Changes
-                        </Button>
-                    </Form>
-                </Modal.Body>
-            </Modal>
+                {/* Edit Modal */}
+                <Modal show={modalVisible} onHide={() => setModalVisible(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Edit Gourd Type</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    value={gourdTypeName}
+                                    onChange={(e) => setGourdTypeName(e.target.value)}
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    value={gourdTypeDescription}
+                                    onChange={(e) => setGourdTypeDescription(e.target.value)}
+                                />
+                            </Form.Group>
+                            <Button variant="primary" onClick={updateGourdType}>
+                                Save Changes
+                            </Button>
+                        </Form>
+                    </Modal.Body>
+                </Modal>
 
-            {/* Create Modal */}
-            <Modal show={createModalVisible} onHide={() => setCreateModalVisible(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Create Gourd Type</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={gourdTypeName}
-                                onChange={(e) => setGourdTypeName(e.target.value)}
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={gourdTypeDescription}
-                                onChange={(e) => setGourdTypeDescription(e.target.value)}
-                            />
-                        </Form.Group>
-                        <Button variant="success" onClick={addGourdType}>
-                            Create
-                        </Button>
-                    </Form>
-                </Modal.Body>
-            </Modal>
-
-        </div>
+                {/* Create Modal */}
+                <Modal show={createModalVisible} onHide={() => setCreateModalVisible(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Create Gourd Type</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    value={gourdTypeName}
+                                    onChange={(e) => setGourdTypeName(e.target.value)}
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    value={gourdTypeDescription}
+                                    onChange={(e) => setGourdTypeDescription(e.target.value)}
+                                />
+                            </Form.Group>
+                            <Button variant="success" onClick={addGourdType}>
+                                Create
+                            </Button>
+                        </Form>
+                    </Modal.Body>
+                </Modal>
+            </div>
+        </AdminSidebar>
     );
 };
 
