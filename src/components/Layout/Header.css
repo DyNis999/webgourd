@@ -1,0 +1,150 @@
+/* Resetting some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Ensure no extra space at the top */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    padding-top: 56px; /* Adjust this value based on the height of your navbar */
+}
+
+/* Navbar */
+.navbar-fixed-top {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1030; /* Ensure the navbar is above other elements */
+    margin: 0; /* Ensure no extra margin */
+}
+
+/* Admin Sidebar */
+.admin-sidebar {
+    position: fixed;
+    left: 0;
+    top: 60px;  /* Set this to the height of your header */
+    width: 250px;
+    height: calc(100vh - 60px);  /* Subtract the height of the header */
+    background-color: #343a40;  /* Dark background color */
+    padding: 20px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+    overflow-y: auto;
+    color: #fff;  /* White text color */
+    border-right: 2px solid #495057;  /* Outline on the right side */
+}
+
+.admin-sidebar.show {
+    transform: translateX(0);
+}
+
+.sidebar-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #fff;  /* White text for title */
+    text-align: center;
+    border-bottom: 1px solid #495057;
+    padding-bottom: 10px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-menu li {
+    margin-bottom: 15px;
+}
+
+.sidebar-menu a {
+    color: #adb5bd;  /* Light grey text color */
+    text-decoration: none;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s;
+}
+
+.sidebar-menu a:hover {
+    color: #fff;  /* White on hover */
+}
+
+.sidebar-menu a svg {
+    margin-right: 10px;  /* Space between icon and text */
+}
+
+.main-content {
+    transition: margin-left 0.3s ease-in-out;
+    margin-left: 0;
+    padding: 20px;
+}
+
+.main-content.content-shifted {
+    margin-left: 250px;
+}
+
+.modern-dropdown-toggle {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 20px;
+    background-color: #343a40;
+    border: none;
+    color: #fff;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.modern-dropdown-toggle:hover {
+    background-color: #495057;
+    transform: scale(1.05);
+}
+
+.modern-dropdown-menu {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    overflow: hidden;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.modern-dropdown-menu .dropdown-item {
+    padding: 10px 20px;
+    color: #212529;
+    transition: background-color 0.3s;
+}
+
+.modern-dropdown-menu .dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.modern-dropdown-menu .dropdown-header {
+    font-size: 1rem;
+    color: #6c757d;
+    padding: 10px 20px;
+    background-color: #e9ecef;
+}
+
+.modern-dropdown-menu .dropdown-divider {
+    margin: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

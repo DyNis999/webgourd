@@ -30,7 +30,9 @@ import Failed from './components/AdminDashboards/FailedpollinationDashboard';
 import UserPollinatedBymonth from './components/UserDashboards/PollinatedFlowersByMonth';
 import UserCompleted from './components/UserDashboards/CompletedpollinationDashboard';
 import UserFailed from './components/UserDashboards/FailedpollinationDashboard';
+import AdminDashboard from './components/AdminDashboards/HomeDashboard';
 const App = () => {
+  
   return (
     <Router>
       <div>
@@ -66,6 +68,7 @@ const App = () => {
           <Route path="/Monitoring" element={<MonitoringList />} />
 
           {/* Admin Dashboard */}
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/Polinatedbymonth" element={<PollinatedBymonth />} />
           <Route path="/Completedbymonth" element={<Completed />} />
           <Route path="/Failedbymonth" element={<Failed />} />

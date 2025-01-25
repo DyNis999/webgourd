@@ -1,25 +1,30 @@
 .admin-sidebar {
     position: fixed;
     left: 0;
-    top: 0;
-    height: 100%;
+    top: 60px;  /* Set this to the height of your header */
     width: 250px;
-    background-color: #343a40;
-    color: white;
+    height: calc(100vh - 60px);  /* Subtract the height of the header */
+    background-color: #4989c9;  /* Dark background color */
     padding: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-    z-index: 1050;
+    transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
-    transform: translateX(-100%); /* Hidden by default */
+    z-index: 1000;
+    overflow-y: auto;
+    color: #fff;  /* White text color */
+    border-right: 2px solid #495057;  /* Outline on the right side */
 }
 
 .admin-sidebar.show {
-    transform: translateX(0); /* Slide in when visible */
+    transform: translateX(0);
 }
 
 .sidebar-title {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     margin-bottom: 20px;
+    color: #fff;  /* White text for title */
+    text-align: center;
+    border-bottom: 1px solid #495057;
+    padding-bottom: 10px;
 }
 
 .sidebar-menu {
@@ -28,15 +33,32 @@
 }
 
 .sidebar-menu li {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .sidebar-menu a {
-    color: white;
+    color: #adb5bd;  /* Light grey text color */
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s;
 }
 
 .sidebar-menu a:hover {
-    text-decoration: underline;
+    color: #fff;  /* White on hover */
+}
+
+.sidebar-menu a svg {
+    margin-right: 10px;  /* Space between icon and text */
+}
+
+.main-content {
+    transition: margin-left 0.3s ease-in-out;
+    margin-left: 0;
+    padding: 20px;
+}
+
+.main-content.content-shifted {
+    margin-left: 250px;
 }

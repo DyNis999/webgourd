@@ -1,163 +1,29 @@
-// import React, { useState, useEffect } from 'react';
-// import { Link, useNavigate } from 'react-router-dom';
-// import { toast } from 'react-toastify';
-// import axios from 'axios';
-// import 'react-toastify/dist/ReactToastify.css';
-// import { Navbar, Nav, Button, Dropdown, Container } from 'react-bootstrap';
-
-// import { getUser, logout } from '../../utils/helpers';
-
-// const Header = () => {
-//     const [user, setUser] = useState(null);
-//     const [loading, setLoading] = useState(true);
-//     const navigate = useNavigate();
-
-//     // Logout handler
-//     const logoutHandler = async () => {
-//         try {
-//             const token = sessionStorage.getItem('token');
-//             if (!token) throw new Error('No token found');
-
-//             const userId = user?.userId;
-//             if (!userId) throw new Error('User ID not found');
-
-//             await axios.post('http://localhost:4000/api/v1/users/logout', { userId }, {
-//                 headers: { Authorization: `Bearer ${token}` },
-//             });
-
-//             sessionStorage.removeItem('token');
-//             logout(() => {
-//                 navigate('/');
-//                 window.location.reload(); // Refresh the page after redirect
-//             });
-//             toast.success('Logged out successfully', { position: 'bottom-right' });
-//         } catch (error) {
-//             console.error('Logout error:', error.response ? error.response.data : error.message);
-//             toast.error('Failed to log out. Please try again.', { position: 'bottom-right' });
-//         }
-//     };
-
-//     // Fetch user information on mount
-//     useEffect(() => {
-//         const fetchedUser = getUser();
-//         if (fetchedUser) {
-//             setUser(fetchedUser);
-//             console.log('Fetched user:', fetchedUser);
-//         }
-//         setLoading(false);
-//     }, []);
-
-//     // Render nothing while loading user data
-//     if (loading) {
-//         return null;
-//     }
-
-//     return (
-//         <Navbar bg="dark" variant="dark" expand="lg">
-//             <Container>
-//                 <Navbar.Brand as={Link} to="/">
-//                     <img src="./images/shopit_logo.png" alt="Gourdify" className="d-inline-block align-top" />
-//                 </Navbar.Brand>
-//                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
-//                 <Navbar.Collapse id="basic-navbar-nav">
-//                     <Nav className="me-auto">
-//                         <Nav.Link as={Link} to="/Home">Home</Nav.Link>
-//                         {user && (
-//                             <>
-//                                 <Nav.Link as={Link} to="/Gourdchat">Chat</Nav.Link>
-//                                 <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
-//                             </>
-//                         )}
-//                         <Nav.Link as={Link} to="/learn">Learn</Nav.Link>
-//                     </Nav>
-//                     <Nav>
-//                         {user ? (
-//                             <Dropdown align="end">
-//                                 <Dropdown.Toggle variant="secondary" id="userDropdown">
-//                                     <img
-//                                         src={user.image || '/images/default_avatar.jpg'} // Use default image if user.image is not available
-//                                         alt={user.name}
-//                                         className="rounded-circle"
-//                                         width="35"
-//                                         height="30"
-//                                     />
-//                                     <span className="ml-2">{user.name}</span>
-//                                 </Dropdown.Toggle>
-
-//                                 <Dropdown.Menu>
-//                                     {user.isAdmin && (
-//                                         <Dropdown drop="right">
-//                                             <Dropdown.Toggle as="div" className="dropdown-item">
-//                                                 Admin Options
-//                                             </Dropdown.Toggle>
-//                                             <Dropdown.Menu>
-//                                                 <Dropdown.Item as={Link} to="/UserManagement">
-//                                                     User Management
-//                                                 </Dropdown.Item>
-//                                                 <Dropdown.Item as={Link} to="/adminfeed">
-//                                                     Post Management
-//                                                 </Dropdown.Item>
-//                                                 <Dropdown.Item as={Link} to="/createCategory">
-//                                                     Create Category
-//                                                 </Dropdown.Item>
-//                                                 <Dropdown.Item as={Link} to="/ViewCategory">
-//                                                     View Category
-//                                                 </Dropdown.Item>
-//                                                 <Dropdown.Toggle as="div" className="dropdown-item">
-//                                                     Monitoring Management
-//                                                 </Dropdown.Toggle>
-//                                                 <Dropdown.Menu>
-//                                                     <Dropdown.Item as={Link} to="/gourdType">
-//                                                         Gourd Type Management
-//                                                     </Dropdown.Item>
-//                                                     <Dropdown.Item as={Link} to="/gourdVariety">
-//                                                         Gourd Variety Management
-//                                                     </Dropdown.Item>
-//                                                 </Dropdown.Menu>
-//                                             </Dropdown.Menu>
-//                                         </Dropdown>
-//                                     )}
-//                                     <Dropdown.Item as={Link} to="/profile">
-//                                         Profile
-//                                     </Dropdown.Item>
-//                                     <Dropdown.Item as={Link} to="/" onClick={logoutHandler} className="text-danger">
-//                                         Logout
-//                                     </Dropdown.Item>
-//                                 </Dropdown.Menu>
-//                             </Dropdown>
-//                         ) : (
-//                             <Button variant="outline-light" as={Link} to="/login">
-//                                 Login
-//                             </Button>
-//                         )}
-//                     </Nav>
-//                 </Navbar.Collapse>
-//             </Container>
-//         </Navbar>
-//     );
-// };
-
-// export default Header;
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import { Navbar, Nav, Button, Dropdown, Container } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretDown, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
 import { getUser, logout } from '../../utils/helpers';
 import AdminSidebar from './AdminSidebar';
-import './AdminSidebar.css';
 
 const Header = () => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [showSidebar, setShowSidebar] = useState(false); // Sidebar state
+    const [showSidebar, setShowSidebar] = useState(false);
+    const [showDashboardMenu, setShowDashboardMenu] = useState(false);
+
     const navigate = useNavigate();
 
     const toggleSidebar = () => {
-        setShowSidebar(!showSidebar); // Toggle sidebar
+        setShowSidebar(!showSidebar);
+    };
+
+    const toggleDashboardMenu = () => {
+        setShowDashboardMenu(!showDashboardMenu);
     };
 
     const logoutHandler = async () => {
@@ -192,25 +58,34 @@ const Header = () => {
         setLoading(false);
     }, []);
 
+    useEffect(() => {
+        const style = document.createElement('style');
+        style.innerHTML = getStyles();
+        document.head.appendChild(style);
+    }, []);
+
     if (loading) {
         return null;
     }
 
     return (
         <>
+            <style>
+                {getStyles()}
+            </style>
             {user?.isAdmin && <AdminSidebar show={showSidebar} />}
-            <Navbar bg="dark" variant="dark" expand="lg">
+            <Navbar bg="dark" variant="dark" expand="lg" className="navbar-fixed-top">
                 <Container>
-                    {user?.isAdmin && <div style={{ display: 'flex', flex: 0.5 }}>
+                    {user?.isAdmin && (
                         <Button
                             variant="outline-light"
                             onClick={toggleSidebar}
                             className="me-2"
-                            style={{ zIndex: 1100, marginRight: '20px' }}
+                            style={{ zIndex: 1100 }}
                         >
                             ☰
                         </Button>
-                    </div>}
+                    )}
                     <Navbar.Brand as={Link} to="/">
                         <img src="./images/shopit_logo.png" alt="Gourdify" className="d-inline-block align-top" />
                     </Navbar.Brand>
@@ -230,7 +105,7 @@ const Header = () => {
                         <Nav>
                             {user ? (
                                 <Dropdown align="end">
-                                    <Dropdown.Toggle variant="secondary" id="userDropdown">
+                                    <Dropdown.Toggle variant="secondary" id="userDropdown" className="modern-dropdown-toggle">
                                         <img
                                             src={user.image || '/images/default_avatar.jpg'}
                                             alt={user.name}
@@ -238,21 +113,37 @@ const Header = () => {
                                             width="35"
                                             height="30"
                                         />
-                                        <span className="ml-2">{user.name}</span>
+                                        <span className="ms-2">{user.name}</span>
                                     </Dropdown.Toggle>
-                                    <Dropdown.Menu>
+                                    <Dropdown.Menu className="modern-dropdown-menu">
                                         <Dropdown.Item as={Link} to="/profile">Profile</Dropdown.Item>
-
-                                        {/* My Dashboards Dropdown Toggle */}
-                                        <Dropdown.Item as="button" className="dropdown-toggle" disabled>
+                                        {user?.isAdmin && (
+                                            <Dropdown.Item as={Link} to="/admin/dashboard">
+                                                Admin
+                                            </Dropdown.Item>
+                                        )}
+                                        <Dropdown.Divider />
+                                        <Dropdown.Header
+                                            onClick={toggleDashboardMenu}
+                                            style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                                        >
                                             My Dashboards
-                                        </Dropdown.Item>
-                                        <Dropdown.Menu>
-                                            <Dropdown.Item as={Link} to="/User/Polinatedbymonth">Pollinated by Month</Dropdown.Item>
-                                            <Dropdown.Item as={Link} to="/User/Completedbymonth">Completed by Month</Dropdown.Item>
-                                            <Dropdown.Item as={Link} to="/User/Failedbymonth">Failed by Month</Dropdown.Item>
-                                        </Dropdown.Menu>
-
+                                            <FontAwesomeIcon icon={showDashboardMenu ? faCaretDown : faCaretRight} />
+                                        </Dropdown.Header>
+                                        {showDashboardMenu && (
+                                            <>
+                                                <Dropdown.Item as={Link} to="/User/Polinatedbymonth">
+                                                    Pollinated 
+                                                </Dropdown.Item>
+                                                <Dropdown.Item as={Link} to="/User/Completedbymonth">
+                                                    Completed 
+                                                </Dropdown.Item>
+                                                <Dropdown.Item as={Link} to="/User/Failedbymonth">
+                                                    Failed
+                                                </Dropdown.Item>
+                                            </>
+                                        )}
+                                        <Dropdown.Divider />
                                         <Dropdown.Item as={Link} to="/" onClick={logoutHandler} className="text-danger">
                                             Logout
                                         </Dropdown.Item>
@@ -264,12 +155,134 @@ const Header = () => {
                                 </Button>
                             )}
                         </Nav>
-
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
         </>
     );
 };
+
+const getStyles = () => `
+.navbar-fixed-top {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1030;
+}
+
+body {
+    padding-top: 56px;
+}
+
+.admin-sidebar {
+    position: fixed;
+    left: 0;
+    top: 60px;
+    width: 250px;
+    height: calc(100vh - 60px);
+    background-color:rgb(42, 50, 58);
+    padding: 20px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.admin-sidebar.show {
+    transform: translateX(0);
+}
+
+.sidebar-title {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color:rgb(242, 244, 246);
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-menu li {
+    margin-bottom: 10px;
+}
+
+.sidebar-menu a {
+    color:rgb(208, 214, 220);
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.sidebar-menu a:hover {
+    text-decoration: underline;
+    color: #007bff;
+}
+
+.main-content {
+    transition: margin-left 0.3s ease-in-out;
+    margin-left: 0;
+    padding: 20px;
+}
+
+.main-content.content-shifted {
+    margin-left: 250px;
+}
+
+.modern-dropdown-toggle {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 20px;
+    background-color: #343a40;
+    border: none;
+    color: #fff;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.modern-dropdown-toggle:hover {
+    background-color: #495057;
+    transform: scale(1.05);
+}
+
+.modern-dropdown-menu {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    overflow: hidden;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.modern-dropdown-menu .dropdown-item {
+    padding: 10px 20px;
+    color: #212529;
+    transition: background-color 0.3s;
+}
+
+.modern-dropdown-menu .dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.modern-dropdown-menu .dropdown-header {
+    font-size: 1rem;
+    color: #6c757d;
+    padding: 10px 20px;
+    background-color: #e9ecef;
+}
+
+.modern-dropdown-menu .dropdown-divider {
+    margin: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+`;
 
 export default Header;

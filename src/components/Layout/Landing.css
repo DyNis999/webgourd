@@ -13,7 +13,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #a8e6cf, #ffb6b9); /* Soft, nature-inspired gradient */
+    background: linear-gradient(135deg, #a8e6cf, #fbfbfb); /* Soft, nature-inspired gradient */
 }
 
 /* Content Styling */
