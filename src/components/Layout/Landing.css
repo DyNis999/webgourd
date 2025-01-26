@@ -1,37 +1,49 @@
-/* Resetting some default styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+body {
+    font-family: 'Roboto';
 }
 
-/* Full-screen container */
 .landing-container {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #a8e6cf, #fbfbfb); /* Soft, nature-inspired gradient */
+    width: 100%;
+    height: 80vh;
+    position: relative;
+    overflow: hidden;
 }
 
-/* Content Styling */
+.background-collage {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    filter: blur(8px);
+    overflow: hidden;
+}
+
+.background-image {
+    flex: 1;
+    background-size: cover;
+    background-position: center;
+}
+
 .content {
-    text-align: center;
+    position: relative;
+    text-align: left;
     color: #fff;
-    max-width: 800px;
+    z-index: 1;
     padding: 20px;
-    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent dark background */
-    border-radius: 10px;
+    margin-top: -90px;
 }
 
 /* Main Title Styling */
 .main-title {
+    text-align: left;
     font-size: 3.5em;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #fff;
+    font-weight: 500; /* Bold */
+    font-family: 'Roboto', sans-serif;
 }
 
 /* Subtitle Styling */
@@ -40,11 +52,20 @@
     margin-bottom: 30px;
     color: #fff;
     opacity: 0.9;
+    font-weight: 400;
+    font-family: 'Roboto', sans-serif; /* Regular */
+}
+
+.cta-button-container {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-top: 20px; /* Adjust as needed */
 }
 
 /* Call-to-Action Button */
 .cta-button {
-    background-color: #ff9f00; /* Vibrant yellow/orange */
+    background-color: #0dd61e; /* Vibrant yellow/orange */
     color: white;
     font-size: 1.2em;
     border: none;
@@ -52,8 +73,29 @@
     border-radius: 50px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-family: 'Roboto', sans-serif;
 }
 
 .cta-button:hover {
-    background-color: #ff7b00; /* Darker shade on hover */
+    background-color: #0bb517; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+}
+
+.about-us-container {
+    margin-top: 40px;
+    text-align: left;
+    color: #000000;
+    padding: 0% 10%;
+}
+
+.about-us-container h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    justify-content: left;
+    align-items: left;
+}
+
+.about-us-container p {
+    font-size: 1.2em;
+    line-height: 1.5;
 }
