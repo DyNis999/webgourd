@@ -110,7 +110,7 @@ const GourdTypeList = () => {
                             <tr key={type._id}>
                                 <td>{type.name}</td>
                                 <td>{type.description}</td>
-                                <td>
+                                <td className="text-center">
                                     <Button
                                         variant="primary"
                                         className="me-2"

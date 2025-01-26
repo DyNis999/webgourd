@@ -101,7 +101,7 @@ const ViewCategories = () => {
                         <tr key={category._id}>
                             <td>{category.name}</td>
                             <td>{category.description}</td>
-                            <td>
+                            <td className="text-center">
                                 <Button
                                     variant="primary"
                                     className="me-2"

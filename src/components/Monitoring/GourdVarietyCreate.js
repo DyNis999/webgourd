@@ -128,7 +128,7 @@ const VarietyList = () => {
                             <td>{variety.name}</td>
                             <td>{variety.description}</td>
                             <td>{variety.gourdType?.name || 'Unknown'}</td>
-                            <td>
+                            <td className="text-center">
                                 <Button variant="primary" onClick={() => openModal(variety)} className="me-2">
                                     <FaPen />
                                 </Button>
