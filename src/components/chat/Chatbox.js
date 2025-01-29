@@ -18,7 +18,6 @@ const Chatbox = ({ chat }) => {
 
   // Fetch messages from the server
   const fetchMessages = async () => {
-    // setLoading(true);
     setError(null);
     try {
       const token = sessionStorage.getItem('token');
@@ -76,36 +75,44 @@ const Chatbox = ({ chat }) => {
   };
 
   // Fetch messages when receiverId changes
-
-  // useEffect(() => {
-  //   const userId = getUser()?.id;
-  //   if (userId) {
-  //     socket.emit("joinRoom", { userId });
-  //   }
-  // }, []);
-
   useEffect(() => {
     fetchMessages();
   }, [receiverId]);
 
   useEffect(() => {
     if (messageListRef.current) {
-        messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
     }
-}, [messages]);
+  }, [messages]);
 
   // Socket event listener for new messages
   useEffect(() => {
-
-    let unsubsribe = socket.on('receiveMessage', (message) => {
+    const handleReceiveMessage = (message) => {
       console.log('Received message:', message);
-      // setMessages((prevMessages) => [...prevMessages, message]);
-      fetchMessages();
+      setMessages((prevMessages) => [...prevMessages, message]);
       markMessagesAsRead([message]);
       scrollToBottom(); // Scroll to bottom for new messages
-    });
+    };
+
+    socket.on('receiveMessage', handleReceiveMessage);
+
     return () => {
-      unsubsribe = null;
+      socket.off('receiveMessage', handleReceiveMessage);
+    };
+  }, []);
+
+  // Socket event listener for deleted messages
+  useEffect(() => {
+    const handleDeleteMessage = (messageId) => {
+      setMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg._id !== messageId)
+      );
+    };
+
+    socket.on('deleteMessage', handleDeleteMessage);
+
+    return () => {
+      socket.off('deleteMessage', handleDeleteMessage);
     };
   }, []);
 
@@ -173,6 +180,7 @@ const Chatbox = ({ chat }) => {
     }
   };
 
+  // Delete a message
   const deleteMessage = async (messageId) => {
     try {
       const storedToken = sessionStorage.getItem('token');
@@ -184,18 +192,14 @@ const Chatbox = ({ chat }) => {
 
       if (response.data.success) {
         setMessages((prevMessages) =>
-          prevMessages.filter((chat) => chat._id !== messageId)
+          prevMessages.filter((msg) => msg._id !== messageId)
         );
         setDeleteModalVisible(false); // Close modal after deletion
+        socket.emit('deleteMessage', messageId); // Emit delete message event
       }
     } catch (err) {
       console.error('Error deleting message:', err.message);
     }
-  };
-
-  const handleEllipsisClick = (messageId) => {
-    setMessageToDelete(messageId);
-    setDeleteModalVisible(true);
   };
 
   // Render a single message
@@ -222,13 +226,16 @@ const Chatbox = ({ chat }) => {
           <p className="message-text">{message.message}</p>
           <p className="timestamp">{new Date(message.createdAt).toLocaleTimeString()}</p>
           {isMyMessage && ( // Conditionally render the ellipsis button
-          <button
-            className="ellipsis-button"
-            onClick={() => handleEllipsisClick(message._id)}
-          >
-            •••
-          </button>
-        )}
+            <button
+              className="ellipsis-button"
+              onClick={() => {
+                setMessageToDelete(message._id);
+                setDeleteModalVisible(true);
+              }}
+            >
+              •••
+            </button>
+          )}
         </div>
       </div>
     );
@@ -236,56 +243,56 @@ const Chatbox = ({ chat }) => {
 
   return (
     <div className="chatbox-container">
-    {loading ? (
-      <div>Loading...</div>
-    ) : error ? (
-      <div>{error}</div>
-    ) : (
-      <div
-        className="message-list"
-        ref={messageListRef}
-        onScroll={handleScroll}
-      >
-        {messages.map((message) => renderMessage(message))}
+      {loading ? (
+        <div>Loading...</div>
+      ) : error ? (
+        <div>{error}</div>
+      ) : (
+        <div
+          className="message-list"
+          ref={messageListRef}
+          onScroll={handleScroll}
+        >
+          {messages.map((message) => renderMessage(message))}
+        </div>
+      )}
+
+      {isScrolledUp && (
+        <button className="scroll-to-bottom" onClick={scrollToBottom}>
+          ⬇
+        </button>
+      )}
+
+      <div className="input-container">
+        <input
+          type="text"
+          className="text-input"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          placeholder="Type your message..."
+        />
+        <button className="send-button" onClick={sendMessage}>Send</button>
       </div>
-    )}
 
-    {isScrolledUp && (
-      <button className="scroll-to-bottom" onClick={scrollToBottom}>
-        ⬇
-      </button>
-    )}
-
-    <div className="input-container">
-      <input
-        type="text"
-        className="text-input"
-        value={newMessage}
-        onChange={(e) => setNewMessage(e.target.value)}
-        placeholder="Type your message..."
-      />
-      <button className="send-button" onClick={sendMessage}>Send</button>
+      {deleteModalVisible && (
+        <div className="delete-modal">
+          <p>Are you sure you want to delete this message?</p>
+          <button
+            className="confirm-delete"
+            onClick={() => deleteMessage(messageToDelete)}
+          >
+            Yes
+          </button>
+          <button
+            className="cancel-delete"
+            onClick={() => setDeleteModalVisible(false)}
+          >
+            No
+          </button>
+        </div>
+      )}
     </div>
-
-    {deleteModalVisible && (
-      <div className="delete-modal">
-        <p>Are you sure you want to delete this message?</p>
-        <button
-          className="confirm-delete"
-          onClick={() => deleteMessage(messageToDelete)}
-        >
-          Yes
-        </button>
-        <button
-          className="cancel-delete"
-          onClick={() => setDeleteModalVisible(false)}
-        >
-          No
-        </button>
-      </div>
-    )}
-  </div>
-);
+  );
 };
 
 export default Chatbox;

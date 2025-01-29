@@ -1,5 +1,6 @@
 .admin-sidebar-container {
     display: flex;
+    font-family: 'Urbanist', sans-serif;
 }
 
 .sidebar {

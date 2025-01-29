@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
 import { getUser, logout } from '../../utils/helpers';
+import { getToken } from '../../utils/helpers';
+
 
 const Header = () => {
     const [user, setUser] = useState(null);
@@ -44,16 +46,30 @@ const Header = () => {
         }
     };
 
-    useEffect(() => {
-        const fetchedUser = getUser();
-        if (fetchedUser) {
-            setUser(fetchedUser);
+    const fetchUser = async () => {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${getToken()}`
+            }
+        };
+        try {
+            const { data } = await axios.get(`http://localhost:4000/api/v1/users/me`, config);
+            setUser(data.user);
+        } catch (error) {
+            toast.error('Failed to fetch user data', {
+                position: 'bottom-right'
+            });
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
+    };
+
+    useEffect(() => {
+        fetchUser();
     }, []);
 
     if (loading) {
-        return null;
+        return <p>Loading...</p>;
     }
 
     return (
@@ -70,7 +86,7 @@ const Header = () => {
                             {user && (
                                 <>
                                     <Nav.Link as={Link} to="/Gourdchat">Chat</Nav.Link>
-                                    <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
+                                    {/* <Nav.Link as={Link} to="/profile">Profile</Nav.Link> */}
                                     <Nav.Link as={Link} to="/Monitoring">Monitoring</Nav.Link>
                                 </>
                             )}

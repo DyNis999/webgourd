@@ -1,0 +1,28 @@
+/* Make dropdown container transparent */
+.post-menu .dropdown-menu {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Align ellipsis icon to the right */
+.post-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 !important;
+    box-shadow: none !important; 
+}
+
+.custom-dropdown-toggle {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    outline: none !important;  /* Remove default focus outline */
+    box-shadow: none !important; /* Remove any box shadows */
+}
+
+/* Hide the default dropdown arrow */
+.custom-dropdown-toggle::after {
+    display: none !important;
+}
