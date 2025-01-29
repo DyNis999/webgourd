@@ -19,7 +19,7 @@ const AdminSidebar = ({ children }) => {
                     width: collapsed ? '80px' : '250px',
                     backgroundColor: '#000000',
                     height: '100%',
-                    transition: 'width 0.3s ease',
+                    transition: 'width 1s ease',
                 }}
             >
                 <div
