@@ -70,18 +70,14 @@
 }
 
 .post-images {
-    display: flex;
-    gap: 15px;
-    overflow-x: auto;
-    margin-top: 15px;
+    margin-bottom: 1rem;
 }
 
 .post-image {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
+    max-width: 100%;
+    max-height: 400px;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    border-radius: 8px;
 }
 
 .post-image:hover {
@@ -95,18 +91,30 @@
 }
 
 .post-actions button {
-    background-color: #1877f2;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 30px;
-    font-size: 1em;
+    background-color: transparent; /* Ensure the button background is transparent */
+    border: none; /* Remove any border */
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.post-actions button.liked .like-icon {
+    color: green;
+}
+
+.post-actions button.not-liked .like-icon {
+    color: gray;
+    -webkit-text-stroke: 1px #007bff; /* Add outline for the icon */
 }
 
 .post-actions button:hover {
-    background-color: #1568c5;
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.post-actions .comment-icon {
+    color: gray;
 }
 
 .post-comments {
@@ -323,32 +331,19 @@ search-bar {
     gap: 15px;
 }
 
-.comment-actions {
+.post-carousel .carousel .slide img {
+    max-height: 400px;
+    object-fit: cover;
+}
+
+.carousel-image-container {
     display: flex;
-    gap: 10px;
-    margin-top: 5px;
+    justify-content: center;
+    align-items: center;
 }
 
-.icon {
-    cursor: pointer;
-    font-size: 18px;
-    transition: transform 0.2s ease;
-}
-
-.edit-icon {
-    color: #34b7f1;
-}
-
-.edit-icon:hover {
-    color: #2a9bd7;
-    transform: scale(1.2);
-}
-
-.delete-icon {
-    color: #ff4d4d;
-}
-
-.delete-icon:hover {
-    color: #d93636;
-    transform: scale(1.2);
+.single-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

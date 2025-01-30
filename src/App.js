@@ -1,5 +1,4 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'; import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Layout/Header';
 import Login from './components/User/Login';
 import Register from './components/User/Register';
@@ -29,17 +28,31 @@ import UserPollinatedBymonth from './components/UserDashboards/PollinatedFlowers
 import UserCompleted from './components/UserDashboards/CompletedpollinationDashboard';
 import UserFailed from './components/UserDashboards/FailedpollinationDashboard';
 import AdminPostManagement from './components/Post/AdminPostManagement';
+import AdminDashboard from './components/AdminDashboards/HomeDashboard';
+import UpdateProfile from './components/User/UpdateProfile';
+import { getToken } from './utils/helpers';
+
 const App = () => {
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
   return (
     <Router>
       <div>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/Home" element={<Home />} />
+          <Route path="/" element={<Landing isAuthenticated={isAuthenticated} />} />          <Route path="/Home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/me/update" element={<UpdateProfile />} exact="true" />
 
           <Route path="/createCategory" element={<CategoryCreate />} />
           <Route path="/UpdateCategory/:categoryId" element={<UpdateCategory />} />
@@ -64,6 +77,7 @@ const App = () => {
           <Route path="/Monitoring" element={<MonitoringList />} />
 
           {/* Admin Dashboard */}
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/Polinatedbymonth" element={<PollinatedBymonth />} />
           <Route path="/Completedbymonth" element={<Completed />} />
           <Route path="/Failedbymonth" element={<Failed />} />

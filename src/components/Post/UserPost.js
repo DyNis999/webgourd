@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './UserPost.css';
+import './Socialmedia.css';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'react-bootstrap';
 import { Carousel } from 'react-responsive-carousel';
-import { getUser } from '../../utils/helpers'; 
+import { getUser } from '../../utils/helpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faEdit, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { faThumbsUp, faComment } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-
+import { FaEdit, FaTrash } from "react-icons/fa";
 const UserPost = () => {
     const [posts, setPosts] = useState([]);
     const [commentContent, setCommentContent] = useState('');
@@ -16,7 +18,9 @@ const UserPost = () => {
     const [expandedComments, setExpandedComments] = useState({});
     const [expandedReplies, setExpandedReplies] = useState({});
     const [currentUser, setCurrentUser] = useState(null);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
     const navigate = useNavigate();
+
 
     useEffect(() => {
         const fetchedUser = getUser();
@@ -26,7 +30,7 @@ const UserPost = () => {
             console.error('No current user found');
         }
     }, []);
-
+    const toggleDropdown = () => setDropdownOpen(prevState => !prevState);
     useEffect(() => {
         const fetchPosts = async () => {
             if (!currentUser || !currentUser.id) {
@@ -74,7 +78,7 @@ const UserPost = () => {
 
             setPosts(posts.map(post => post._id === postId ? response.data : post));
             setReplyContent('');
-            setSelectedCommentId(null); 
+            setSelectedCommentId(null);
         } catch (error) {
             console.error('Error adding reply:', error);
         }
@@ -113,16 +117,18 @@ const UserPost = () => {
 
     const handleDeletePost = async (postId) => {
         try {
+            console.log("Attempting to delete post:", postId);
             const token = sessionStorage.getItem('token');
             await axios.delete(`http://localhost:4000/api/v1/posts/${postId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-
+    
             setPosts(posts.filter(post => post._id !== postId));
         } catch (error) {
-            console.error('Error deleting post:', error);
+            console.error('Error deleting post:', error.response ? error.response.data : error.message);
         }
     };
+    
 
     const handleUpdatePost = (postId) => {
         navigate(`/updatePost/${postId}`);
@@ -142,6 +148,73 @@ const UserPost = () => {
         }
     };
 
+    const handleEditComment = async (postId, commentId, newContent) => {
+        try {
+            const token = sessionStorage.getItem('token');
+            const response = await axios.put(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}`, {
+                content: newContent
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            setPosts(posts.map(post => post._id === postId ? response.data : post));
+        } catch (error) {
+            console.error('Error editing comment:', error);
+        }
+    };
+
+    const handleDeleteComment = async (postId, commentId) => {
+        try {
+            const token = sessionStorage.getItem('token');
+            await axios.delete(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            setPosts(posts.map(post => ({
+                ...post,
+                comments: post.comments.filter(comment => comment._id !== commentId)
+            })));
+        } catch (error) {
+            console.error('Error deleting comment:', error);
+        }
+    };
+
+    const handleEditReply = async (postId, commentId, replyId, newContent) => {
+        try {
+            const token = sessionStorage.getItem('token');
+            const response = await axios.put(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}/replies/${replyId}`, {
+                content: newContent
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            setPosts(posts.map(post => post._id === postId ? response.data : post));
+        } catch (error) {
+            console.error('Error editing reply:', error);
+        }
+    };
+
+    const handleDeleteReply = async (postId, commentId, replyId) => {
+        try {
+            const token = sessionStorage.getItem('token');
+            await axios.delete(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}/replies/${replyId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            setPosts(posts.map(post => ({
+                ...post,
+                comments: post.comments.map(comment =>
+                    comment._id === commentId ? {
+                        ...comment,
+                        replies: comment.replies.filter(reply => reply._id !== replyId)
+                    } : comment
+                )
+            })));
+        } catch (error) {
+            console.error('Error deleting reply:', error);
+        }
+    };
+
     return (
         <div className="User-social-media-feed">
             {posts.map(post => (
@@ -153,11 +226,20 @@ const UserPost = () => {
                             <p>{post.user.email}</p>
                         </div>
                         {post.user._id === currentUser.id && (
-                            <div className="post-menu">
-                                <FontAwesomeIcon icon={faEdit} onClick={() => handleUpdatePost(post._id)} />
-                                <FontAwesomeIcon icon={faTrash} onClick={() => handleDeletePost(post._id)} />
-                            </div>
-                        )}
+                                <Dropdown isOpen={dropdownOpen} toggle={toggleDropdown} className="post-menu">
+                                    <DropdownToggle tag="span" className="custom-dropdown-toggle">
+                                        <FontAwesomeIcon icon={faEllipsisV} />
+                                    </DropdownToggle>
+                                    <DropdownMenu right>
+                                        <DropdownItem onClick={() => handleUpdatePost(post._id)}>
+                                            <FontAwesomeIcon icon={faEdit} /> Edit
+                                        </DropdownItem>
+                                        <DropdownItem onClick={() => handleDeletePost(post._id)}>
+                                            <FontAwesomeIcon icon={faTrash} /> Delete
+                                        </DropdownItem>
+                                    </DropdownMenu>
+                                </Dropdown>
+                            )}
                     </div>
                     <div className="post-content">
                         <h2>{post.title}</h2>
@@ -183,13 +265,19 @@ const UserPost = () => {
                         </div>
                     </div>
                     <div className="post-actions">
-                        <button onClick={() => handleLikePost(post._id)}>
-                            {post.likedBy.includes(currentUser.id) ? 'Unlike' : 'Like'} ({post.likes})
+                        <button
+                            onClick={() => handleLikePost(post._id)}
+                            className={post.likedBy.includes(currentUser._id) ? 'liked' : 'not-liked'}
+                        >
+                            <FontAwesomeIcon icon={faThumbsUp} className="like-icon" />
+                            ({post.likes})
                         </button>
                         <button onClick={() => toggleExpandComments(post._id)}>
-                            {expandedComments[post._id] ? 'Hide Comments' : 'Show Comments'}
+                            <FontAwesomeIcon icon={faComment} className="comment-icon" />
+                            ({post.comments.length})
                         </button>
                     </div>
+
                     {expandedComments[post._id] && (
                         <div className="post-comments">
                             {post.comments.map(comment => (
@@ -198,6 +286,12 @@ const UserPost = () => {
                                     <div className="comment-content">
                                         <h5>{comment.user.name}</h5>
                                         <p>{comment.content}</p>
+                                        {comment.user._id === currentUser._id && (
+                                            <div className="comment-actions">
+                                                <FaEdit className="icon edit-icon" onClick={() => handleEditComment(post._id, comment._id, prompt("Edit your comment", comment.content))} />
+                                                <FaTrash className="icon delete-icon" onClick={() => handleDeleteComment(post._id, comment._id)} />
+                                            </div>
+                                        )}
                                         <div className="comment-replies">
                                             {comment.replies.slice(0, expandedReplies[comment._id] ? comment.replies.length : 1).map(reply => (
                                                 <div key={reply._id} className="reply">
@@ -205,6 +299,12 @@ const UserPost = () => {
                                                     <div className="reply-content">
                                                         <h6>{reply.user.name}</h6>
                                                         <p>{reply.content}</p>
+                                                        {reply.user._id === currentUser._id && (
+                                                            <div className="comment-actions">
+                                                                <FaEdit className="icon edit-icon" onClick={() => handleEditReply(post._id, comment._id, reply._id, prompt("Edit your reply", reply.content))} />
+                                                                <FaTrash className="icon delete-icon" onClick={() => handleDeleteReply(post._id, comment._id, reply._id)} />
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
                                             ))}

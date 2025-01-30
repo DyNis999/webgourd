@@ -7,6 +7,9 @@ import { getUser } from '../../utils/helpers'; // Adjust the import path as nece
 import Topcontributor from '../Layout/Topcontributor';
 import { filterBadWords } from '../Layout/filteredwords';
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsUp, faComment } from '@fortawesome/free-solid-svg-icons';
+
 
 const Socialmedia = () => {
     const [posts, setPosts] = useState([]);
@@ -215,31 +218,36 @@ const Socialmedia = () => {
                                 <p>{post.user.email}</p>
                             </div>
                         </div>
-                        <div className="post-content">
-                            <h2>{post.title}</h2>
-                            <p>{post.content}</p>
-                            <div className="post-images">
-                                {post.images.length > 1 ? (
-                                    <Carousel showThumbs={false}>
-                                        {post.images.map(image => (
-                                            <div key={image}>
-                                                <img src={image} alt={post.title} className="post-image" />
-                                            </div>
-                                        ))}
-                                    </Carousel>
-                                ) : (
-                                    post.images.map(image => (
-                                        <img key={image} src={image} alt={post.title} className="post-image" />
-                                    ))
-                                )}
-                            </div>
+                        <h2>{post.title}</h2>
+                        <p>{post.content}</p>
+                        <div className="post-images">
+                            {post.images.length > 1 ? (
+                                <Carousel showThumbs={false} className="post-carousel">
+                                    {post.images.map(image => (
+                                        <div key={image} className="carousel-image-container">
+                                            <img src={image} alt={post.title} className="post-image" />
+                                        </div>
+                                    ))}
+                                </Carousel>
+                            ) : (
+                                post.images.map(image => (
+                                    <div key={image} className="single-image-container">
+                                        <img src={image} alt={post.title} className="post-image" />
+                                    </div>
+                                ))
+                            )}
                         </div>
                         <div className="post-actions">
-                            <button onClick={() => handleLikePost(post._id)}>
-                                {post.likedBy.includes(currentUser._id) ? 'Unlike' : 'Like'} ({post.likes})
+                            <button
+                                onClick={() => handleLikePost(post._id)}
+                                className={post.likedBy.includes(currentUser._id) ? 'liked' : 'not-liked'}
+                            >
+                                <FontAwesomeIcon icon={faThumbsUp} className="like-icon" />
+                                ({post.likes})
                             </button>
                             <button onClick={() => toggleExpandComments(post._id)}>
-                                {expandedComments[post._id] ? 'Hide Comments' : 'Show Comments'} ({post.comments.length})
+                                <FontAwesomeIcon icon={faComment} className='comment-icon'/>
+                                ({post.comments.length})
                             </button>
                         </div>
                         {expandedComments[post._id] && (
@@ -256,8 +264,6 @@ const Socialmedia = () => {
                                                     <FaTrash className="icon delete-icon" onClick={() => handleDeleteComment(post._id, comment._id)} />
                                                 </div>
                                             )}
-
-
 
                                             <div className="comment-replies">
                                                 {comment.replies.slice(0, expandedReplies[comment._id] ? comment.replies.length : 1).map(reply => (

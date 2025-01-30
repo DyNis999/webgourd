@@ -1,0 +1,124 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+.shadow-lg {
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    margin-top: 20px; /* Add space at the top */
+    margin-bottom: 20px; 
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #343a40;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #495057;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.custom-file {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.custom-file-input {
+    width: 100%;
+    height: 2.5rem;
+    margin-right: 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 0.5rem;
+}
+
+.custom-file-label {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    background-color: #e9ecef;
+    color: #495057;
+    cursor: pointer;
+}
+
+.custom-file-label::after {
+    content: 'Browse';
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-left: 1px solid #ced4da;
+    background-color: #e9ecef;
+    color: #495057;
+    border-radius: 0 5px 5px 0;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 1rem;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btn.update-btn {
+    background-color: green;
+    color: #fff;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.btn.update-btn:hover {
+    background-color: darkgreen;
+}
+
+.btn.update-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

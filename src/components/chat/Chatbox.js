@@ -19,7 +19,6 @@ const Chatbox = ({ chat }) => {
 
   // Fetch messages from the server
   const fetchMessages = async () => {
-    // setLoading(true);
     setError(null);
     try {
       const token = sessionStorage.getItem('token');
@@ -77,14 +76,6 @@ const Chatbox = ({ chat }) => {
   };
 
   // Fetch messages when receiverId changes
-
-  // useEffect(() => {
-  //   const userId = getUser()?.id;
-  //   if (userId) {
-  //     socket.emit("joinRoom", { userId });
-  //   }
-  // }, []);
-
   useEffect(() => {
     fetchMessages();
   }, [receiverId]);
@@ -97,16 +88,32 @@ const Chatbox = ({ chat }) => {
 
   // Socket event listener for new messages
   useEffect(() => {
-
-    let unsubsribe = socket.on('receiveMessage', (message) => {
+    const handleReceiveMessage = (message) => {
       console.log('Received message:', message);
-      // setMessages((prevMessages) => [...prevMessages, message]);
-      fetchMessages();
+      setMessages((prevMessages) => [...prevMessages, message]);
       markMessagesAsRead([message]);
       scrollToBottom(); // Scroll to bottom for new messages
-    });
+    };
+
+    socket.on('receiveMessage', handleReceiveMessage);
+
     return () => {
-      unsubsribe = null;
+      socket.off('receiveMessage', handleReceiveMessage);
+    };
+  }, []);
+
+  // Socket event listener for deleted messages
+  useEffect(() => {
+    const handleDeleteMessage = (messageId) => {
+      setMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg._id !== messageId)
+      );
+    };
+
+    socket.on('deleteMessage', handleDeleteMessage);
+
+    return () => {
+      socket.off('deleteMessage', handleDeleteMessage);
     };
   }, []);
 
@@ -127,7 +134,7 @@ const Chatbox = ({ chat }) => {
     }
   };
 
-  // Send a new message
+   // Send a new message
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
     const filteredMessage = filterBadWords(newMessage.trim());
@@ -175,6 +182,8 @@ const Chatbox = ({ chat }) => {
     }
   };
 
+
+  // Delete a message
   const deleteMessage = async (messageId) => {
     try {
       const storedToken = sessionStorage.getItem('token');
@@ -186,18 +195,14 @@ const Chatbox = ({ chat }) => {
 
       if (response.data.success) {
         setMessages((prevMessages) =>
-          prevMessages.filter((chat) => chat._id !== messageId)
+          prevMessages.filter((msg) => msg._id !== messageId)
         );
         setDeleteModalVisible(false); // Close modal after deletion
+        socket.emit('deleteMessage', messageId); // Emit delete message event
       }
     } catch (err) {
       console.error('Error deleting message:', err.message);
     }
-  };
-
-  const handleEllipsisClick = (messageId) => {
-    setMessageToDelete(messageId);
-    setDeleteModalVisible(true);
   };
 
   // Render a single message
@@ -226,7 +231,10 @@ const Chatbox = ({ chat }) => {
           {isMyMessage && ( // Conditionally render the ellipsis button
             <button
               className="ellipsis-button"
-              onClick={() => handleEllipsisClick(message._id)}
+              onClick={() => {
+                setMessageToDelete(message._id);
+                setDeleteModalVisible(true);
+              }}
             >
               •••
             </button>

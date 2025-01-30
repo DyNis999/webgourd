@@ -28,3 +28,19 @@
   .profile-posts {
     margin-bottom: 20px;
   }
+
+  .edit-profile-link {
+    display: block;
+    margin-top:1px;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .edit-profile-link:hover {
+    text-decoration: underline;
+  }
+
+  .vertical-posts {
+    display: flex;
+    flex-direction: column;
+  }

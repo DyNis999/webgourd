@@ -81,7 +81,7 @@ const FailedPollinationDashboard = () => {
   return (
     <Container maxWidth="lg" sx={{ marginTop: 4 }}>
       <Typography variant="h4" sx={{ marginBottom: 4, fontWeight: 'bold', color: purple[700], textAlign: 'center' }}>
-        Failed Pollination Dashboard
+        Failed Pollination 
       </Typography>
       <Grid container spacing={3}>
         {renderCharts()}
