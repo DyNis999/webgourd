@@ -11,7 +11,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const redirect = location.search ? new URLSearchParams(location.search).get('redirect') : '/';
+  const redirect = location.search ? new URLSearchParams(location.search).get('redirect') : '/Home';
 
   const handleChange = (e) => {
     const { name, value } = e.target;

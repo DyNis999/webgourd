@@ -13,7 +13,8 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #a8e6cf, #ffb6b9); /* Soft, nature-inspired gradient */
+    background: url('D:\WebGourd\webgourd\public\images\pngtree-a-green-colour-bottle-gourd-tip-on-the-sunny-day-in-image_15673491.jpg') no-repeat center center/cover; /* Replace with your image URL */
+    background-color: rgba(0, 0, 0, 0.3); /* Optional: semi-transparent overlay */
 }
 
 /* Content Styling */

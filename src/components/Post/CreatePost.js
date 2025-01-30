@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Select from 'react-select';
 import './CreatePost.css'; // Assuming you have a CSS file for styles
@@ -52,6 +52,7 @@ const CreatePost = () => {
             setError("Please fill in all fields.");
             return;
         }
+        toast.success("Creating your post...");
 
         let formData = new FormData();
         formData.append("title", title);
@@ -79,7 +80,8 @@ const CreatePost = () => {
             });
 
             if (response.status === 201) {
-                toast.success("Post Created Successfully");
+                // Inform user to wait for admin approval
+                toast.info("Your post is under review. Please wait until the admin approves it.");
 
                 // Clear the input fields
                 setTitle('');
@@ -88,7 +90,7 @@ const CreatePost = () => {
                 setImages([]); // Clear images
                 setTimeout(() => {
                     navigate("/home");
-                }, 500);
+                }, 5000);
             }
         } catch (error) {
             console.error('Error creating post:', error.message);
@@ -143,6 +145,9 @@ const CreatePost = () => {
                 {error && <p className="error">{error}</p>}
                 <button type="submit" className="btn btn-primary">Create Post</button>
             </form>
+
+            {/* ToastContainer is placed here to display the toasts */}
+            <ToastContainer position="top-right" autoClose={6000} theme="colored" />
         </div>
     );
 };

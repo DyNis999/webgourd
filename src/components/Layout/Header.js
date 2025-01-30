@@ -211,7 +211,7 @@ const Header = () => {
                             ☰
                         </Button>
                     </div>}
-                    <Navbar.Brand as={Link} to="/">
+                    <Navbar.Brand as={user ? 'div' : Link} to={user ? '#' : '/'}>
                         <img src="./images/shopit_logo.png" alt="Gourdify" className="d-inline-block align-top" />
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />

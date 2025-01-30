@@ -1,12 +1,11 @@
-.social-media-feed {
+.User-social-media-feed {
     display: flex;
-    flex-direction: row; /* Ensure items are in a row */
-    justify-content: flex-start; /* Align items to the start */
-    gap: 20px; /* Space between the sidebar and main content */
+    flex-direction: column; /* Change from row to column to display posts vertically */
+    align-items: center; /* Center the posts */
+    gap: 20px; /* Space between posts */
     padding: 10px;
-    background-color: #f4f6f8; /* Lighter background for the feed */
+    background-color: #f4f6f8;
     max-width: 100%;
-    align-items: flex-start; /* Align items at the top */
 }
 .post {
     background-color: #ffffff;

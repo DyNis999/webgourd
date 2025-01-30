@@ -5,6 +5,8 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 import { getUser } from '../../utils/helpers'; // Adjust the import path as necessary
 import Topcontributor from '../Layout/Topcontributor';
+import { filterBadWords } from '../Layout/filteredwords';
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 const Socialmedia = () => {
     const [posts, setPosts] = useState([]);
@@ -20,7 +22,8 @@ const Socialmedia = () => {
         const fetchPosts = async () => {
             try {
                 const response = await axios.get('http://localhost:4000/api/v1/posts');
-                setPosts(response.data);
+                const approvedPosts = response.data.filter(post => post.status === 'Approved');
+                setPosts(approvedPosts);
             } catch (error) {
                 console.error('Error fetching posts:', error);
             }
@@ -33,10 +36,11 @@ const Socialmedia = () => {
             alert('If you have not account yet create and login first');
             return;
         }
+        const filteredComment = filterBadWords(commentContent);
         try {
             const token = sessionStorage.getItem('token');
             const response = await axios.post(`http://localhost:4000/api/v1/posts/${postId}/comments`, {
-                content: commentContent
+                content: filteredComment
             }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -53,10 +57,11 @@ const Socialmedia = () => {
             alert('If you have not account yet create and login first');
             return;
         }
+        const filteredReply = filterBadWords(replyContent);
         try {
             const token = sessionStorage.getItem('token');
             const response = await axios.post(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}/replies`, {
-                content: replyContent
+                content: filteredReply
             }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -113,10 +118,77 @@ const Socialmedia = () => {
     };
 
     const filteredPosts = posts.filter(post =>
-        post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        post.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        post.user.name.toLowerCase().includes(searchQuery.toLowerCase())
+        post?.title?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
+        post?.content?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
+        post?.user?.name?.toLowerCase()?.includes(searchQuery.toLowerCase())
     );
+
+    const handleEditComment = async (postId, commentId, newContent) => {
+        try {
+            const token = sessionStorage.getItem('token');
+            const response = await axios.put(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}`, {
+                content: newContent
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            setPosts(posts.map(post => post._id === postId ? response.data : post));
+        } catch (error) {
+            console.error('Error editing comment:', error);
+        }
+    };
+
+    const handleDeleteComment = async (postId, commentId) => {
+        try {
+            const token = sessionStorage.getItem('token');
+            await axios.delete(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            setPosts(posts.map(post => ({
+                ...post,
+                comments: post.comments.filter(comment => comment._id !== commentId)
+            })));
+        } catch (error) {
+            console.error('Error deleting comment:', error);
+        }
+    };
+
+    const handleEditReply = async (postId, commentId, replyId, newContent) => {
+        try {
+            const token = sessionStorage.getItem('token');
+            const response = await axios.put(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}/replies/${replyId}`, {
+                content: newContent
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            setPosts(posts.map(post => post._id === postId ? response.data : post));
+        } catch (error) {
+            console.error('Error editing reply:', error);
+        }
+    };
+
+    const handleDeleteReply = async (postId, commentId, replyId) => {
+        try {
+            const token = sessionStorage.getItem('token');
+            await axios.delete(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}/replies/${replyId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            setPosts(posts.map(post => ({
+                ...post,
+                comments: post.comments.map(comment =>
+                    comment._id === commentId ? {
+                        ...comment,
+                        replies: comment.replies.filter(reply => reply._id !== replyId)
+                    } : comment
+                )
+            })));
+        } catch (error) {
+            console.error('Error deleting reply:', error);
+        }
+    };
 
     return (
         <div className="social-media-feed">
@@ -178,6 +250,15 @@ const Socialmedia = () => {
                                         <div className="comment-content">
                                             <h5>{comment.user.name}</h5>
                                             <p>{comment.content}</p>
+                                            {comment.user._id === currentUser._id && (
+                                                <div className="comment-actions">
+                                                    <FaEdit className="icon edit-icon" onClick={() => handleEditComment(post._id, comment._id, prompt("Edit your comment", comment.content))} />
+                                                    <FaTrash className="icon delete-icon" onClick={() => handleDeleteComment(post._id, comment._id)} />
+                                                </div>
+                                            )}
+
+
+
                                             <div className="comment-replies">
                                                 {comment.replies.slice(0, expandedReplies[comment._id] ? comment.replies.length : 1).map(reply => (
                                                     <div key={reply._id} className="reply">
@@ -185,6 +266,12 @@ const Socialmedia = () => {
                                                         <div className="reply-content">
                                                             <h6>{reply.user.name}</h6>
                                                             <p>{reply.content}</p>
+                                                            {reply.user._id === currentUser._id && (
+                                                                <div className="comment-actions">
+                                                                    <FaEdit className="icon edit-icon" onClick={() => handleEditReply(post._id, comment._id, reply._id, prompt("Edit your reply", reply.content))} />
+                                                                    <FaTrash className="icon delete-icon" onClick={() => handleDeleteReply(post._id, comment._id, reply._id)} />
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 ))}

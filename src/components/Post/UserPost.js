@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './Socialmedia.css';
+import './UserPost.css';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
-import { getUser } from '../../utils/helpers'; // Adjust the import path as necessary
+import { getUser } from '../../utils/helpers'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +22,6 @@ const UserPost = () => {
         const fetchedUser = getUser();
         if (fetchedUser) {
             setCurrentUser(fetchedUser);
-            console.log('Fetched user:', fetchedUser);
         } else {
             console.error('No current user found');
         }
@@ -37,7 +36,6 @@ const UserPost = () => {
 
             try {
                 const response = await axios.get(`http://localhost:4000/api/v1/posts/user/${currentUser.id}`);
-                console.log('Fetched user posts:', response.data);
                 setPosts(response.data);
             } catch (error) {
                 console.error('Error fetching user posts:', error);
@@ -76,7 +74,7 @@ const UserPost = () => {
 
             setPosts(posts.map(post => post._id === postId ? response.data : post));
             setReplyContent('');
-            setSelectedCommentId(null); // Hide the reply input box after submitting
+            setSelectedCommentId(null); 
         } catch (error) {
             console.error('Error adding reply:', error);
         }
@@ -130,8 +128,22 @@ const UserPost = () => {
         navigate(`/updatePost/${postId}`);
     };
 
+    // Function to get status color
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'Approved':
+                return 'green';
+            case 'Pending':
+                return 'orange';
+            case 'Rejected':
+                return 'red';
+            default:
+                return 'gray';
+        }
+    };
+
     return (
-        <div className="social-media-feed">
+        <div className="User-social-media-feed">
             {posts.map(post => (
                 <div key={post._id} className="post">
                     <div className="post-header">
@@ -150,6 +162,10 @@ const UserPost = () => {
                     <div className="post-content">
                         <h2>{post.title}</h2>
                         <p>{post.content}</p>
+                        {/* Post Status */}
+                        <div className="post-status" style={{ color: getStatusColor(post.status) }}>
+                            {post.status}
+                        </div>
                         <div className="post-images">
                             {post.images.length > 1 ? (
                                 <Carousel showThumbs={false}>

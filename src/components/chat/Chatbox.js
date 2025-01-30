@@ -4,6 +4,7 @@ import axios from 'axios';
 import { socket } from '../../socket/index';
 import { getUser, getToken } from '../../utils/helpers';
 import './chatbox.css'; // Separate the styles into a CSS file
+import { filterBadWords } from '../Layout/filteredwords';
 
 const Chatbox = ({ chat }) => {
   const receiverId = chat?.userId;
@@ -90,9 +91,9 @@ const Chatbox = ({ chat }) => {
 
   useEffect(() => {
     if (messageListRef.current) {
-        messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
     }
-}, [messages]);
+  }, [messages]);
 
   // Socket event listener for new messages
   useEffect(() => {
@@ -129,11 +130,12 @@ const Chatbox = ({ chat }) => {
   // Send a new message
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
+    const filteredMessage = filterBadWords(newMessage.trim());
 
     const tempMessage = {
       _id: new Date().toISOString(),
       sender: { _id: getUser()?.id },
-      message: newMessage.trim(),
+      message: filteredMessage,
       createdAt: new Date(), // Add this
       timestamp: new Date()
     };
@@ -150,7 +152,7 @@ const Chatbox = ({ chat }) => {
       const messageData = {
         sender: senderId,
         user: receiverId,
-        message: newMessage.trim(),
+        message: filteredMessage, 
       };
 
       const response = await axios.post(
@@ -222,13 +224,13 @@ const Chatbox = ({ chat }) => {
           <p className="message-text">{message.message}</p>
           <p className="timestamp">{new Date(message.createdAt).toLocaleTimeString()}</p>
           {isMyMessage && ( // Conditionally render the ellipsis button
-          <button
-            className="ellipsis-button"
-            onClick={() => handleEllipsisClick(message._id)}
-          >
-            •••
-          </button>
-        )}
+            <button
+              className="ellipsis-button"
+              onClick={() => handleEllipsisClick(message._id)}
+            >
+              •••
+            </button>
+          )}
         </div>
       </div>
     );
@@ -236,56 +238,56 @@ const Chatbox = ({ chat }) => {
 
   return (
     <div className="chatbox-container">
-    {loading ? (
-      <div>Loading...</div>
-    ) : error ? (
-      <div>{error}</div>
-    ) : (
-      <div
-        className="message-list"
-        ref={messageListRef}
-        onScroll={handleScroll}
-      >
-        {messages.map((message) => renderMessage(message))}
+      {loading ? (
+        <div>Loading...</div>
+      ) : error ? (
+        <div>{error}</div>
+      ) : (
+        <div
+          className="message-list"
+          ref={messageListRef}
+          onScroll={handleScroll}
+        >
+          {messages.map((message) => renderMessage(message))}
+        </div>
+      )}
+
+      {isScrolledUp && (
+        <button className="scroll-to-bottom" onClick={scrollToBottom}>
+          ⬇
+        </button>
+      )}
+
+      <div className="input-container">
+        <input
+          type="text"
+          className="text-input"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          placeholder="Type your message..."
+        />
+        <button className="send-button" onClick={sendMessage}>Send</button>
       </div>
-    )}
 
-    {isScrolledUp && (
-      <button className="scroll-to-bottom" onClick={scrollToBottom}>
-        ⬇
-      </button>
-    )}
-
-    <div className="input-container">
-      <input
-        type="text"
-        className="text-input"
-        value={newMessage}
-        onChange={(e) => setNewMessage(e.target.value)}
-        placeholder="Type your message..."
-      />
-      <button className="send-button" onClick={sendMessage}>Send</button>
+      {deleteModalVisible && (
+        <div className="delete-modal">
+          <p>Are you sure you want to delete this message?</p>
+          <button
+            className="confirm-delete"
+            onClick={() => deleteMessage(messageToDelete)}
+          >
+            Yes
+          </button>
+          <button
+            className="cancel-delete"
+            onClick={() => setDeleteModalVisible(false)}
+          >
+            No
+          </button>
+        </div>
+      )}
     </div>
-
-    {deleteModalVisible && (
-      <div className="delete-modal">
-        <p>Are you sure you want to delete this message?</p>
-        <button
-          className="confirm-delete"
-          onClick={() => deleteMessage(messageToDelete)}
-        >
-          Yes
-        </button>
-        <button
-          className="cancel-delete"
-          onClick={() => setDeleteModalVisible(false)}
-        >
-          No
-        </button>
-      </div>
-    )}
-  </div>
-);
+  );
 };
 
 export default Chatbox;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
-import { Box, Container, Grid, Typography, Paper } from '@mui/material';
+import { Container, Grid, Typography, Paper } from '@mui/material';
 import { blue, purple } from '@mui/material/colors';
 import { getUser, getToken } from '../../utils/helpers'; // Ensure correct path
 
