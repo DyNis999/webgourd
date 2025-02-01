@@ -1,0 +1,11 @@
+.menu-link {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+  .active-link {
+    background-color: darkgreen;
+    color: #fff;
+  }

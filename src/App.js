@@ -30,6 +30,8 @@ import UserFailed from './components/UserDashboards/FailedpollinationDashboard';
 import AdminPostManagement from './components/Post/AdminPostManagement';
 import AdminDashboard from './components/AdminDashboards/HomeDashboard';
 import LearnHome from './components/Learn/LearnHome';
+import GourdUses from './components/Learn/GourdUses';
+import HistoryGourd from './components/Learn/HistoryGourd';
 import UpdateProfile from './components/User/UpdateProfile';
 import { getToken } from './utils/helpers';
 
@@ -56,6 +58,8 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/me/update" element={<UpdateProfile />} exact="true" />
           <Route path="/learn" element={<LearnHome />} />
+          <Route path="/gourduses" element={<GourdUses />} />
+          <Route path="/historygourd" element={<HistoryGourd />} />
 
           <Route path="/createCategory" element={<CategoryCreate />} />
           <Route path="/UpdateCategory/:categoryId" element={<UpdateCategory />} />
