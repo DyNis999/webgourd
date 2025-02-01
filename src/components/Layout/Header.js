@@ -58,32 +58,33 @@ const Header = () => {
 
     return (
         <>
-            <Navbar bg="dark" variant="dark" expand="xxl" style={styles.navbarFixedTop}>
+            <Navbar expand="xxl" style={styles.navbarFixedTop}>
                 <Container>
-                    <Navbar.Brand as={Link} to="/">
+                    <Navbar.Brand as={Link} to="/" style={{ color: '#FFFFFF' }}>
                         <img
                             src="./logoNBG.png"
                             alt="Gourdify"
                             className="d-inline-block align-top"
                             style={{ width: '35px', height: '35px' }} // Adjust the width and height as needed
-                        />                    </Navbar.Brand>
+                        />
+                    </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link as={Link} to="/Home">Home</Nav.Link>
+                            <Nav.Link as={Link} to="/Home" style={styles.navLink}>Home</Nav.Link>
                             {user && (
                                 <>
-                                    <Nav.Link as={Link} to="/Gourdchat">Chat</Nav.Link>
-                                    <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
-                                    <Nav.Link as={Link} to="/Monitoring">Monitoring</Nav.Link>
+                                    <Nav.Link as={Link} to="/Gourdchat" style={styles.navLink}>Chat</Nav.Link>
+                                    <Nav.Link as={Link} to="/profile" style={styles.navLink}>Profile</Nav.Link>
+                                    <Nav.Link as={Link} to="/Monitoring" style={styles.navLink}>Monitoring</Nav.Link>
                                 </>
                             )}
-                            <Nav.Link as={Link} to="/learn">Learn</Nav.Link>
+                            <Nav.Link as={Link} to="/learn" style={styles.navLink}>Learn</Nav.Link>
                         </Nav>
                         <Nav>
                             {user ? (
                                 <Dropdown align="end">
-                                    <Dropdown.Toggle variant="secondary" id="userDropdown" className="modern-dropdown-toggle">
+                                    <Dropdown.Toggle variant="success" id="userDropdown" className="modern-dropdown-toggle" style={styles.dropdownToggle}>
                                         <img
                                             src={user.image || '/images/default_avatar.jpg'}
                                             alt={user.name}
@@ -91,44 +92,44 @@ const Header = () => {
                                             width="35"
                                             height="30"
                                         />
-                                        <span className="ms-2">{user.name}</span>
+                                        <span className="ms-2" style={styles.navLink}>{user.name}</span>
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu className="modern-dropdown-menu">
-                                        <Dropdown.Item as={Link} to="/profile">Profile</Dropdown.Item>
+                                        <Dropdown.Item as={Link} to="/profile" style={styles.dropdownItem}>Profile</Dropdown.Item>
                                         {user?.isAdmin && (
-                                            <Dropdown.Item as={Link} to="/admin/dashboard">
+                                            <Dropdown.Item as={Link} to="/admin/dashboard" style={styles.dropdownItem}>
                                                 Admin
                                             </Dropdown.Item>
                                         )}
                                         <Dropdown.Divider />
                                         <Dropdown.Header
                                             onClick={toggleDashboardMenu}
-                                            style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                                            style={{ ...styles.dropdownHeader, ...{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' } }}
                                         >
                                             My Dashboards
                                             <FontAwesomeIcon icon={showDashboardMenu ? faCaretDown : faCaretRight} />
                                         </Dropdown.Header>
                                         {showDashboardMenu && (
                                             <>
-                                                <Dropdown.Item as={Link} to="/User/Polinatedbymonth">
+                                                <Dropdown.Item as={Link} to="/User/Polinatedbymonth" style={styles.dropdownItem}>
                                                     Pollinated
                                                 </Dropdown.Item>
-                                                <Dropdown.Item as={Link} to="/User/Completedbymonth">
+                                                <Dropdown.Item as={Link} to="/User/Completedbymonth" style={styles.dropdownItem}>
                                                     Completed
                                                 </Dropdown.Item>
-                                                <Dropdown.Item as={Link} to="/User/Failedbymonth">
+                                                <Dropdown.Item as={Link} to="/User/Failedbymonth" style={styles.dropdownItem}>
                                                     Failed
                                                 </Dropdown.Item>
                                             </>
                                         )}
                                         <Dropdown.Divider />
-                                        <Dropdown.Item as={Link} to="/" onClick={logoutHandler} className="text-danger">
+                                        <Dropdown.Item as={Link} to="/" onClick={logoutHandler} className="text-danger" style={styles.dropdownItem}>
                                             Logout
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
                             ) : (
-                                <Button variant="outline-light" as={Link} to="/login">
+                                <Button variant="outline-light" as={Link} to="/login" style={styles.loginButton}>
                                     Login
                                 </Button>
                             )}
@@ -148,8 +149,11 @@ const styles = {
         zIndex: 1030,
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
         fontFamily: 'Urbanist, sans-serif',
-        backgroundColor: '#1F3B1C', // Custom background color
-        color: '#FFFFFF', // Custom font color
+        backgroundColor: '#1F3B1C', // Dark green background color
+        color: '#FFFFFF', // White font color
+    },
+    navLink: {
+        color: '#FFFFFF', // Ensure nav links are white
     },
     body: {
         paddingTop: '56px',
