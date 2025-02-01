@@ -1,5 +1,5 @@
 body {
-    font-family: 'Roboto';
+    font-family: 'Urbanist', sans-serif;
 }
 
 .landing-container {
@@ -19,7 +19,6 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    filter: blur(8px);
     overflow: hidden;
 }
 
@@ -27,6 +26,17 @@ body {
     flex: 1;
     background-size: cover;
     background-position: center;
+    position: relative;
+}
+
+.background-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
 }
 
 .content {
@@ -43,7 +53,8 @@ body {
     text-align: left;
     font-size: 3.5em;
     font-weight: 500; /* Bold */
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Urbanist', sans-serif;
+    animation: fadeIn 2s ease-in-out;
 }
 
 /* Subtitle Styling */
@@ -53,7 +64,8 @@ body {
     color: #fff;
     opacity: 0.9;
     font-weight: 400;
-    font-family: 'Roboto', sans-serif; /* Regular */
+    font-family: 'Urbanist', sans-serif; /* Regular */
+    animation: fadeIn 2s ease-in-out;
 }
 
 .cta-button-container {
@@ -61,6 +73,7 @@ body {
     justify-content: left;
     align-items: center;
     margin-top: 20px; /* Adjust as needed */
+    font-family: 'Urbanist', sans-serif;
 }
 
 /* Call-to-Action Button */
@@ -73,7 +86,8 @@ body {
     border-radius: 50px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Urbanist', sans-serif;
+    animation: fadeIn 2s ease-in-out;
 }
 
 .cta-button:hover {
@@ -86,6 +100,7 @@ body {
     text-align: left;
     color: #000000;
     padding: 0% 10%;
+    font-family: 'Urbanist', sans-serif;
 }
 
 .about-us-container h2 {
@@ -93,9 +108,22 @@ body {
     margin-bottom: 20px;
     justify-content: left;
     align-items: left;
+    font-family: 'Urbanist', sans-serif;
 }
 
 .about-us-container p {
     font-size: 1.2em;
     line-height: 1.5;
+    font-family: 'Urbanist', sans-serif;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

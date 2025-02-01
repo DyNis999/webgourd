@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&display=swap');
+
+body {
+    background-color: #000000; /* Set the body background color to black */
+    color: #ffffff; /* Ensures text is visible on the black background */
+    margin: 0;
+    padding: 0;
+    font-family: 'Urbanist', sans-serif;
+}
+
+.gourd-uses {
+    font-family: 'Urbanist', sans-serif;
+    padding: 20px;
+    background-color: #101010; /* Changed to black */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.gourd-uses h2 {
+    font-size: 1.6rem;
+    margin: 20px 0; /* Add space at the top and bottom */
+    color: #ffffff; /* Ensure text is visible on black background */
+    font-weight: bold; /* Make the heading bold */
+}
+
+.gourd-uses p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #ffffff; /* Ensure text is visible on black background */
+    font-size: 1.5rem;
+}
+
+.gourd-uses-container {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+}
+
+.carousel-container {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+}
+
+.animate-left {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.animate-bottom {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.gourd-uses-container:hover h2,
+.gourd-uses-container:hover p {
+    transform: scale(1.01); /* Slightly scale up the heading and paragraph on hover */
+    transition: transform 0.3s ease; /* Smooth transition for scaling */
+}
+
+.gourd-use-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    background-color: #323432; /* Dark background for carousel items */
+    padding: 20px;
+    border-radius: 10px;
+    transition: border-radius 0.3s ease; /* Smooth transition for border-radius */
+}
+
+.gourd-use-item .text {
+    flex: 1;
+    padding-right: 20px;
+    color: #ffffff; /* Ensure text is visible on dark background */
+    font-size: 1.5rem;
+    text-align: left; /* Align text to the left */
+}
+
+.gourd-use-item .image {
+    flex: 1;
+    text-align: center;
+}
+
+.gourd-use-item .text:hover {
+    transform: scale(1.01); /* Slightly scale up the text on hover */
+}
+
+.gourd-use-item .image:hover {
+    transform: scale(1.01); /* Slightly scale up the image on hover */
+}
+
+.gourd-use-item .image img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+.gourd-use-item:hover {
+    border-radius: 15px; /* Increase border-radius on hover */
+}
+
+.gourd-use-item img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+/* Carousel customization if needed */
+.carousel .slide {
+    background: none;
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

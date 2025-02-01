@@ -29,6 +29,7 @@ import UserCompleted from './components/UserDashboards/CompletedpollinationDashb
 import UserFailed from './components/UserDashboards/FailedpollinationDashboard';
 import AdminPostManagement from './components/Post/AdminPostManagement';
 import AdminDashboard from './components/AdminDashboards/HomeDashboard';
+import LearnHome from './components/Learn/LearnHome';
 import UpdateProfile from './components/User/UpdateProfile';
 import { getToken } from './utils/helpers';
 
@@ -48,11 +49,13 @@ const App = () => {
       <div>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Landing isAuthenticated={isAuthenticated} />} />          <Route path="/Home" element={<Home />} />
+          <Route path="/" element={<Landing isAuthenticated={isAuthenticated} />} /> 
+          <Route path="/Home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/me/update" element={<UpdateProfile />} exact="true" />
+          <Route path="/learn" element={<LearnHome />} />
 
           <Route path="/createCategory" element={<CategoryCreate />} />
           <Route path="/UpdateCategory/:categoryId" element={<UpdateCategory />} />

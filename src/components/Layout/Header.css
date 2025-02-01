@@ -27,60 +27,8 @@ body {
     margin: 0; /* Ensure no extra margin */
 }
 
-/* Admin Sidebar */
-.admin-sidebar {
-    position: fixed;
-    left: 0;
-    top: 60px;  /* Set this to the height of your header */
-    width: 250px;
-    height: calc(100vh - 60px);  /* Subtract the height of the header */
-    background-color: #343a40;  /* Dark background color */
-    padding: 20px;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease-in-out;
-    z-index: 1000;
-    overflow-y: auto;
-    color: #fff;  /* White text color */
-    border-right: 2px solid #495057;  /* Outline on the right side */
-}
-
-.admin-sidebar.show {
-    transform: translateX(0);
-}
-
-.sidebar-title {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    color: #fff;  /* White text for title */
-    text-align: center;
-    border-bottom: 1px solid #495057;
-    padding-bottom: 10px;
-}
-
-.sidebar-menu {
-    list-style: none;
-    padding: 0;
-}
-
-.sidebar-menu li {
-    margin-bottom: 15px;
-}
-
-.sidebar-menu a {
-    color: #adb5bd;  /* Light grey text color */
-    text-decoration: none;
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    transition: color 0.3s;
-}
-
-.sidebar-menu a:hover {
-    color: #fff;  /* White on hover */
-}
-
-.sidebar-menu a svg {
-    margin-right: 10px;  /* Space between icon and text */
+.navbar-container {
+    background-color: inherit; /* Inherit the background color from the Navbar */
 }
 
 .main-content {

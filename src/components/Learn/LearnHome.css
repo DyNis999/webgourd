@@ -1,0 +1,122 @@
+.learn-home-container {
+    text-align: center;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.learn-home-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    z-index: 1;
+}
+
+.learn-home-container h1 {
+    font-family: Urbanist, sans-serif;
+    font-size: 6rem;
+    color: #ffffff; /* White text color */
+    position: relative;
+    z-index: 2;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.intro-section {
+    display: flex;
+    width: 100%;
+    background-color: #1F3B1C;
+    z-index: 2;
+}
+
+.intro-image {
+    flex: 1;
+    background-size: cover; /* Ensure the image covers the entire area */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent the image from repeating */
+    height: auto; /* Adjust the height to fill the container */
+    animation: fadeInLeft 2s ease-in-out;
+}
+
+.intro-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-family: Urbanist, sans-serif;
+    font-size: 1.5rem;
+    color: #ffffff;
+    animation: fadeInRight 2s ease-in-out;
+    text-indent: 2em;
+    text-align: justify;
+}
+
+.learn-home-container h1 {
+    transition: transform 0.3s ease;
+}
+
+.learn-home-container:hover h1 {
+    transform: scale(1.05);
+}
+
+.intro-image {
+    transition: transform 0.3s ease, z-index 0s;
+}
+
+.intro-image:hover {
+    transform: scale(1.01);
+    z-index: 3; /* Bring the hovered element to the front */
+}
+
+.intro-text {
+    transition: transform 0.3s ease;
+}
+
+.intro-text:hover {
+    transform: scale(1.01);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

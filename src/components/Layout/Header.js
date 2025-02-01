@@ -8,8 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
 import { getUser, logout } from '../../utils/helpers';
-import { getToken } from '../../utils/helpers';
-
 
 const Header = () => {
     const [user, setUser] = useState(null);
@@ -21,78 +19,62 @@ const Header = () => {
     const toggleDashboardMenu = () => {
         setShowDashboardMenu(!showDashboardMenu);
     };
+
     const logoutHandler = async () => {
         try {
-            if (!user) {
-                throw new Error('User data not found in state');
-            }
-    
-            const userId = user._id || user.userId; // Check both possible key names
-            if (!userId) {
-                throw new Error('User ID not found in user state');
-            }
-    
             const token = sessionStorage.getItem('token');
             if (!token) throw new Error('No token found');
-    
+
+            const userId = user?.userId;
+            if (!userId) throw new Error('User ID not found');
+
             await axios.post('http://localhost:4000/api/v1/users/logout', { userId }, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-    
+
             sessionStorage.removeItem('token');
-            setUser(null);
-    
             logout(() => {
-                navigate('/login');
+                navigate('/');
+                window.location.reload();
             });
-    
             toast.success('Logged out successfully', { position: 'bottom-right' });
         } catch (error) {
-            console.error('Logout error:', error.message);
-            toast.error(error.message, { position: 'bottom-right' });
+            console.error('Logout error:', error.response ? error.response.data : error.message);
+            toast.error('Failed to log out. Please try again.', { position: 'bottom-right' });
         }
     };
-    
-    const fetchUser = async () => {
-        try {
-            const { data } = await axios.get('http://localhost:4000/api/v1/users/me', {
-                headers: { Authorization: `Bearer ${getToken()}` }
-            });
-    
-            if (!data || !data.user) {
-                throw new Error('Invalid user data received');
-            }
-    
-            console.log('User fetched:', data.user); // Debugging
-            setUser(data.user);
-        } catch (error) {
-            console.error('Error fetching user:', error);
-            setUser(null);
-        } finally {
-            setLoading(false);
-        }
-    };
-    
+
     useEffect(() => {
-        fetchUser();
+        const fetchedUser = getUser();
+        if (fetchedUser) {
+            setUser(fetchedUser);
+        }
+        setLoading(false);
     }, []);
-    
+
+    if (loading) {
+        return null;
+    }
 
     return (
         <>
-            <Navbar bg="dark" variant="dark" expand="lg" style={styles.navbarFixedTop}>
+            <Navbar bg="dark" variant="dark" expand="xxl" style={styles.navbarFixedTop}>
                 <Container>
                     <Navbar.Brand as={Link} to="/">
-                        <img src="./images/shopit_logo.png" alt="Gourdify" className="d-inline-block align-top" />
-                    </Navbar.Brand>
+                        <img
+                            src="./logoNBG.png"
+                            alt="Gourdify"
+                            className="d-inline-block align-top"
+                            style={{ width: '35px', height: '35px' }} // Adjust the width and height as needed
+                        />                    </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link as={Link} to="/Home">Forum</Nav.Link>
+                            <Nav.Link as={Link} to="/Home">Home</Nav.Link>
                             {user && (
                                 <>
                                     <Nav.Link as={Link} to="/Gourdchat">Chat</Nav.Link>
-                                    {/* <Nav.Link as={Link} to="/profile">Profile</Nav.Link> */}
+                                    <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
                                     <Nav.Link as={Link} to="/Monitoring">Monitoring</Nav.Link>
                                 </>
                             )}
@@ -165,9 +147,13 @@ const styles = {
         width: '100%',
         zIndex: 1030,
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        fontFamily: 'Urbanist, sans-serif',
+        backgroundColor: '#1F3B1C', // Custom background color
+        color: '#FFFFFF', // Custom font color
     },
     body: {
         paddingTop: '56px',
+        fontFamily: 'Urbanist, sans-serif',
     },
 };
 
