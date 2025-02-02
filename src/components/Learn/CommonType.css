@@ -51,7 +51,6 @@
     font-size: 1.5rem;
     color: #ffffff; /* White text color */
     line-height: 1.5;
-    margin-top: 20px;
     margin-bottom: 20px;
     opacity: 0;
     transform: translateY(20px);
@@ -66,6 +65,90 @@
 .definition-body-text:hover {
     transform: scale(1.02);
     transition: transform 0.3s ease-in-out;
+}
+
+.example-content-container {
+    padding: 50px;
+    background-color: #1F3B1C; /* Dark green background color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.example-content-container h2 {
+    font-family: Urbanist, sans-serif;
+    font-size: 2rem;
+    color: #ffffff; /* White text color */
+    margin-bottom: 15px;
+    animation: fadeInLeft 1s ease-in-out;
+    transition: transform 0.3s ease-in-out;
+}
+
+.example-content-container h2:hover {
+    transform: scale(1.02);
+}
+
+.carousel-wrapper {
+    background-color: #101010; /* Dark background color */
+    padding: 20px;
+}
+
+.carousel-container {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+    background: #101010;
+}
+
+.carousel-container.animate-bottom {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.gourd-example-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    background-color: #101010; /* Dark background for carousel items */
+    padding: 20px;
+}
+
+.gourd-example-item .text {
+    flex: 1;
+    padding-right: 20px;
+    color: #ffffff; /* Ensure text is visible on dark background */
+    font-size: 1.5rem;
+    text-align: left; /* Align text to the left */
+}
+
+.gourd-example-item .image {
+    flex: 1;
+    text-align: center;
+}
+
+.gourd-example-item .text:hover {
+    transform: scale(1.01); /* Slightly scale up the text on hover */
+}
+
+.gourd-example-item .image:hover {
+    transform: scale(1.01); /* Slightly scale up the image on hover */
+}
+
+.gourd-example-item .image img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+.image-source {
+    font-family: Urbanist, sans-serif;
+    font-size: 1rem;
+    color: #ffffff; /* White text color */
+    text-align: center;
+    margin-top: 10px;
+}
+
+.image-source a {
+    color: #ffffff; /* White text color */
+    text-decoration: underline;
 }
 
 @keyframes fadeIn {
