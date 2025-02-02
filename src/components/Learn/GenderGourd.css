@@ -129,6 +129,147 @@
     margin-bottom: 20px; /* Add space below the image */
 }
 
+.importance-content-container {
+    padding: 50px;
+    background-color: #1F3B1C; /* Dark green background color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.importance-subtitle {
+    font-family: Urbanist, sans-serif;
+    font-size: 2rem;
+    color: #ffffff; /* White text color */
+    margin-bottom: 15px;
+    animation: fadeInLeft 1s ease-in-out;
+    transition: transform 0.3s ease-in-out;
+}
+
+.importance-subtitle:hover {
+    transform: scale(1.02);
+}
+
+.importance-body-text {
+    font-family: Urbanist, sans-serif;
+    font-size: 1.5rem;
+    color: #ffffff; /* White text color */
+    line-height: 1.5;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+}
+
+.importance-body-text.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.importance-body-text:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease-in-out;
+}
+
+.process-content-container {
+    padding: 50px;
+    background-color: #1F3B1C; /* Dark green background color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.process-subtitle {
+    font-family: Urbanist, sans-serif;
+    font-size: 2rem;
+    color: #ffffff; /* White text color */
+    margin-bottom: 15px;
+    animation: fadeInLeft 1s ease-in-out;
+    transition: transform 0.3s ease-in-out;
+}
+
+.process-subtitle:hover {
+    transform: scale(1.02);
+}
+
+.process-body-text {
+    font-family: Urbanist, sans-serif;
+    font-size: 1.5rem;
+    color: #ffffff; /* White text color */
+    line-height: 1.5;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+}
+
+.process-body-text.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.process-body-text:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease-in-out;
+}
+
+.natural-section, .hand-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #1F3B1C; /* Dark green background color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    border-radius: 10px;
+    flex-direction: row; /* Ensure items are aligned in a row */
+}
+
+.natural-section .text-container, .hand-section .text-container {
+    flex: 0 0 50%; /* Ensure the text container takes up 50% of the container */
+    max-width: 50%;
+    margin-right: 20px; /* Add space between text and image */
+}
+
+.natural-section .image-container, .hand-section .image-container {
+    flex: 0 0 50%; /* Ensure the image container takes up 50% of the container */
+    max-width: 50%;
+    text-align: center; /* Center the content within the image container */
+}
+
+.natural-section img, .hand-section img {
+    width: 100%; /* Ensure the image takes up 100% of its container */
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    animation: fadeInRight 1s ease-in-out;
+}
+
+.natural-section h3, .hand-section h3 {
+    font-family: Urbanist, sans-serif;
+    font-size: 2rem;
+    color: #ffffff; /* White text color */
+    margin-bottom: 15px;
+}
+
+.natural-section .process-body-text, .hand-section .process-body-text {
+    font-family: Urbanist, sans-serif;
+    font-size: 1.5rem;
+    color: #ffffff; /* White text color */
+    line-height: 1.5;
+    margin: 0;
+}
+
+.image-source {
+    font-family: Urbanist, sans-serif;
+    font-size: 1rem;
+    color: #ffffff; /* White text color */
+    margin-top: 10px;
+}
+
+.image-source a {
+    color: #ffffff; /* White text color */
+    text-decoration: underline;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
