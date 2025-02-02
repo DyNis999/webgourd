@@ -1,11 +1,35 @@
-.menu-link {
+.learn-menu {
+    background-color: rgba(0, 0, 0, 0.36); /* Transparent gray background */
+    padding: 10px;
+    position: fixed;
+    top: 70px; /* Default position */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: top 0.3s ease; /* Smooth transition */
+    z-index: 1000;
+}
+
+.learn-menu.hidden {
+    top: -100px; /* Hide the menu when scrolling down */
+}
+
+.learn-menu-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    padding-left: 20px;
+}
+
+.learn-menu-item {
+    margin-right: 20px;
     color: #fff;
-    text-decoration: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-  }
-  
-  .active-link {
-    background-color: darkgreen;
+}
+
+.learn-menu-separator {
+    margin-right: 20px;
     color: #fff;
-  }
+}

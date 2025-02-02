@@ -33,6 +33,7 @@ import LearnHome from './components/Learn/LearnHome';
 import GourdUses from './components/Learn/GourdUses';
 import HistoryGourd from './components/Learn/HistoryGourd';
 import Botany from './components/Learn/Botany';
+import GenderGourd from './components/Learn/GenderGourd';
 import UpdateProfile from './components/User/UpdateProfile';
 import { getToken } from './utils/helpers';
 
@@ -59,9 +60,10 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/me/update" element={<UpdateProfile />} exact="true" />
           <Route path="/learn" element={<LearnHome />} />
-          <Route path="/gourduses" element={<GourdUses />} />
-          <Route path="/historygourd" element={<HistoryGourd />} />
-          <Route path="/botany" element={<Botany />} />
+          <Route path="/learn/gourduses" element={<GourdUses />} />
+          <Route path="/learn/historygourd" element={<HistoryGourd />} />
+          <Route path="/learn/botany" element={<Botany />} />
+          <Route path="/learn/gender" element={<GenderGourd />} />
 
           <Route path="/createCategory" element={<CategoryCreate />} />
           <Route path="/UpdateCategory/:categoryId" element={<UpdateCategory />} />
