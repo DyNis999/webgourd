@@ -18,7 +18,7 @@ const GenderGourd = () => {
             });
         }, { threshold: 0.1 });
 
-        const elements = document.querySelectorAll('.gender-body-text, .male-card, .female-card, .importance-body-text, .process-body-text');
+        const elements = document.querySelectorAll('.gender-body-text, .male-card, .female-card, .importance-body-text, .process-body-text, .challenge-body-text');
         elements.forEach(element => observer.observe(element));
 
         return () => {
@@ -101,7 +101,14 @@ const GenderGourd = () => {
                         </p>
                     </div>
                 </div>
-
+            </div>
+            <div className='challenge-content-container'>
+                <h2 className="challenge-subtitle">Challenges in Pollination</h2>
+                <p className="challenge-body-text">
+                    Pollination can be challenging, particularly if there are not enough pollinators in the area.
+                    Factors like habitat loss, pesticide use, and climate change have led to declining pollinator populations, which can affect gourd production.
+                    Additionally, poor weather conditions such as excessive rain or extreme heat can hinder pollination, as bees and other insects may be less active in such conditions.
+                </p>
             </div>
 
         </LearnMenu>

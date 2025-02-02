@@ -156,6 +156,7 @@
     margin-top: 20px;
     margin-bottom: 20px;
     opacity: 0;
+    text-indent: 2em;
     transform: translateY(20px);
     transition: opacity 1s ease-in-out, transform 1s ease-in-out;
 }
@@ -197,6 +198,7 @@
     margin-top: 20px;
     margin-bottom: 20px;
     opacity: 0;
+    text-indent: 2em;
     transform: translateY(20px);
     transition: opacity 1s ease-in-out, transform 1s ease-in-out;
 }
@@ -268,6 +270,48 @@
 .image-source a {
     color: #ffffff; /* White text color */
     text-decoration: underline;
+}
+
+.challenge-content-container {
+    padding: 50px;
+    background-color: #1F3B1C; /* Dark green background color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.challenge-subtitle {
+    font-family: Urbanist, sans-serif;
+    font-size: 2rem;
+    color: #ffffff; /* White text color */
+    margin-bottom: 15px;
+    animation: fadeInLeft 1s ease-in-out;
+    transition: transform 0.3s ease-in-out;
+}
+
+.challenge-subtitle:hover {
+    transform: scale(1.02);
+}
+
+.challenge-body-text {
+    font-family: Urbanist, sans-serif;
+    font-size: 1.5rem;
+    color: #ffffff; /* White text color */
+    line-height: 1.5;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-indent: 2em;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+}
+
+.challenge-body-text.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.challenge-body-text:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease-in-out;
 }
 
 @keyframes fadeIn {

@@ -11,7 +11,7 @@ const LearnHome = () => {
         <>
             <LearnMenu>
                 <div className="learn-home-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
-                    <h1>Explore the world of gourds</h1>
+                    <h1>Explore The World of Gourds</h1>
                 </div>
                 <div className="intro-section">
                     <div className="intro-image" style={{ backgroundImage: `url(${Intro})` }}></div>
