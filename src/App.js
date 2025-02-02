@@ -32,6 +32,7 @@ import AdminDashboard from './components/AdminDashboards/HomeDashboard';
 import LearnHome from './components/Learn/LearnHome';
 import GourdUses from './components/Learn/GourdUses';
 import HistoryGourd from './components/Learn/HistoryGourd';
+import Botany from './components/Learn/Botany';
 import UpdateProfile from './components/User/UpdateProfile';
 import { getToken } from './utils/helpers';
 
@@ -60,6 +61,7 @@ const App = () => {
           <Route path="/learn" element={<LearnHome />} />
           <Route path="/gourduses" element={<GourdUses />} />
           <Route path="/historygourd" element={<HistoryGourd />} />
+          <Route path="/botany" element={<Botany />} />
 
           <Route path="/createCategory" element={<CategoryCreate />} />
           <Route path="/UpdateCategory/:categoryId" element={<UpdateCategory />} />

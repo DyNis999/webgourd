@@ -57,7 +57,7 @@ const LearnMenu = ({ children }) => {
           </li>
           <li style={{ marginRight: '20px', color: '#fff' }}>|</li>
           <li style={{ color: '#fff' }}>
-            <Link to="/learn/screen-two" style={linkStyle('/learn/screen-two')}>Screen Two</Link>
+            <Link to="/botany" style={linkStyle('/botany')}>Botany</Link>
           </li>
         </ul>
       </nav>
