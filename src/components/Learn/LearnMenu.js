@@ -76,11 +76,11 @@ const LearnMenu = ({ children }) => {
           </li>
           <li style={{ marginRight: '20px', color: '#fff' }}>|</li>
           <li style={{ marginRight: '20px', color: '#fff' }}>
-            <Link to="/learn/health" style={linkStyle('/health')}>Health</Link>
+            <Link to="/learn/health" style={linkStyle('/learn/health')}>Health</Link>
           </li>
           <li style={{ marginRight: '20px', color: '#fff' }}>|</li>
           <li style={{ marginRight: '20px', color: '#fff' }}>
-            <Link to="/learn/issue" style={linkStyle('/issue')}>Issues</Link>
+            <Link to="/learn/issue" style={linkStyle('/learn/issue')}>Issues</Link>
           </li>
         </ul>
       </nav>

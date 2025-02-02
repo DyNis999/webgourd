@@ -35,6 +35,8 @@ import HistoryGourd from './components/Learn/HistoryGourd';
 import Botany from './components/Learn/Botany';
 import GenderGourd from './components/Learn/GenderGourd';
 import CommonType from './components/Learn/CommonType';
+import HealthGourd from './components/Learn/HealthGourd';
+import IssueGourd from './components/Learn/IssueGourd';
 import UpdateProfile from './components/User/UpdateProfile';
 import { getToken } from './utils/helpers';
 
@@ -66,6 +68,8 @@ const App = () => {
           <Route path="/learn/botany" element={<Botany />} />
           <Route path="/learn/gender" element={<GenderGourd />} />
           <Route path="/learn/common" element={<CommonType />} />
+          <Route path="/learn/health" element={<HealthGourd />} />
+          <Route path="/learn/issue" element={<IssueGourd />} />
 
           <Route path="/createCategory" element={<CategoryCreate />} />
           <Route path="/UpdateCategory/:categoryId" element={<UpdateCategory />} />
