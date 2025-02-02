@@ -27,7 +27,7 @@
 
 .history-container h1 {
     font-family: Urbanist, sans-serif;
-    font-size: 3rem;
+    font-size: 4rem;
     color: #ffffff; /* White text color */
     position: relative;
     z-index: 2;
@@ -36,34 +36,55 @@
 
 .history-container:hover h1 {
     transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
 }
 
 .world-content-container {
-    padding: 20px;
+    padding: 50px;
     background-color: #101010; /* Dark green background color */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.world-content-container:hover {
+    background-color: #1a1a1a; /* Slightly lighter background on hover */
+    transition: background-color 0.3s ease-in-out;
+}
+
 .ph-content-container {
-    padding: 20px;
+    padding: 50px;
     background-color: #101010; /* Dark green background color */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ph-content-container:hover {
+    background-color: #1a1a1a; /* Slightly lighter background on hover */
+    transition: background-color 0.3s ease-in-out;
 }
 
 .world-subtitle {
     font-family: Urbanist, sans-serif;
     font-size: 2rem;
     color: #ffffff; /* White text color */
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     animation: fadeInLeft 1s ease-in-out;
+    transition: transform 0.3s ease-in-out;
+}
+
+.world-subtitle:hover {
+    transform: scale(1.02);
 }
 
 .ph-subtitle {
     font-family: Urbanist, sans-serif;
     font-size: 2rem;
     color: #ffffff; /* White text color */
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     animation: fadeInLeft 1s ease-in-out;
+    transition: transform 0.3s ease-in-out;
+}
+
+.ph-subtitle:hover {
+    transform: scale(1.02);
 }
 
 .ph-body-text1 {
@@ -82,6 +103,11 @@
     transform: translateX(0);
 }
 
+.ph-body-text1:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease-in-out;
+}
+
 .ph-body-text2 {
     font-family: Urbanist, sans-serif;
     font-size: 1.5rem;
@@ -96,6 +122,11 @@
 .ph-body-text2.animate {
     opacity: 1;
     transform: translateX(0);
+}
+
+.ph-body-text2:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease-in-out;
 }
 
 .world-body-text {
@@ -114,11 +145,27 @@
     transform: translateY(0);
 }
 
+.world-body-text:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease-in-out;
+}
+
 .content-section {
     display: flex;
     flex-direction: column; /* Change flex direction to column */
     align-items: center;
     margin-bottom: 20px;
+}
+
+.content-section:hover {
+    background-color: #1a1a1a; /* Slightly lighter background on hover */
+    transition: background-color 0.3s ease-in-out;
+}
+
+.content-section:hover .content-image,
+.content-section:hover .image-source-centered {
+    transform: scale(1.02); /* Slightly enlarge the image and text */
+    transition: transform 0.3s ease-in-out;
 }
 
 .content-section .content-image {
@@ -140,6 +187,11 @@
     transform: translateY(0);
 }
 
+.content-section .content-image:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease-in-out;
+}
+
 .image-source {
     color: #ffffff; /* White text color */
 }
@@ -148,6 +200,78 @@
     color: #ffffff; /* White text color for links */
 }
 
+.image-section {
+    display: flex;
+    flex-direction: row; /* Change flex direction to row */
+    justify-content: center; /* Center the images */
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.image-section:hover {
+    background-color: #1a1a1a; /* Slightly lighter background on hover */
+    transition: background-color 0.3s ease-in-out;
+}
+
+.image-section:hover .ph-content-image-small,
+.image-section:hover .image-source-centered {
+    transform: scale(1.02); /* Slightly enlarge the image and text */
+    transition: transform 0.3s ease-in-out;
+}
+
+.ph-content-image-small {
+    max-width: 100%;
+    width: 100%; /* Ensure the image takes up the full width of its container */
+    max-width: 300px; /* Adjust the max-width to resize the image */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px; /* Add some spacing between images */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+}
+
+.ph-content-image-small.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.ph-content-image-small:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease-in-out;
+}
+
+.image-container {
+    text-align: center;
+}
+
+.image-container:hover {
+    background-color: #1a1a1a; /* Slightly lighter background on hover */
+    transition: background-color 0.3s ease-in-out;
+}
+
+.image-container:hover .ph-content-image-small,
+.image-container:hover .image-source-centered {
+    transform: scale(1.02); /* Slightly enlarge the image and text */
+    transition: transform 0.3s ease-in-out;
+}
+
+.image-source-centered {
+    margin-top: 10px;
+    font-family: Urbanist, sans-serif;
+    font-size: 1rem;
+    color: #ffffff; /* White text color */
+    transition: transform 0.3s ease-in-out;
+}
+
+.image-source-centered a {
+    color: #ffffff; /* White text color for links */
+}
+
+.image-source-centered:hover {
+    transform: scale(1.02);
+}
 
 @keyframes fadeIn {
     from {
