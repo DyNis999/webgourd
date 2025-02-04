@@ -5,7 +5,7 @@ const config = {
 };
 
 // Use window.location.hostname to dynamically get the current IP/hostname
-export const socket = io(`http://${window.location.hostname}:4000`, {
+export const socket = io(`${process.env.REACT_APP_API}`, {
     autoConnect: false,
     reconnection: true,
     reconnectionAttempts: 10,

@@ -19,7 +19,7 @@ const FailedPollinationDashboard = () => {
           return;
         }
 
-        const response = await axios.get(`http://localhost:4000/api/v1/Dashboard/failed/month/${user.userId}`, {
+        const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/failed/month/${user.userId}`, {
           headers: { Authorization: `Bearer ${token}` }, // Include authentication token
         });
 

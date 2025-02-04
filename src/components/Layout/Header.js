@@ -28,7 +28,7 @@ const Header = () => {
             const userId = user?.userId;
             if (!userId) throw new Error('User ID not found');
 
-            await axios.post('http://localhost:4000/api/v1/users/logout', { userId }, {
+            await axios.post(`${process.env.REACT_APP_API}/api/v1/users/logout`, { userId }, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 

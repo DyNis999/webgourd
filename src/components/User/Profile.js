@@ -18,7 +18,7 @@ const Profile = () => {
       }
     };
     try {
-      const { data } = await axios.get(`http://localhost:4000/api/v1/users/me`, config);
+      const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/users/me`, config);
       setUser(data.user);
       setLoading(false);
     } catch (error) {

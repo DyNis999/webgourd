@@ -24,7 +24,7 @@ const Socialmedia = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get('http://localhost:4000/api/v1/posts');
+                const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/posts`);
                 const approvedPosts = response.data.filter(post => post.status === 'Approved');
                 setPosts(approvedPosts);
             } catch (error) {
@@ -42,7 +42,7 @@ const Socialmedia = () => {
         const filteredComment = filterBadWords(commentContent);
         try {
             const token = sessionStorage.getItem('token');
-            const response = await axios.post(`http://localhost:4000/api/v1/posts/${postId}/comments`, {
+            const response = await axios.post(`${process.env.REACT_APP_API}/api/v1/posts/${postId}/comments`, {
                 content: filteredComment
             }, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -63,7 +63,7 @@ const Socialmedia = () => {
         const filteredReply = filterBadWords(replyContent);
         try {
             const token = sessionStorage.getItem('token');
-            const response = await axios.post(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}/replies`, {
+            const response = await axios.post(`${process.env.REACT_APP_API}/api/v1/posts/${postId}/comments/${commentId}/replies`, {
                 content: filteredReply
             }, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -84,7 +84,7 @@ const Socialmedia = () => {
         }
         try {
             const token = sessionStorage.getItem('token');
-            const response = await axios.post(`http://localhost:4000/api/v1/posts/${postId}/like`, {}, {
+            const response = await axios.post(`${process.env.REACT_APP_API}/api/v1/posts/${postId}/like`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -129,7 +129,7 @@ const Socialmedia = () => {
     const handleEditComment = async (postId, commentId, newContent) => {
         try {
             const token = sessionStorage.getItem('token');
-            const response = await axios.put(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}`, {
+            const response = await axios.put(`${process.env.REACT_APP_API}/api/v1/posts/${postId}/comments/${commentId}`, {
                 content: newContent
             }, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -144,7 +144,7 @@ const Socialmedia = () => {
     const handleDeleteComment = async (postId, commentId) => {
         try {
             const token = sessionStorage.getItem('token');
-            await axios.delete(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}`, {
+            await axios.delete(`${process.env.REACT_APP_API}/api/v1/posts/${postId}/comments/${commentId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -160,7 +160,7 @@ const Socialmedia = () => {
     const handleEditReply = async (postId, commentId, replyId, newContent) => {
         try {
             const token = sessionStorage.getItem('token');
-            const response = await axios.put(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}/replies/${replyId}`, {
+            const response = await axios.put(`${process.env.REACT_APP_API}/api/v1/posts/${postId}/comments/${commentId}/replies/${replyId}`, {
                 content: newContent
             }, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -175,7 +175,7 @@ const Socialmedia = () => {
     const handleDeleteReply = async (postId, commentId, replyId) => {
         try {
             const token = sessionStorage.getItem('token');
-            await axios.delete(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}/replies/${replyId}`, {
+            await axios.delete(`${process.env.REACT_APP_API}/api/v1/posts/${postId}/comments/${commentId}/replies/${replyId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 

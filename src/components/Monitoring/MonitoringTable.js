@@ -40,7 +40,7 @@ const MonitoringList = () => {
 
             try {
                 const token = sessionStorage.getItem('token');
-                const response = await axios.get(`http://localhost:4000/api/v1/Monitoring/${currentUser.id}`, {
+                const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/Monitoring/${currentUser.id}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setMonitorings(response.data);
@@ -59,10 +59,10 @@ const MonitoringList = () => {
             const token = sessionStorage.getItem('token');
             try {
                 const [gourdTypesResponse, gourdVarietiesResponse] = await Promise.all([
-                    axios.get('http://localhost:4000/api/v1/gourdType/getall', {
+                    axios.get(`${process.env.REACT_APP_API}/api/v1/gourdType/getall`, {
                         headers: { Authorization: `Bearer ${token}` },
                     }),
-                    axios.get('http://localhost:4000/api/v1/gourdVariety/getall', {
+                    axios.get(`${process.env.REACT_APP_API}/api/v1/gourdVariety/getall`, {
                         headers: { Authorization: `Bearer ${token}` },
                     }),
                 ]);
@@ -89,7 +89,7 @@ const MonitoringList = () => {
     const deleteMonitoring = async (id) => {
         try {
             const token = sessionStorage.getItem('token');
-            await axios.delete(`http://localhost:4000/api/v1/Monitoring/${id}`, {
+            await axios.delete(`${process.env.REACT_APP_API}/api/v1/Monitoring/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setMonitorings(monitorings.filter((monitoring) => monitoring._id !== id));
@@ -124,7 +124,7 @@ const MonitoringList = () => {
         try {
             const token = sessionStorage.getItem('token');
             const response = await axios.put(
-                `http://localhost:4000/api/v1/Monitoring/${id}`,
+                `${process.env.REACT_APP_API}/api/v1/Monitoring/${id}`,
                 updatedMonitoring,
                 {
                     headers: {
@@ -178,7 +178,7 @@ const MonitoringList = () => {
         try {
             const token = sessionStorage.getItem("token");
             const response = await axios.post(
-                "http://localhost:4000/api/v1/Monitoring",
+                `${process.env.REACT_APP_API}/api/v1/Monitoring`,
                 formData,
                 {
                     headers: {

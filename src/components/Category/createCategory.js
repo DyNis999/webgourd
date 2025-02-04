@@ -9,7 +9,7 @@ const CreateCategory = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:4000/api/v1/categories/create', { name, description });
+            const response = await axios.post(`${process.env.REACT_APP_API}/api/v1/categories/create`, { name, description });
             console.log('Category created:', response.data);
             setName('');
             setDescription('');

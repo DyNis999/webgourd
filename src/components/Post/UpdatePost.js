@@ -25,7 +25,7 @@ const UpdatePost = () => {
                     return;
                 }
 
-                const response = await axios.get(`http://localhost:4000/api/v1/posts/${postId}`, {
+                const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/posts/${postId}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
@@ -47,7 +47,7 @@ const UpdatePost = () => {
                     return;
                 }
 
-                const response = await axios.get('http://localhost:4000/api/v1/categories/getall', {
+                const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/categories/getall`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
@@ -92,7 +92,7 @@ const UpdatePost = () => {
                 throw new Error("No token found in sessionStorage");
             }
 
-            const response = await fetch(`http://localhost:4000/api/v1/posts/${postId}`, {
+            const response = await fetch(`${process.env.REACT_APP_API}/api/v1/posts/${postId}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,

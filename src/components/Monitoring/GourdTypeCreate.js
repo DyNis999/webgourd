@@ -18,7 +18,7 @@ const GourdTypeList = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:4000/api/v1/gourdType/getall`, {
+                const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/gourdType/getall`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setGourdTypes(response.data);
@@ -31,7 +31,7 @@ const GourdTypeList = () => {
 
     const deleteGourdType = async (id) => {
         try {
-            await axios.delete(`http://localhost:4000/api/v1/gourdType/${id}`, {
+            await axios.delete(`${process.env.REACT_APP_API}/api/v1/gourdType/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setGourdTypes(gourdTypes.filter((type) => type._id !== id));
@@ -59,7 +59,7 @@ const GourdTypeList = () => {
 
         try {
             const response = await axios.put(
-                `http://localhost:4000/api/v1/gourdType/${selectedGourdType._id}`,
+                `${process.env.REACT_APP_API}/api/v1/gourdType/${selectedGourdType._id}`,
                 updatedGourdType,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -77,7 +77,7 @@ const GourdTypeList = () => {
         const newGourdType = { name: gourdTypeName, description: gourdTypeDescription };
 
         try {
-            const response = await axios.post(`http://localhost:4000/api/v1/gourdType/create`, newGourdType, {
+            const response = await axios.post(`${process.env.REACT_APP_API}/api/v1/gourdType/create`, newGourdType, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setGourdTypes([...gourdTypes, response.data]);

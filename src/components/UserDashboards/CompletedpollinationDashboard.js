@@ -18,7 +18,7 @@ const PollinationDashboard = () => {
       }
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/v1/Dashboard/completed/month/${user.userId}`,
+          `${process.env.REACT_APP_API}/api/v1/Dashboard/completed/month/${user.userId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

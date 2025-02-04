@@ -23,7 +23,7 @@ const ChatScreen = ({ onChatSelect }) => {
         const storedToken = getToken();
         if (!storedToken) throw new Error('No token found');
 
-        const usersResponse = await axios.get('http://localhost:4000/api/v1/users', {
+        const usersResponse = await axios.get(`${process.env.REACT_APP_API}/api/v1/users`, {
           headers: { Authorization: `Bearer ${storedToken}` },
         });
         if (usersResponse.status !== 200) throw new Error('Failed to fetch users');
@@ -31,7 +31,7 @@ const ChatScreen = ({ onChatSelect }) => {
         setUsers(usersData);
         setFilteredUsers(usersData);
 
-        const chatsResponse = await axios.get('http://localhost:4000/api/v1/chat/chats', {
+        const chatsResponse = await axios.get(`${process.env.REACT_APP_API}/api/v1/chat/chats`, {
           headers: { Authorization: `Bearer ${storedToken}` },
         });
         if (chatsResponse.status !== 200) throw new Error('Failed to fetch chats');

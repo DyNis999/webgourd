@@ -21,10 +21,10 @@ const VarietyList = () => {
         const fetchData = async () => {
             try {
                 const [varietiesResponse, gourdTypesResponse] = await Promise.all([
-                    axios.get(`http://localhost:4000/api/v1/gourdVariety/getall`, {
+                    axios.get(`${process.env.REACT_APP_API}/api/v1/gourdVariety/getall`, {
                         headers: { Authorization: `Bearer ${token}` },
                     }),
-                    axios.get(`http://localhost:4000/api/v1/gourdType/getall`, {
+                    axios.get(`${process.env.REACT_APP_API}/api/v1/gourdType/getall`, {
                         headers: { Authorization: `Bearer ${token}` },
                     }),
                 ]);
@@ -40,7 +40,7 @@ const VarietyList = () => {
 
     const deleteVariety = async (id) => {
         try {
-            await axios.delete(`http://localhost:4000/api/v1/gourdVariety/${id}`, {
+            await axios.delete(`${process.env.REACT_APP_API}/api/v1/gourdVariety/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setVarieties(varieties.filter((variety) => variety._id !== id));
@@ -69,7 +69,7 @@ const VarietyList = () => {
 
         try {
             const response = await axios.put(
-                `http://localhost:4000/api/v1/gourdVariety/${selectedVariety._id}`,
+                `${process.env.REACT_APP_API}/api/v1/gourdVariety/${selectedVariety._id}`,
                 updatedVariety,
                 {
                     headers: { Authorization: `Bearer ${token}` },
@@ -93,7 +93,7 @@ const VarietyList = () => {
         };
 
         try {
-            const response = await axios.post(`http://localhost:4000/api/v1/gourdVariety/create`, newVariety, {
+            const response = await axios.post(`${process.env.REACT_APP_API}/api/v1/gourdVariety/create`, newVariety, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setVarieties([...varieties, response.data]);

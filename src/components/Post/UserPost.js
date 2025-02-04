@@ -39,7 +39,7 @@ const UserPost = () => {
             }
 
             try {
-                const response = await axios.get(`http://localhost:4000/api/v1/posts/user/${currentUser.id}`);
+                const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/posts/user/${currentUser.id}`);
                 setPosts(response.data);
             } catch (error) {
                 console.error('Error fetching user posts:', error);
@@ -54,7 +54,7 @@ const UserPost = () => {
     const handleAddComment = async (postId) => {
         try {
             const token = sessionStorage.getItem('token');
-            const response = await axios.post(`http://localhost:4000/api/v1/posts/${postId}/comments`, {
+            const response = await axios.post(`${process.env.REACT_APP_API}/api/v1/posts/${postId}/comments`, {
                 content: commentContent
             }, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -70,7 +70,7 @@ const UserPost = () => {
     const handleAddReply = async (postId, commentId) => {
         try {
             const token = sessionStorage.getItem('token');
-            const response = await axios.post(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}/replies`, {
+            const response = await axios.post(`${process.env.REACT_APP_API}/api/v1/posts/${postId}/comments/${commentId}/replies`, {
                 content: replyContent
             }, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -87,7 +87,7 @@ const UserPost = () => {
     const handleLikePost = async (postId) => {
         try {
             const token = sessionStorage.getItem('token');
-            const response = await axios.post(`http://localhost:4000/api/v1/posts/${postId}/like`, {}, {
+            const response = await axios.post(`${process.env.REACT_APP_API}/api/v1/posts/${postId}/like`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -119,7 +119,7 @@ const UserPost = () => {
         try {
             console.log("Attempting to delete post:", postId);
             const token = sessionStorage.getItem('token');
-            await axios.delete(`http://localhost:4000/api/v1/posts/${postId}`, {
+            await axios.delete(`${process.env.REACT_APP_API}/api/v1/posts/${postId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
     
@@ -151,7 +151,7 @@ const UserPost = () => {
     const handleEditComment = async (postId, commentId, newContent) => {
         try {
             const token = sessionStorage.getItem('token');
-            const response = await axios.put(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}`, {
+            const response = await axios.put(`${process.env.REACT_APP_API}/api/v1/posts/${postId}/comments/${commentId}`, {
                 content: newContent
             }, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -166,7 +166,7 @@ const UserPost = () => {
     const handleDeleteComment = async (postId, commentId) => {
         try {
             const token = sessionStorage.getItem('token');
-            await axios.delete(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}`, {
+            await axios.delete(`${process.env.REACT_APP_API}/api/v1/posts/${postId}/comments/${commentId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -182,7 +182,7 @@ const UserPost = () => {
     const handleEditReply = async (postId, commentId, replyId, newContent) => {
         try {
             const token = sessionStorage.getItem('token');
-            const response = await axios.put(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}/replies/${replyId}`, {
+            const response = await axios.put(`${process.env.REACT_APP_API}/api/v1/posts/${postId}/comments/${commentId}/replies/${replyId}`, {
                 content: newContent
             }, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -197,7 +197,7 @@ const UserPost = () => {
     const handleDeleteReply = async (postId, commentId, replyId) => {
         try {
             const token = sessionStorage.getItem('token');
-            await axios.delete(`http://localhost:4000/api/v1/posts/${postId}/comments/${commentId}/replies/${replyId}`, {
+            await axios.delete(`${process.env.REACT_APP_API}/api/v1/posts/${postId}/comments/${commentId}/replies/${replyId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 

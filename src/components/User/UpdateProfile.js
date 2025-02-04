@@ -21,7 +21,7 @@ const UpdateProfile = () => {
             }
         };
         try {
-            const { data } = await axios.get(`http://localhost:4000/api/v1/users/me`, config);
+            const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/users/me`, config);
             setValue('name', data.user.name);
             setValue('email', data.user.email);
             setValue('phone', data.user.phone);
@@ -51,7 +51,7 @@ const UpdateProfile = () => {
         };
         try {
             setLoading(true); // Set loading to true when the update starts
-            const response = await axios.put(`http://localhost:4000/api/v1/users/updateProfile`, userData, config);
+            const response = await axios.put(`${process.env.REACT_APP_API}/api/v1/users/updateProfile`, userData, config);
             console.log('Update response:', response.data);
             toast.success('User updated', {
                 position: 'bottom-right'

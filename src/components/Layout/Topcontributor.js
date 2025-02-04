@@ -8,7 +8,7 @@ const Topcontributor = () => {
     useEffect(() => {
         const fetchTopContributors = async () => {
             try {
-                const response = await axios.get('http://localhost:4000/api/v1/posts/top-contributors');
+                const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/posts/top-contributors`);
                 setTopContributors(response.data);
             } catch (error) {
                 console.error('Error fetching top contributors:', error);

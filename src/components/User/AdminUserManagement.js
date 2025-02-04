@@ -21,7 +21,7 @@ const UserManagement = () => {
         }
 
         axios
-            .get('http://localhost:4000/api/v1/users/', {
+            .get('${process.env.REACT_APP_API}/api/v1/users/', {
                 headers: {
                     Authorization: `Bearer ${storedToken}`,
                 },
@@ -43,7 +43,7 @@ const UserManagement = () => {
                 return;
             }
 
-            const response = await fetch(`http://localhost:4000/api/v1/users/${userId}/role`, {
+            const response = await fetch(`${process.env.REACT_APP_API}/api/v1/users/${userId}/role`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ const UserManagement = () => {
         }
 
         // Delete user from API
-        fetch(`http://localhost:4000/api/v1/users/${userId}`, {
+        fetch(`${process.env.REACT_APP_API}/api/v1/users/${userId}`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${token}`,

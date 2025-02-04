@@ -13,7 +13,7 @@ const AdminPostManagement = () => {
         setLoading(true);
         try {
             const token = sessionStorage.getItem('token');
-            const response = await axios.get('http://localhost:4000/api/v1/posts', {
+            const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/posts`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setPosts(response.data);
@@ -39,7 +39,7 @@ const AdminPostManagement = () => {
             try {
                 const token = sessionStorage.getItem('token');
                 await axios.put(
-                    `http://localhost:4000/api/v1/posts/status/${selectedPost._id}`,
+                    `${process.env.REACT_APP_API}/api/v1/posts/status/${selectedPost._id}`,
                     { status: postStatus },
                     {
                         headers: { Authorization: `Bearer ${token}` },
@@ -57,7 +57,7 @@ const AdminPostManagement = () => {
         if (window.confirm('Are you sure you want to delete this post?')) {
             try {
                 const token = sessionStorage.getItem('token');
-                await axios.delete(`http://localhost:4000/api/v1/posts/${postId}`, {
+                await axios.delete(`${process.env.REACT_APP_API}/api/v1/posts/${postId}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 fetchPosts(); // Refresh post list

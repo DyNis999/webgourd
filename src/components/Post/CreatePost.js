@@ -24,7 +24,7 @@ const CreatePost = () => {
                     return;
                 }
 
-                const response = await axios.get('http://localhost:4000/api/v1/categories/getall', {
+                const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/categories/getall`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
@@ -70,7 +70,7 @@ const CreatePost = () => {
             }
 
             // Send the request
-            const response = await fetch('http://localhost:4000/api/v1/posts', {
+            const response = await fetch(`${process.env.REACT_APP_API}/api/v1/posts`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`, // Ensure this is correctly passed

@@ -17,7 +17,7 @@ const ViewCategories = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('http://localhost:4000/api/v1/categories/getall');
+                const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/categories/getall`);
                 setCategories(response.data);
             } catch (err) {
                 setError('Error fetching categories');
@@ -28,7 +28,7 @@ const ViewCategories = () => {
 
     const deleteCategory = async (id) => {
         try {
-            await axios.delete(`http://localhost:4000/api/v1/categories/${id}`);
+            await axios.delete(`${process.env.REACT_APP_API}/api/v1/categories/${id}`);
             setCategories(categories.filter((category) => category._id !== id));
             toast.success('Category deleted successfully');
         } catch (err) {
@@ -54,7 +54,7 @@ const ViewCategories = () => {
 
         try {
             const response = await axios.put(
-                `http://localhost:4000/api/v1/categories/${selectedCategory._id}`,
+                `${process.env.REACT_APP_API}/api/v1/categories/${selectedCategory._id}`,
                 updatedCategory
             );
             setCategories(categories.map((category) =>
@@ -71,7 +71,7 @@ const ViewCategories = () => {
         const newCategory = { name: categoryName, description: categoryDescription };
 
         try {
-            const response = await axios.post('http://localhost:4000/api/v1/categories/create', newCategory);
+            const response = await axios.post(`${process.env.REACT_APP_API}/api/v1/categories/create`, newCategory);
             setCategories([...categories, response.data]);
             toast.success('Category created successfully');
             setCreateModalVisible(false);

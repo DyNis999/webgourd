@@ -4,7 +4,6 @@ import axios from 'axios';
 import { socket } from '../../socket/index';
 import { getUser, getToken } from '../../utils/helpers';
 import './chatbox.css'; // Separate the styles into a CSS file
-import { filterBadWords } from '../Layout/filteredwords';
 
 const Chatbox = ({ chat }) => {
   const receiverId = chat?.userId;
@@ -12,13 +11,12 @@ const Chatbox = ({ chat }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [newMessage, setNewMessage] = useState('');
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const [messageToDelete, setMessageToDelete] = useState(null);
   const messageListRef = useRef(null); // Ref for the message list
   const [isScrolledUp, setIsScrolledUp] = useState(false); // Track if the user scrolled up
 
   // Fetch messages from the server
   const fetchMessages = async () => {
+    // setLoading(true);
     setError(null);
     try {
       const token = sessionStorage.getItem('token');
@@ -29,7 +27,7 @@ const Chatbox = ({ chat }) => {
       }
 
       const response = await axios.get(
-        `http://localhost:4000/api/v1/chat/messages/${senderId}/${receiverId}`,
+        `${process.env.REACT_APP_API}/api/v1/chat/messages/${senderId}/${receiverId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -59,7 +57,7 @@ const Chatbox = ({ chat }) => {
 
       if (messageIds.length > 0) {
         await axios.put(
-          'http://localhost:4000/api/v1/chat/messages/read',
+          `${process.env.REACT_APP_API}/api/v1/chat/messages/read`,
           { messages: messageIds },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -76,44 +74,36 @@ const Chatbox = ({ chat }) => {
   };
 
   // Fetch messages when receiverId changes
+
+  // useEffect(() => {
+  //   const userId = getUser()?.id;
+  //   if (userId) {
+  //     socket.emit("joinRoom", { userId });
+  //   }
+  // }, []);
+
   useEffect(() => {
     fetchMessages();
   }, [receiverId]);
 
   useEffect(() => {
     if (messageListRef.current) {
-      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+        messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
     }
-  }, [messages]);
+}, [messages]);
 
   // Socket event listener for new messages
   useEffect(() => {
-    const handleReceiveMessage = (message) => {
+
+    let unsubsribe = socket.on('receiveMessage', (message) => {
       console.log('Received message:', message);
-      setMessages((prevMessages) => [...prevMessages, message]);
+      // setMessages((prevMessages) => [...prevMessages, message]);
+      fetchMessages();
       markMessagesAsRead([message]);
       scrollToBottom(); // Scroll to bottom for new messages
-    };
-
-    socket.on('receiveMessage', handleReceiveMessage);
-
+    });
     return () => {
-      socket.off('receiveMessage', handleReceiveMessage);
-    };
-  }, []);
-
-  // Socket event listener for deleted messages
-  useEffect(() => {
-    const handleDeleteMessage = (messageId) => {
-      setMessages((prevMessages) =>
-        prevMessages.filter((msg) => msg._id !== messageId)
-      );
-    };
-
-    socket.on('deleteMessage', handleDeleteMessage);
-
-    return () => {
-      socket.off('deleteMessage', handleDeleteMessage);
+      unsubsribe = null;
     };
   }, []);
 
@@ -134,15 +124,14 @@ const Chatbox = ({ chat }) => {
     }
   };
 
-   // Send a new message
+  // Send a new message
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
-    const filteredMessage = filterBadWords(newMessage.trim());
 
     const tempMessage = {
       _id: new Date().toISOString(),
       sender: { _id: getUser()?.id },
-      message: filteredMessage,
+      message: newMessage.trim(),
       createdAt: new Date(), // Add this
       timestamp: new Date()
     };
@@ -159,11 +148,11 @@ const Chatbox = ({ chat }) => {
       const messageData = {
         sender: senderId,
         user: receiverId,
-        message: filteredMessage, 
+        message: newMessage.trim(),
       };
 
       const response = await axios.post(
-        `http://localhost:4000/api/v1/chat/messages`,
+        `${process.env.REACT_APP_API}/api/v1/chat/messages`,
         messageData,
         { headers: { Authorization: `Bearer ${storedToken}` } }
       );
@@ -179,29 +168,6 @@ const Chatbox = ({ chat }) => {
       markMessagesAsRead([response.data.chat]);
     } catch (err) {
       console.error('Error sending message:', err.message);
-    }
-  };
-
-
-  // Delete a message
-  const deleteMessage = async (messageId) => {
-    try {
-      const storedToken = sessionStorage.getItem('token');
-      if (!storedToken) throw new Error('Authentication failed');
-
-      const response = await axios.delete(`http://localhost:4000/api/v1/chat/${messageId}`, {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      });
-
-      if (response.data.success) {
-        setMessages((prevMessages) =>
-          prevMessages.filter((msg) => msg._id !== messageId)
-        );
-        setDeleteModalVisible(false); // Close modal after deletion
-        socket.emit('deleteMessage', messageId); // Emit delete message event
-      }
-    } catch (err) {
-      console.error('Error deleting message:', err.message);
     }
   };
 
@@ -228,17 +194,6 @@ const Chatbox = ({ chat }) => {
         <div className={`message-container ${isMyMessage ? 'my-message' : 'other-message'}`}>
           <p className="message-text">{message.message}</p>
           <p className="timestamp">{new Date(message.createdAt).toLocaleTimeString()}</p>
-          {isMyMessage && ( // Conditionally render the ellipsis button
-            <button
-              className="ellipsis-button"
-              onClick={() => {
-                setMessageToDelete(message._id);
-                setDeleteModalVisible(true);
-              }}
-            >
-              •••
-            </button>
-          )}
         </div>
       </div>
     );
@@ -276,24 +231,6 @@ const Chatbox = ({ chat }) => {
         />
         <button className="send-button" onClick={sendMessage}>Send</button>
       </div>
-
-      {deleteModalVisible && (
-        <div className="delete-modal">
-          <p>Are you sure you want to delete this message?</p>
-          <button
-            className="confirm-delete"
-            onClick={() => deleteMessage(messageToDelete)}
-          >
-            Yes
-          </button>
-          <button
-            className="cancel-delete"
-            onClick={() => setDeleteModalVisible(false)}
-          >
-            No
-          </button>
-        </div>
-      )}
     </div>
   );
 };

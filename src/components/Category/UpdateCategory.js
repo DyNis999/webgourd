@@ -11,7 +11,7 @@ const UpdateCategory = () => {
     useEffect(() => {
         const fetchCategoryDetails = async () => {
             try {
-                const response = await axios.get(`http://localhost:4000/api/v1/categories/${categoryId}`);
+                const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/categories/${categoryId}`);
                 if (response.data) {
                     setName(response.data.name);
                     setDescription(response.data.description);
@@ -34,7 +34,7 @@ const UpdateCategory = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(`http://localhost:4000/api/v1/categories/${categoryId}`, { name, description });
+            const response = await axios.put(`${process.env.REACT_APP_API}/api/v1/categories/${categoryId}`, { name, description });
             console.log('Category updated:', response.data);
             alert('Category updated successfully!');
         } catch (error) {

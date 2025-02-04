@@ -37,7 +37,7 @@ const Login = () => {
       const config = { headers: { 'Content-Type': 'application/json' } };
       console.log('Submitting login form with data:', formData);
 
-      const { data } = await axios.post('http://localhost:4000/api/v1/users/login', formData, config);
+      const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/users/login`, formData, config);
       console.log('API Response:', data);
 
       successMsg('Login successful!');

@@ -11,7 +11,7 @@ const FailedPollinationDashboard = () => {
   useEffect(() => {
     const fetchPollinationData = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/v1/Dashboard/Adminfailed/month');
+        const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/Adminfailed/month`);
         setPollinationData(response.data);
       } catch (error) {
         console.error('Error fetching pollination data:', error);
