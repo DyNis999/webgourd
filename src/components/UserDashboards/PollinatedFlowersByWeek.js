@@ -2,8 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 import { Container, Grid, Typography, Paper } from '@mui/material';
-import { blue, purple } from '@mui/material/colors';
+import { blue, purple, grey } from '@mui/material/colors';
 import { getToken, getUser } from '../../utils/helpers';
+import styled from 'styled-components';
+
+const StyledPaper = styled(Paper)`
+  padding: 16px;
+  border-radius: 16px;
+  background-color: ${grey[100]};
+`;
+
+const StyledTypography = styled(Typography)`
+  text-align: center;
+  margin-bottom: 16px;
+  color: ${purple[700]};
+`;
 
 const PollinationDashboard = () => {
   const [pollinationData, setPollinationData] = useState([]);
@@ -18,7 +31,7 @@ const PollinationDashboard = () => {
     
     const fetchPollinationData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/pollination/month/${user.userId}`, {
+        const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/pollination/week/${user.userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPollinationData(response.data);
@@ -34,15 +47,15 @@ const PollinationDashboard = () => {
     const groupedData = {};
 
     pollinationData.forEach((item) => {
-      const { gourdType, variety, month, year, day, totalPollinated } = item;
-      const key = `${gourdType}-${variety}`;
+      const { gourdType, variety, week, year, plotNo, totalPollinated } = item;
+      const key = `${gourdType}-${variety}- PlotNo. ${plotNo}`;
 
       if (!groupedData[key]) {
         groupedData[key] = [];
       }
 
       groupedData[key].push({
-        name: `${day}/${month}/${year}`,
+        name: `Week ${week}, ${year}`,
         totalPollinated,
       });
     });
@@ -58,21 +71,21 @@ const PollinationDashboard = () => {
 
       return (
         <Grid item xs={12} sm={6} md={4} key={key}>
-          <Paper elevation={3} sx={{ padding: 2, borderRadius: 2 }}>
-            <Typography variant="h6" sx={{ textAlign: 'center', marginBottom: 2 }}>
-              {key.replace('-', ' ')}
-            </Typography>
+          <StyledPaper elevation={3}>
+            <StyledTypography variant="h6">
+              {key.replace(/-/g, ' ')}
+            </StyledTypography>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={data}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
+                <CartesianGrid strokeDasharray="3 3" stroke={grey[300]} />
+                <XAxis dataKey="name" stroke={grey[700]} />
+                <YAxis stroke={grey[700]} />
+                <Tooltip contentStyle={{ backgroundColor: grey[200], borderColor: grey[300] }} />
                 <Legend />
                 <Line type="monotone" dataKey="totalPollinated" stroke={blue[500]} activeDot={{ r: 8 }} />
               </LineChart>
             </ResponsiveContainer>
-          </Paper>
+          </StyledPaper>
         </Grid>
       );
     });
