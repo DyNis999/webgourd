@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Container, Button, Table } from 'react-bootstrap';
+import { Container, Grid, Typography, Button, Table, Paper } from '@mui/material';
 import FailedpollinationDashboard from './FailedpollinationDashboard';
 import PollinatedFlowersByMonth from './PollinatedFlowersByWeek';
 import CompletedpollinationDashboard from './CompletedpollinationDashboard';
@@ -7,6 +7,25 @@ import AdminSidebar from '../Layout/AdminSidebar';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import axios from 'axios';
+import { styled } from '@mui/system';
+
+const StyledPaper = styled(Paper)`
+  padding: 24px;
+  border-radius: 16px;
+  background-color: #f9f9f9;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+`;
+
+const StyledButton = styled(Button)`
+  margin-bottom: 20px;
+  font-weight: bold;
+`;
+
+const StyledTable = styled(Table)`
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+`;
 
 const HomeDashboard = () => {
   const dashboardRef = useRef();
@@ -117,43 +136,51 @@ const HomeDashboard = () => {
 
   return (
     <AdminSidebar>
-      <Container fluid ref={dashboardRef}>
-        <Button
-          variant="primary"
+      <Container ref={dashboardRef} sx={{ padding: '20px' }}>
+        <StyledButton
+          variant="contained"
+          color="primary"
           onClick={handlePrintAll}
-          style={{ marginBottom: '20px' }}
         >
           Print All Dashboards to PDF
-        </Button>
-        <div className="dashboard-section">
-          <PollinatedFlowersByMonth />
-        </div>
-        <div className="dashboard-section">
-          <CompletedpollinationDashboard />
-        </div>
-        <div className="dashboard-section">
-          <FailedpollinationDashboard />
-        </div>
-        <div className="dashboard-section">
-          <h4 className="text-center mb-4">SUCCESS RATE</h4>
-          <Table striped bordered hover responsive className="table-success-rate">
-            <thead className="table-dark">
-              <tr>
-                <th>Gourd Type, Variety & Plot</th>
-                <th>Success Rate (%)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {successRates.map(({ gourdTypeVarietyPlot, successRate }) => (
-                <tr key={gourdTypeVarietyPlot}>
-                  <td>{gourdTypeVarietyPlot.replace(/-/g, ' ')}</td>
-                  <td>{successRate}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-          <h5 className="text-center mt-4">Overall Success Rate: <strong>{overallSuccessRate}%</strong></h5>
-        </div>
+        </StyledButton>
+        <Grid container spacing={3}>
+          <Grid item xs={12} className="dashboard-section">
+            <PollinatedFlowersByMonth />
+          </Grid>
+          <Grid item xs={12} className="dashboard-section">
+            <CompletedpollinationDashboard />
+          </Grid>
+          <Grid item xs={12} className="dashboard-section">
+            <FailedpollinationDashboard />
+          </Grid>
+          <Grid item xs={12} className="dashboard-section">
+            <StyledPaper>
+              <Typography variant="h5" align="center" gutterBottom>
+                SUCCESS RATE
+              </Typography>
+              <StyledTable>
+                <thead>
+                  <tr>
+                    <th>Gourd Type, Variety & Plot</th>
+                    <th>Success Rate (%)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {successRates.map(({ gourdTypeVarietyPlot, successRate }) => (
+                    <tr key={gourdTypeVarietyPlot}>
+                      <td>{gourdTypeVarietyPlot.replace(/-/g, ' ')}</td>
+                      <td>{successRate}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </StyledTable>
+              <Typography variant="h6" align="center" sx={{ marginTop: '20px' }}>
+                Overall Success Rate: <strong>{overallSuccessRate}%</strong>
+              </Typography>
+            </StyledPaper>
+          </Grid>
+        </Grid>
       </Container>
     </AdminSidebar>
   );
