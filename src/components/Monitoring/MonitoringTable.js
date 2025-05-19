@@ -24,6 +24,7 @@ const MonitoringList = () => {
     const [dateOfPollination, setDateOfPollination] = useState('');
     const [pollinatedFlowerImages, setPollinatedFlowerImages] = useState([]);
     const [currentUser, setCurrentUser] = useState(null);
+    const [plotNo, setPlotNo] = useState(''); // New state for PlotNo
 
     useEffect(() => {
         const fetchedUser = getUser();
@@ -104,6 +105,7 @@ const MonitoringList = () => {
         setFruitsHarvested(monitoring.fruitsHarvested);
         setFruitHarvestedImages(monitoring.fruitHarvestedImages || []);
         setDateOfFinalization(monitoring.dateOfFinalization || '');
+        setPlotNo(monitoring.plotNo || ''); // Set PlotNo
         setModalVisible(true);
     };
 
@@ -113,6 +115,7 @@ const MonitoringList = () => {
         updatedMonitoring.append('fruitsHarvested', fruitsHarvested);
         updatedMonitoring.append('dateOfFinalization', dateOfFinalization);
         updatedMonitoring.append('status', fruitsHarvested > 0 ? 'Completed' : 'Failed');
+        updatedMonitoring.append('plotNo', plotNo); // Append PlotNo
 
         // If there are images to upload, append them to FormData
         Array.from(fruitHarvestedImages).forEach((file) => {
@@ -156,6 +159,7 @@ const MonitoringList = () => {
         formData.append('variety', selectedGourdVariety._id); 
         formData.append("dateOfPollination", new Date().toISOString().split("T")[0]);
         formData.append("pollinatedFlowers", pollinatedFlowers);
+        formData.append("plotNo", plotNo); // Append PlotNo
 
         // Handle pollinated flower images if provided
         Array.from(pollinatedFlowerImages).forEach((file) => {
@@ -214,6 +218,7 @@ const MonitoringList = () => {
                         <th>Date of Pollination</th>
                         <th>Pollinated Flowers</th>
                         <th>Fruits Harvested</th>
+                        <th>Plot No</th> {/* New column for PlotNo */}
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -227,6 +232,7 @@ const MonitoringList = () => {
                             <td>{monitoring.dateOfPollination || 'N/A'}</td>
                             <td>{monitoring.pollinatedFlowers || 0}</td>
                             <td>{monitoring.fruitsHarvested}</td>
+                            <td>{monitoring.plotNo || 'N/A'}</td> {/* Display PlotNo */}
                             <td>{monitoring.status}</td>
                             <td>
                                 <Button variant="primary" onClick={() => openModal(monitoring)} className="me-2">
@@ -281,7 +287,6 @@ const MonitoringList = () => {
             </Modal>
 
             {/* Create Modal */}
-            {/* Create Monitoring Modal */}
             <Modal show={createModalVisible} onHide={() => setCreateModalVisible(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Create Monitoring</Modal.Title>
@@ -355,33 +360,13 @@ const MonitoringList = () => {
                             />
                         </Form.Group>
 
-                        {/* Fruits Harvested */}
-                        <Form.Group controlId="fruitsHarvested" className="mt-3">
-                            <Form.Label>Fruits Harvested</Form.Label>
+                        {/* Plot No */}
+                        <Form.Group controlId="plotNo" className="mt-3"> {/* New field for PlotNo */}
+                            <Form.Label>Plot No</Form.Label>
                             <Form.Control
-                                type="number"
-                                value={fruitsHarvested}
-                                onChange={(e) => setFruitsHarvested(Number(e.target.value))}
-                            />
-                        </Form.Group>
-
-                        {/* Fruit Harvested Images */}
-                        <Form.Group controlId="fruitHarvestedImages" className="mt-3">
-                            <Form.Label>Fruit Harvested Images</Form.Label>
-                            <Form.Control
-                                type="file"
-                                multiple
-                                onChange={(e) => setFruitHarvestedImages(e.target.files)}
-                            />
-                        </Form.Group>
-
-                        {/* Date of Finalization */}
-                        <Form.Group controlId="dateOfFinalization" className="mt-3">
-                            <Form.Label>Date of Finalization</Form.Label>
-                            <Form.Control
-                                type="date"
-                                value={dateOfFinalization}
-                                onChange={(e) => setDateOfFinalization(e.target.value)}
+                                type="text"
+                                value={plotNo}
+                                onChange={(e) => setPlotNo(e.target.value)}
                             />
                         </Form.Group>
                     </Form>

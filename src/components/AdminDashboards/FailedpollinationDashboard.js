@@ -1,8 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { Line } from 'react-chartjs-2';
 import axios from 'axios';
-import { Box, Container, Grid, Typography, Paper } from '@mui/material';
-import { red, purple } from '@mui/material/colors';
+import { Container, Grid, Typography, Paper } from '@mui/material';
+import { red, purple, grey } from '@mui/material/colors';
+import styled from 'styled-components';
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+
+const StyledPaper = styled(Paper)`
+  padding: 16px;
+  border-radius: 16px;
+  background-color: ${grey[100]};
+`;
+
+const StyledTypography = styled(Typography)`
+  text-align: center;
+  margin-bottom: 16px;
+  color: ${purple[700]};
+`;
 
 const FailedPollinationDashboard = () => {
   const [pollinationData, setPollinationData] = useState([]);
@@ -11,7 +27,7 @@ const FailedPollinationDashboard = () => {
   useEffect(() => {
     const fetchPollinationData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/Adminfailed/month`);
+        const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/Adminfailed/week`);
         setPollinationData(response.data);
       } catch (error) {
         console.error('Error fetching pollination data:', error);
@@ -21,58 +37,76 @@ const FailedPollinationDashboard = () => {
     fetchPollinationData();
   }, []);
 
-  // Function to process data into a structure that can be used in Recharts
+  // Function to process data into a structure that can be used in Chart.js
   const processData = () => {
     const groupedData = {};
 
-    // Group data by GourdType and Variety
+    // Group data by GourdType, Variety, and PlotNo
     pollinationData.forEach((item) => {
-      const { gourdType, variety, month, year, day, totalFailed } = item;
-      const key = `${gourdType}-${variety}`;
+      const { gourdType, variety, week, year, plotNo, totalFailed } = item;
+      const key = `${gourdType}-${variety}- PlotNo. ${plotNo}`;
 
       if (!groupedData[key]) {
-        groupedData[key] = [];
+        groupedData[key] = { labels: [], data: [] };
       }
 
-      // Add data point for each day, month, and year
-      groupedData[key].push({
-        name: `${day}/${month}/${year}`,
-        totalFailed,
-      });
+      // Add data point for each week and year
+      groupedData[key].labels.push(`Week ${week}, ${year}`);
+      groupedData[key].data.push(totalFailed);
     });
 
     return groupedData;
   };
 
-  // Generate charts for each GourdType and Variety
+  // Generate charts for each GourdType, Variety, and PlotNo
   const renderCharts = () => {
     const groupedData = processData();
 
     return Object.keys(groupedData).map((key) => {
-      const data = groupedData[key];
+      const { labels, data } = groupedData[key];
+
+      const chartData = {
+        labels,
+        datasets: [
+          {
+            label: 'Total Failed',
+            data,
+            borderColor: red[500],
+            backgroundColor: red[100],
+            tension: 0.4,
+          },
+        ],
+      };
+
+      const options = {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+          },
+        },
+        scales: {
+          x: {
+            ticks: { color: grey[700] },
+          },
+          y: {
+            ticks: { color: grey[700] },
+          },
+        },
+      };
 
       return (
         <Grid item xs={12} sm={6} md={4} key={key}>
-          <Paper elevation={3} sx={{ padding: 2, borderRadius: 2 }}>
-            <Typography variant="h6" sx={{ textAlign: 'center', marginBottom: 2 }}>
-              {key.replace('-', ' ')}
-            </Typography>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={data}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="totalFailed"
-                  stroke={red[500]}
-                  activeDot={{ r: 8 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </Paper>
+          <StyledPaper elevation={3}>
+            <StyledTypography variant="h6">
+              {key.replace(/-/g, ' ')}
+            </StyledTypography>
+            <Line data={chartData} options={options} />
+          </StyledPaper>
         </Grid>
       );
     });
@@ -80,9 +114,9 @@ const FailedPollinationDashboard = () => {
 
   return (
     <Container maxWidth="lg" sx={{ marginTop: 4 }}>
-      <Typography variant="h4" sx={{ marginBottom: 4, fontWeight: 'bold', color: purple[700], textAlign: 'center' }}>
-        Failed Pollination 
-      </Typography>
+      <StyledTypography variant="h4" sx={{ marginBottom: 4, fontWeight: 'bold' }}>
+        Failed Pollination Dashboard
+      </StyledTypography>
       <Grid container spacing={3}>
         {renderCharts()}
       </Grid>
