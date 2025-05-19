@@ -21,7 +21,7 @@ const UserManagement = () => {
         }
 
         axios
-            .get('${process.env.REACT_APP_API}/api/v1/users/', {
+            .get(`${process.env.REACT_APP_API}/api/v1/users/`, {
                 headers: {
                     Authorization: `Bearer ${storedToken}`,
                 },
