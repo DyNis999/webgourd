@@ -4,6 +4,7 @@ import axios from 'axios';
 import { socket } from '../../socket/index';
 import { getUser, getToken } from '../../utils/helpers';
 import './chatbox.css'; // Separate the styles into a CSS file
+import { filterBadWords } from '../Layout/filteredwords';
 
 const Chatbox = ({ chat }) => {
   const receiverId = chat?.userId;
@@ -16,7 +17,6 @@ const Chatbox = ({ chat }) => {
 
   // Fetch messages from the server
   const fetchMessages = async () => {
-    // setLoading(true);
     setError(null);
     try {
       const token = sessionStorage.getItem('token');
@@ -73,31 +73,20 @@ const Chatbox = ({ chat }) => {
     }
   };
 
-  // Fetch messages when receiverId changes
-
-  // useEffect(() => {
-  //   const userId = getUser()?.id;
-  //   if (userId) {
-  //     socket.emit("joinRoom", { userId });
-  //   }
-  // }, []);
-
   useEffect(() => {
     fetchMessages();
   }, [receiverId]);
 
   useEffect(() => {
     if (messageListRef.current) {
-        messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
     }
-}, [messages]);
+  }, [messages]);
 
   // Socket event listener for new messages
   useEffect(() => {
-
     let unsubsribe = socket.on('receiveMessage', (message) => {
       console.log('Received message:', message);
-      // setMessages((prevMessages) => [...prevMessages, message]);
       fetchMessages();
       markMessagesAsRead([message]);
       scrollToBottom(); // Scroll to bottom for new messages
@@ -128,11 +117,14 @@ const Chatbox = ({ chat }) => {
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
 
+    // Filter bad words before sending
+    const filteredMessage = filterBadWords(newMessage.trim());
+
     const tempMessage = {
       _id: new Date().toISOString(),
       sender: { _id: getUser()?.id },
-      message: newMessage.trim(),
-      createdAt: new Date(), // Add this
+      message: filteredMessage,
+      createdAt: new Date(),
       timestamp: new Date()
     };
 
@@ -148,7 +140,7 @@ const Chatbox = ({ chat }) => {
       const messageData = {
         sender: senderId,
         user: receiverId,
-        message: newMessage.trim(),
+        message: filteredMessage,
       };
 
       const response = await axios.post(

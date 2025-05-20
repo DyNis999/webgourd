@@ -3,13 +3,12 @@ import axios from 'axios';
 import './Socialmedia.css';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
-import { getUser } from '../../utils/helpers'; // Adjust the import path as necessary
+import { getUser } from '../../utils/helpers';
 import Topcontributor from '../Layout/Topcontributor';
 import { filterBadWords } from '../Layout/filteredwords';
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faComment } from '@fortawesome/free-solid-svg-icons';
-
 
 const Socialmedia = () => {
     const [posts, setPosts] = useState([]);
@@ -31,7 +30,7 @@ const Socialmedia = () => {
                 console.error('Error fetching posts:', error);
             }
         };
-        fetchPosts()
+        fetchPosts();
     }, []);
 
     const handleAddComment = async (postId) => {
@@ -71,7 +70,7 @@ const Socialmedia = () => {
 
             setPosts(posts.map(post => post._id === postId ? response.data : post));
             setReplyContent('');
-            setSelectedCommentId(null); // Hide the reply input box after submitting
+            setSelectedCommentId(null);
         } catch (error) {
             console.error('Error adding reply:', error);
         }
@@ -127,10 +126,11 @@ const Socialmedia = () => {
     );
 
     const handleEditComment = async (postId, commentId, newContent) => {
+        const filteredEdit = filterBadWords(newContent);
         try {
             const token = sessionStorage.getItem('token');
             const response = await axios.put(`${process.env.REACT_APP_API}/api/v1/posts/${postId}/comments/${commentId}`, {
-                content: newContent
+                content: filteredEdit
             }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -158,10 +158,11 @@ const Socialmedia = () => {
     };
 
     const handleEditReply = async (postId, commentId, replyId, newContent) => {
+        const filteredEdit = filterBadWords(newContent);
         try {
             const token = sessionStorage.getItem('token');
             const response = await axios.put(`${process.env.REACT_APP_API}/api/v1/posts/${postId}/comments/${commentId}/replies/${replyId}`, {
-                content: newContent
+                content: filteredEdit
             }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -240,7 +241,7 @@ const Socialmedia = () => {
                         <div className="post-actions">
                             <button
                                 onClick={() => handleLikePost(post._id)}
-                                className={post.likedBy.includes(currentUser._id) ? 'liked' : 'not-liked'}
+                                className={post.likedBy.includes(currentUser?._id) ? 'liked' : 'not-liked'}
                             >
                                 <FontAwesomeIcon icon={faThumbsUp} className="like-icon" />
                                 ({post.likes})
@@ -258,9 +259,12 @@ const Socialmedia = () => {
                                         <div className="comment-content">
                                             <h5>{comment.user.name}</h5>
                                             <p>{comment.content}</p>
-                                            {comment.user._id === currentUser._id && (
+                                            {comment.user._id === currentUser?._id && (
                                                 <div className="comment-actions">
-                                                    <FaEdit className="icon edit-icon" onClick={() => handleEditComment(post._id, comment._id, prompt("Edit your comment", comment.content))} />
+                                                    <FaEdit className="icon edit-icon" onClick={() => {
+                                                        const newContent = prompt("Edit your comment", comment.content);
+                                                        if (newContent !== null) handleEditComment(post._id, comment._id, newContent);
+                                                    }} />
                                                     <FaTrash className="icon delete-icon" onClick={() => handleDeleteComment(post._id, comment._id)} />
                                                 </div>
                                             )}
@@ -272,9 +276,12 @@ const Socialmedia = () => {
                                                         <div className="reply-content">
                                                             <h6>{reply.user.name}</h6>
                                                             <p>{reply.content}</p>
-                                                            {reply.user._id === currentUser._id && (
+                                                            {reply.user._id === currentUser?._id && (
                                                                 <div className="comment-actions">
-                                                                    <FaEdit className="icon edit-icon" onClick={() => handleEditReply(post._id, comment._id, reply._id, prompt("Edit your reply", reply.content))} />
+                                                                    <FaEdit className="icon edit-icon" onClick={() => {
+                                                                        const newContent = prompt("Edit your reply", reply.content);
+                                                                        if (newContent !== null) handleEditReply(post._id, comment._id, reply._id, newContent);
+                                                                    }} />
                                                                     <FaTrash className="icon delete-icon" onClick={() => handleDeleteReply(post._id, comment._id, reply._id)} />
                                                                 </div>
                                                             )}
