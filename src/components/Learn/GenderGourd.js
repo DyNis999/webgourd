@@ -1,13 +1,24 @@
 import React, { useEffect } from 'react';
-import './GenderGourd.css'; // Ensure the CSS file is imported
+import './GenderGourd.css';
 import LearnMenu from './LearnMenu';
+import { Carousel } from 'react-responsive-carousel'; // Add this import
 
 const GenderGourd = () => {
     const backgroundImage = '/images/pngtree-a-green-colour-bottle-gourd-tip-on-the-sunny-day-in-image_15673491.jpg';
-    const maleFlowerImage = '/content/MaleFlower.jpg'; // Update with the correct path
-    const femaleFlowerImage = '/content/FemaleFlower.jpg'; // Update with the correct path
-    const handPollinationImage = '/content/hand.jpg'; // Update with the correct path
-    const beePollinationImage = '/content/bee.jpg'; // Update with the correct path
+
+    // Arrays of images for carousels
+    const maleFlowerImages = [
+        '/content/MaleFlower.jpg',
+        '/content/Male Ampalaya.jpg',
+        '/content/Upo Male.jpg'
+    ];
+    const femaleFlowerImages = [
+        '/content/FemaleFlower.jpg',
+        '/content/Ampalaya female.jpg',
+        '/content/Upo Female.jpg'
+    ];
+    const handPollinationImage = '/content/hand.jpg';
+    const beePollinationImage = '/content/bee.jpg';
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
@@ -32,22 +43,34 @@ const GenderGourd = () => {
                 <h1>Understanding Flower Gender in Gourds</h1>
             </div>
             <div className="gender-content-container">
-                <h2 className="gender-subtitle">Male vs. Female Flowers</h2>
+                <h2 className="gender-subtitle">Male vs. Female Gourd Flowers</h2>
                 <p className="gender-body-text">
                     Gourd plants are unique in having distinct male and female flowers on the same plant,
                     a feature that plays a critical role in fruit production:
                 </p>
                 <div className="gender-body-text">
                     <div className="gender-section male-card">
-                        <h3>Male Flowers</h3>
-                        <img src={maleFlowerImage} alt="Male Flower" className="gender-image" />
+                        <h3>Male Gourd Flowers</h3>
+                        <Carousel showThumbs={false} showStatus={false} infiniteLoop={true} className="gender-carousel">
+                            {maleFlowerImages.map((img, idx) => (
+                                <div key={idx}>
+                                    <img src={img} alt={`Male Flower ${idx + 1}`} className="gender-image" />
+                                </div>
+                            ))}
+                        </Carousel>
                         <p>
                             These flowers are typically smaller and grow on long, slender stems. They produce pollen but do not bear fruit. Male flowers tend to bloom first and in greater numbers than female flowers, ensuring ample pollen is available for pollination.
                         </p>
                     </div>
                     <div className="gender-section female-card">
-                        <h3>Female Flowers</h3>
-                        <img src={femaleFlowerImage} alt="Female Flower" className="gender-image" />
+                        <h3>Female Gourd Flowers</h3>
+                        <Carousel showThumbs={false} showStatus={false} infiniteLoop={true} className="gender-carousel">
+                            {femaleFlowerImages.map((img, idx) => (
+                                <div key={idx}>
+                                    <img src={img} alt={`Female Flower ${idx + 1}`} className="gender-image" />
+                                </div>
+                            ))}
+                        </Carousel>
                         <p>
                             Female flowers are distinguishable by the small, immature fruit (ovary) visible at the base of the bloom. This ovary will develop into a full-sized gourd if the flower is successfully pollinated. Female flowers are often slightly larger and bloom after the initial appearance of male flowers.
                         </p>
@@ -110,7 +133,6 @@ const GenderGourd = () => {
                     Additionally, poor weather conditions such as excessive rain or extreme heat can hinder pollination, as bees and other insects may be less active in such conditions.
                 </p>
             </div>
-
         </LearnMenu>
     );
 }
