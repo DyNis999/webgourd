@@ -62,7 +62,7 @@ const IssueGourd = () => {
                         </p>
                     </div>
                 </div>
-                <div className='pest-item'>
+                {/* <div className='pest-item'>
                     <div className='pest-text'>
                         <ul className='pest-body-text'>
                             <li><strong>Squash Bugs:</strong>
@@ -80,7 +80,7 @@ const IssueGourd = () => {
                             Source: <a href="https://vegcropshotline.org/article/squash-bugs/" target="_blank" rel="noopener noreferrer">Purdue University</a>
                         </p>
                     </div>
-                </div>
+                </div> */}
                 <div className='pest-item'>
                     <div className='pest-text'>
                         <ul className='pest-body-text'>

@@ -64,7 +64,8 @@ const HomeDashboard = () => {
 
     // Group pollinated data by GourdType, Variety, and PlotNo
     pollinatedData.forEach(({ gourdType, variety, plotNo, totalPollinated: pollinated }) => {
-      const key = `${gourdType || 'Unknown GourdType'}-${variety || 'Unknown Variety'}-Plot ${plotNo || 'Undefined'}`;
+      // const key = `${gourdType || 'Unknown GourdType'}-${variety || 'Unknown Variety'}-Plot ${plotNo || 'Undefined'}`;
+       const key = `${gourdType || 'Unknown GourdType'}-Plot ${plotNo || 'Undefined'}`;
       if (!groupedData[key]) {
         groupedData[key] = { totalPollinated: 0, totalCompleted: 0, totalFailed: 0 };
       }
@@ -74,7 +75,8 @@ const HomeDashboard = () => {
 
     // Add completed data
     completedData.forEach(({ gourdType, variety, plotNo, totalCompleted: completed }) => {
-      const key = `${gourdType || 'Unknown GourdType'}-${variety || 'Unknown Variety'}-Plot ${plotNo || 'Undefined'}`;
+      // const key = `${gourdType || 'Unknown GourdType'}-${variety || 'Unknown Variety'}-Plot ${plotNo || 'Undefined'}`;
+       const key = `${gourdType || 'Unknown GourdType'}-Plot ${plotNo || 'Undefined'}`;
       if (!groupedData[key]) {
         groupedData[key] = { totalPollinated: 0, totalCompleted: 0, totalFailed: 0 };
       }
@@ -84,7 +86,8 @@ const HomeDashboard = () => {
 
     // Add failed data
     failedData.forEach(({ gourdType, variety, plotNo, totalFailed }) => {
-      const key = `${gourdType || 'Unknown GourdType'}-${variety || 'Unknown Variety'}-Plot ${plotNo || 'Undefined'}`;
+      // const key = `${gourdType || 'Unknown GourdType'}-${variety || 'Unknown Variety'}-Plot ${plotNo || 'Undefined'}`;
+       const key = `${gourdType || 'Unknown GourdType'}-Plot ${plotNo || 'Undefined'}`;
       if (!groupedData[key]) {
         groupedData[key] = { totalPollinated: 0, totalCompleted: 0, totalFailed: 0 };
       }
@@ -95,7 +98,7 @@ const HomeDashboard = () => {
     const rates = Object.keys(groupedData).map((key) => {
       const { totalPollinated, totalCompleted } = groupedData[key];
       const successRate = totalPollinated > 0 ? (totalCompleted / totalPollinated) * 100 : 0;
-      return { gourdTypeVarietyPlot: key, successRate: successRate.toFixed(2) };
+      return { gourdTypePlot: key, successRate: successRate.toFixed(2) };
     });
 
     // Calculate overall success rate
@@ -162,14 +165,14 @@ const HomeDashboard = () => {
               <StyledTable>
                 <thead>
                   <tr>
-                    <th>Gourd Type, Variety & Plot</th>
+                    <th>Gourd Type & Plot</th>
                     <th>Success Rate (%)</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {successRates.map(({ gourdTypeVarietyPlot, successRate }) => (
-                    <tr key={gourdTypeVarietyPlot}>
-                      <td>{gourdTypeVarietyPlot.replace(/-/g, ' ')}</td>
+                  {successRates.map(({ gourdTypePlot, successRate }) => (
+                    <tr key={gourdTypePlot}>
+                      <td>{gourdTypePlot.replace(/-/g, ' ')}</td>
                       <td>{successRate}</td>
                     </tr>
                   ))}
