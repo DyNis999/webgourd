@@ -134,8 +134,13 @@ const CreatePost = () => {
                     <input type="file" multiple onChange={handleImageChange} />
                     <div className="image-preview">
                         {images.length > 0 ? (
-                            images.map((uri, index) => (
-                                <img key={index} src={uri} alt={`Selected ${index}`} />
+                            images.map((image, index) => (
+                                <img
+                                    key={index}
+                                    src={URL.createObjectURL(image)}
+                                    alt={`Preview ${index + 1}`}
+                                    className="image-thumbnail"
+                                />
                             ))
                         ) : (
                             <p>Select Images</p>

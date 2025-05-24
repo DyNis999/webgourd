@@ -39,6 +39,8 @@ import HealthGourd from './components/Learn/HealthGourd';
 import IssueGourd from './components/Learn/IssueGourd';
 import UpdateProfile from './components/User/UpdateProfile';
 import { getToken } from './utils/helpers';
+import ArchivePost from './components/Post/ArchivePost';
+import UserArchive from './components/User/UserArchive';
 
 const App = () => {
 
@@ -103,6 +105,8 @@ const App = () => {
           <Route path="/User/Completedbymonth" element={<UserCompleted />} />
           <Route path="/User/Failedbymonth" element={<UserFailed />} />
           <Route path="/PostManagement" element={<AdminPostManagement />} />
+            <Route path="/ArchivePost" element={<ArchivePost/>} />
+             <Route path="/ArchiveUser" element={<UserArchive/>} />
         </Routes>
       </div>
     </Router>

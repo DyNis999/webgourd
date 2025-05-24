@@ -114,6 +114,25 @@ const AdminSidebar = ({ children }) => {
                             </span>
                         </div>
                     </MenuItem>
+                          <MenuItem component={<Link to="/ArchiveUser" />}>
+                        <div style={menuItemStyle}>
+                            <div style={iconBoxStyle}>
+                                <FontAwesomeIcon icon={faNewspaper} />
+                            </div>
+                            <span
+                                style={{
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    transition: 'opacity 0.3s ease',
+                                    opacity: collapsed ? 0 : 1,
+                                    color: '#fff',
+                                }}
+                            >
+                                Archive User
+                            </span>
+                        </div>
+                    </MenuItem>
                     <MenuItem component={<Link to="/PostManagement" />}>
                         <div style={menuItemStyle}>
                             <div style={iconBoxStyle}>
@@ -130,6 +149,25 @@ const AdminSidebar = ({ children }) => {
                                 }}
                             >
                                 Posts
+                            </span>
+                        </div>
+                    </MenuItem>
+                                <MenuItem component={<Link to="/ArchivePost" />}>
+                        <div style={menuItemStyle}>
+                            <div style={iconBoxStyle}>
+                                <FontAwesomeIcon icon={faNewspaper} />
+                            </div>
+                            <span
+                                style={{
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    transition: 'opacity 0.3s ease',
+                                    opacity: collapsed ? 0 : 1,
+                                    color: '#fff',
+                                }}
+                            >
+                                Archive Posts
                             </span>
                         </div>
                     </MenuItem>

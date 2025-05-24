@@ -5,18 +5,15 @@ import AdminSidebar from '../Layout/AdminSidebar';
 import './AdminPostManagement.css';
 import { FaEdit, FaArchive } from 'react-icons/fa';
 
-const AdminPostManagement = () => {
-    const [posts, setPosts] = useState([]);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [selectedPost, setSelectedPost] = useState(null);
-    const [postStatus, setPostStatus] = useState('Pending');
+const ArchivePost = () => {
+ const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const fetchPosts = async () => {
         setLoading(true);
         try {
             const token = sessionStorage.getItem('token');
-            const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/posts`, {
+            const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/posts/archive`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setPosts(response.data);
@@ -31,46 +28,22 @@ const AdminPostManagement = () => {
         fetchPosts();
     }, []);
 
-    const handleOpenModal = (post) => {
-        setSelectedPost(post);
-        setPostStatus(post.status || 'Pending');
-        setModalVisible(true);
-    };
-
-    const handleUpdateStatus = async () => {
-        if (selectedPost && postStatus) {
-            try {
-                const token = sessionStorage.getItem('token');
-                await axios.put(
-                    `${process.env.REACT_APP_API}/api/v1/posts/status/${selectedPost._id}`,
-                    { status: postStatus },
-                    {
-                        headers: { Authorization: `Bearer ${token}` },
-                    }
-                );
-                fetchPosts();
-                setModalVisible(false);
-            } catch (error) {
-                console.error('Error updating post status:', error);
-            }
-        }
-    };
 
     const handleArchivePost = async (postId) => {
     const postToArchive= posts.find((post) => post._id === postId);
     if (!postToArchive) return;
 
-    if (window.confirm('Are you sure you want to Archive this post?')) {
+    if (window.confirm('Are you sure you want to Retrive this post?')) {
         try {
             const token = sessionStorage.getItem('token');
             // 1. Archive the post
             await axios.post(
-                `${process.env.REACT_APP_API}/api/v1/posts/archive`,
+                `${process.env.REACT_APP_API}/api/v1/posts`,
                 postToArchive,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             // 2. Delete the post
-            await axios.delete(`${process.env.REACT_APP_API}/api/v1/posts/${postId}`, {
+            await axios.delete(`${process.env.REACT_APP_API}/api/v1/posts/archive/${postId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             fetchPosts(); // Refresh post list
@@ -87,7 +60,7 @@ const AdminPostManagement = () => {
     ) : (
         <AdminSidebar>
             <div className="admin-post-container">
-                <h1 className="mb-4" style={{ fontWeight: 700, color: "#2d3748" }}>Post Management</h1>
+                <h1 className="mb-4" style={{ fontWeight: 700, color: "#2d3748" }}>Archive Posts</h1>
                 <Table striped bordered hover responsive className="admin-post-table">
                     <thead>
                         <tr>
@@ -126,60 +99,22 @@ const AdminPostManagement = () => {
                                     )}
                                 </td>
                                 <td>
-                                    {post.status === 'Pending' && (
-                                        <Button
-                                            variant="warning"
-                                            className="admin-action-btn d-flex align-items-center mb-2"
-                                            onClick={() => handleOpenModal(post)}
-                                        >
-                                            <FaEdit className="me-2" /> Update Status
-                                        </Button>
-                                    )}
                                     <Button
-                                        variant="danger"
+                                        variant="warning"
                                         className="admin-action-btn d-flex align-items-center"
                                         onClick={() => handleArchivePost(post._id)}
                                     >
-                                        <FaArchive className="me-2" /> Archive
+                                        <FaArchive className="me-2" /> Retrive
                                     </Button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </Table>
-                <Modal show={modalVisible} onHide={() => setModalVisible(false)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Update Post Status</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form>
-                            <Form.Group controlId="postStatus">
-                                <Form.Label>Status</Form.Label>
-                                <Form.Control
-                                    as="select"
-                                    value={postStatus}
-                                    onChange={(e) => setPostStatus(e.target.value)}
-                                >
-                                    <option value="Pending">Pending</option>
-                                    <option value="Approved">Approved</option>
-                                    <option value="Rejected">Rejected</option>
-                                </Form.Control>
-                            </Form.Group>
-                        </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setModalVisible(false)}>
-                            Cancel
-                        </Button>
-                        <Button variant="primary" onClick={handleUpdateStatus}>
-                            Update
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
             </div>
         </AdminSidebar>
     );
     
 };
 
-export default AdminPostManagement;
+export default ArchivePost;
