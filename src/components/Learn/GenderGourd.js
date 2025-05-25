@@ -52,12 +52,17 @@ const GenderGourd = () => {
                     <div className="gender-section male-card">
                         <h3>Male Gourd Flowers</h3>
                         <Carousel showThumbs={false} showStatus={false} infiniteLoop={true} className="gender-carousel">
-                            {maleFlowerImages.map((img, idx) => (
-                                <div key={idx}>
-                                    <img src={img} alt={`Male Flower ${idx + 1}`} className="gender-image" />
-                                </div>
-                            ))}
+                            {maleFlowerImages.map((img, idx) => {
+                                const labels = ['Sponge Gourd Flower', 'Bitter Gourd Flower', 'Bottle Gourd Flower'];
+                                return (
+                                    <div key={idx}>
+                                        <img src={img} alt={`Male ${labels[idx]}`} className="gender-image" />
+                                        <p className="gourd-gender-image-name">Male {labels[idx]}</p>
+                                    </div>
+                                );
+                            })}
                         </Carousel>
+
                         <p>
                             These flowers are typically smaller and grow on long, slender stems. They produce pollen but do not bear fruit. Male flowers tend to bloom first and in greater numbers than female flowers, ensuring ample pollen is available for pollination.
                         </p>
@@ -65,12 +70,17 @@ const GenderGourd = () => {
                     <div className="gender-section female-card">
                         <h3>Female Gourd Flowers</h3>
                         <Carousel showThumbs={false} showStatus={false} infiniteLoop={true} className="gender-carousel">
-                            {femaleFlowerImages.map((img, idx) => (
-                                <div key={idx}>
-                                    <img src={img} alt={`Female Flower ${idx + 1}`} className="gender-image" />
-                                </div>
-                            ))}
+                            {femaleFlowerImages.map((img, idx) => {
+                                const labels = ['Sponge Gourd Flower', 'Bitter Gourd Flower', 'Bottle Gourd Flower'];
+                                return (
+                                    <div key={idx}>
+                                        <img src={img} alt={`Female ${labels[idx]}`} className="gender-image" />
+                                        <p className="gourd-gender-image-name">Female {labels[idx]}</p>
+                                    </div>
+                                );
+                            })}
                         </Carousel>
+
                         <p>
                             Female flowers are distinguishable by the small, immature fruit (ovary) visible at the base of the bloom. This ovary will develop into a full-sized gourd if the flower is successfully pollinated. Female flowers are often slightly larger and bloom after the initial appearance of male flowers.
                         </p>
