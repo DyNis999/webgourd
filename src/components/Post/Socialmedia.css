@@ -7,6 +7,19 @@
     background-color: #f4f6f8; /* Lighter background for the feed */
     max-width: 100%;
     align-items: flex-start; /* Align items at the top */
+     position: relative;
+}
+.social-media-feed::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(99, 99, 99, 0.184); /* dark overlay */
+  z-index: 0;
+}
+
+.social-media-feed > * {
+  position: relative;
+  z-index: 1;
 }
 .post {
     background-color: #ffffff;

@@ -213,12 +213,23 @@ const Socialmedia = () => {
                 {filteredPosts.map(post => (
                     <div key={post._id} className="post">
                         <div className="post-header">
-                            <img src={post.user.image} alt={post.user.name} className="user-image" />
+                            {/* <img src={post.user.image} alt={post.user.name} className="user-image" />
                             <div className="user-info">
                                 <h3>{post.user.name}</h3>
                                 <p>{post.user.email}</p>
                             </div>
-                        </div>
+                        </div> */}
+
+                        {post.user && post.user.image ? (
+                                <img src={post.user.image} alt={post.user.name} className="user-image" />
+                            ) : (
+                                <div className="user-image-placeholder" />
+                            )}
+                            <div className="user-info">
+                                <h3>{post.user ? post.user.name : "Unknown User"}</h3>
+                                <p>{post.user ? post.user.email : ""}</p>
+                            </div>
+                            </div>
                         <h2>{post.title}</h2>
                         <p>{post.content}</p>
                         <div className="post-images">

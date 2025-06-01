@@ -1,8 +1,138 @@
+// import React, { useEffect, useState } from 'react';
+// import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+// import { Line } from 'react-chartjs-2';
+// import axios from 'axios';
+// import { Container, Grid, Typography, Paper } from '@mui/material';
+// import { red, purple, grey } from '@mui/material/colors';
+// import styled from 'styled-components';
+
+// ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+
+// const StyledPaper = styled(Paper)`
+//   padding: 16px;
+//   border-radius: 16px;
+//   background-color: ${grey[100]};
+// `;
+
+// const StyledTypography = styled(Typography)`
+//   text-align: center;
+//   margin-bottom: 16px;
+//   color: ${purple[700]};
+// `;
+
+// const FailedPollinationDashboard = () => {
+//   const [pollinationData, setPollinationData] = useState([]);
+
+//   // Fetch the pollination data
+//   useEffect(() => {
+//     const fetchPollinationData = async () => {
+//       try {
+//         const response = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/Adminfailed/week`);
+//         setPollinationData(response.data);
+//       } catch (error) {
+//         console.error('Error fetching pollination data:', error);
+//       }
+//     };
+
+//     fetchPollinationData();
+//   }, []);
+
+//   // Function to process data into a structure that can be used in Chart.js
+//   const processData = () => {
+//     const groupedData = {};
+
+//     // Group data by GourdType, Variety, and PlotNo
+//     pollinationData.forEach((item) => {
+//       const { gourdType, variety, week, year, plotNo, totalFailed } = item;
+//       // const key = `${gourdType}-${variety}- PlotNo. ${plotNo}`;
+//        const key = `${gourdType}- PlotNo. ${plotNo}`;
+
+//       if (!groupedData[key]) {
+//         groupedData[key] = { labels: [], data: [] };
+//       }
+
+//       // Add data point for each week and year
+//       groupedData[key].labels.push(`Week ${week}, ${year}`);
+//       groupedData[key].data.push(totalFailed);
+//     });
+
+//     return groupedData;
+//   };
+
+//   // Generate charts for each GourdType, Variety, and PlotNo
+//   const renderCharts = () => {
+//     const groupedData = processData();
+
+//     return Object.keys(groupedData).map((key) => {
+//       const { labels, data } = groupedData[key];
+
+//       const chartData = {
+//         labels,
+//         datasets: [
+//           {
+//             label: 'Total Failed',
+//             data,
+//             borderColor: red[500],
+//             backgroundColor: red[100],
+//             tension: 0.4,
+//           },
+//         ],
+//       };
+
+//       const options = {
+//         responsive: true,
+//         plugins: {
+//           legend: {
+//             position: 'top',
+//           },
+//           tooltip: {
+//             mode: 'index',
+//             intersect: false,
+//           },
+//         },
+//         scales: {
+//           x: {
+//             ticks: { color: grey[700] },
+//           },
+//           y: {
+//             ticks: { color: grey[700] },
+//           },
+//         },
+//       };
+
+//       return (
+//         <Grid item xs={12} sm={6} md={4} key={key}>
+//           <StyledPaper elevation={3}>
+//             <StyledTypography variant="h6">
+//               {key.replace(/-/g, ' ')}
+//             </StyledTypography>
+//             <Line data={chartData} options={options} />
+//           </StyledPaper>
+//         </Grid>
+//       );
+//     });
+//   };
+
+//   return (
+//     <Container maxWidth="lg" sx={{ marginTop: 4 }}>
+//       <StyledTypography variant="h4" sx={{ marginBottom: 4, fontWeight: 'bold' }}>
+//         Failed Pollination Dashboard
+//       </StyledTypography>
+//       <Grid container spacing={3}>
+//         {renderCharts()}
+//       </Grid>
+//     </Container>
+//   );
+// };
+
+// export default FailedPollinationDashboard;
+
+
 import React, { useEffect, useState } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import axios from 'axios';
-import { Container, Grid, Typography, Paper } from '@mui/material';
+import { Container, Typography, Paper } from '@mui/material';
 import { red, purple, grey } from '@mui/material/colors';
 import styled from 'styled-components';
 
@@ -23,7 +153,6 @@ const StyledTypography = styled(Typography)`
 const FailedPollinationDashboard = () => {
   const [pollinationData, setPollinationData] = useState([]);
 
-  // Fetch the pollination data
   useEffect(() => {
     const fetchPollinationData = async () => {
       try {
@@ -37,80 +166,67 @@ const FailedPollinationDashboard = () => {
     fetchPollinationData();
   }, []);
 
-  // Function to process data into a structure that can be used in Chart.js
-  const processData = () => {
-    const groupedData = {};
-
-    // Group data by GourdType, Variety, and PlotNo
-    pollinationData.forEach((item) => {
-      const { gourdType, variety, week, year, plotNo, totalFailed } = item;
-      // const key = `${gourdType}-${variety}- PlotNo. ${plotNo}`;
-       const key = `${gourdType}- PlotNo. ${plotNo}`;
-
-      if (!groupedData[key]) {
-        groupedData[key] = { labels: [], data: [] };
-      }
-
-      // Add data point for each week and year
-      groupedData[key].labels.push(`Week ${week}, ${year}`);
-      groupedData[key].data.push(totalFailed);
+  // Prepare all unique week-year labels, sorted
+  const getAllLabels = () => {
+    const labelSet = new Set();
+    pollinationData.forEach(({ week, year }) => {
+      labelSet.add(`Week ${week}, ${year}`);
     });
-
-    return groupedData;
+    // Sort by year then week
+    return Array.from(labelSet).sort((a, b) => {
+      const [_, wA, yA] = a.match(/Week (\d+), (\d+)/);
+      const [__, wB, yB] = b.match(/Week (\d+), (\d+)/);
+      return yA - yB || wA - wB;
+    });
   };
 
-  // Generate charts for each GourdType, Variety, and PlotNo
-  const renderCharts = () => {
-    const groupedData = processData();
-
-    return Object.keys(groupedData).map((key) => {
-      const { labels, data } = groupedData[key];
-
-      const chartData = {
-        labels,
-        datasets: [
-          {
-            label: 'Total Failed',
-            data,
-            borderColor: red[500],
-            backgroundColor: red[100],
-            tension: 0.4,
-          },
-        ],
-      };
-
-      const options = {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-          tooltip: {
-            mode: 'index',
-            intersect: false,
-          },
-        },
-        scales: {
-          x: {
-            ticks: { color: grey[700] },
-          },
-          y: {
-            ticks: { color: grey[700] },
-          },
-        },
-      };
-
-      return (
-        <Grid item xs={12} sm={6} md={4} key={key}>
-          <StyledPaper elevation={3}>
-            <StyledTypography variant="h6">
-              {key.replace(/-/g, ' ')}
-            </StyledTypography>
-            <Line data={chartData} options={options} />
-          </StyledPaper>
-        </Grid>
-      );
+  // Group data by type-plot
+  const processData = () => {
+    const grouped = {};
+    pollinationData.forEach(({ gourdType, week, year, plotNo, totalFailed }) => {
+      const key = `${gourdType}- PlotNo. ${plotNo}`;
+      const label = `Week ${week}, ${year}`;
+      if (!grouped[key]) grouped[key] = {};
+      grouped[key][label] = totalFailed;
     });
+    return grouped;
+  };
+
+  // Build datasets for Chart.js
+  const buildDatasets = (labels, groupedData) => {
+    const colorPalette = [
+      red[500], purple[500], '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+    ];
+    return Object.keys(groupedData).map((key, idx) => ({
+      label: key.replace(/-/g, ' '),
+      data: labels.map(label => groupedData[key][label] || 0),
+      borderColor: colorPalette[idx % colorPalette.length],
+      backgroundColor: colorPalette[idx % colorPalette.length] + '33',
+      tension: 0.4,
+      fill: false,
+    }));
+  };
+
+  const labels = getAllLabels();
+  const groupedData = processData();
+  const datasets = buildDatasets(labels, groupedData);
+
+  const chartData = {
+    labels,
+    datasets,
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: { mode: 'index', intersect: false },
+      title: { display: true, text: 'Total Failed per Week (All Type-Plot)' }
+    },
+    scales: {
+      x: { ticks: { color: grey[700] } },
+      y: { ticks: { color: grey[700] } },
+    },
   };
 
   return (
@@ -118,9 +234,9 @@ const FailedPollinationDashboard = () => {
       <StyledTypography variant="h4" sx={{ marginBottom: 4, fontWeight: 'bold' }}>
         Failed Pollination Dashboard
       </StyledTypography>
-      <Grid container spacing={3}>
-        {renderCharts()}
-      </Grid>
+      <StyledPaper elevation={3}>
+        <Line data={chartData} options={options} />
+      </StyledPaper>
     </Container>
   );
 };

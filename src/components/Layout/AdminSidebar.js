@@ -209,7 +209,7 @@ const AdminSidebar = ({ children }) => {
                             </span>
                         </div>
                     </MenuItem>
-                    <MenuItem component={<Link to="/gourdVariety" />}>
+                    {/* <MenuItem component={<Link to="/gourdVariety" />}>
                         <div style={menuItemStyle}>
                             <div style={iconBoxStyle}>
                                 <FontAwesomeIcon icon={faLeaf} />
@@ -227,7 +227,7 @@ const AdminSidebar = ({ children }) => {
                                 Gourd Varieties
                             </span>
                         </div>
-                    </MenuItem>
+                    </MenuItem> */}
                 </Menu>
             </div>
 

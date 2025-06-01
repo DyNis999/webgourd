@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Button, Form, Container, Col, Row, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './auth.css'; // Updated CSS file name
+import OTPModal from './OTPverification'; 
+
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +21,8 @@ const Register = () => {
   });
   const [avatarPreview, setAvatarPreview] = useState('/images/default_avatar.jpg'); // Default preview
   const [error, setError] = useState(null);
+  const [showOTPModal, setShowOTPModal] = useState(false);
+  const [registeredUserId, setRegisteredUserId] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,7 +62,10 @@ const Register = () => {
 
       console.log(response.data); // Log the response
       // Redirect to login page using Link component
-      window.location.href = '/login';
+       // Show OTP modal and pass userId
+      setRegisteredUserId(response.data.user.id || response.data.userId); // Adjust according to your backend response
+      setShowOTPModal(true);
+      // window.location.href = '/login';
     } catch (error) {
       console.error(error);
       setError(error.response?.data?.message || 'Something went wrong');
@@ -206,6 +213,11 @@ const Register = () => {
 
         </Col>
       </Row>
+      <OTPModal
+        show={showOTPModal}
+        userId={registeredUserId}
+        onHide={() => setShowOTPModal(false)}
+      />
     </Container>
   );
 };
