@@ -11,7 +11,7 @@
     margin-bottom: 20px;
     font-size: 26px;
     font-weight: 600;
-    color: #333;
+    color: #23bb01;
     text-align: center;
 }
 
@@ -27,7 +27,7 @@
     padding: 15px;
     background-color: #fff;
     border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(177, 250, 117, 0.563);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
 }

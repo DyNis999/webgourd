@@ -20,13 +20,15 @@ const Topcontributor = () => {
 
     return (
         <div className="top-contributors">
-            <h2>Top Contributors</h2>
+        
+                <h2>Top Contributors</h2>
+        
             <ul>
                 {topContributors.map(contributor => (
                     <li key={contributor.user._id}>
                         <img src={contributor.user.image} alt={contributor.user.name} className="user-image" />
                         <div className="user-info">
-                            <h3>{contributor.user.name}</h3>
+                            <h3 style={{ color: '#388e3c' }}>{contributor.user.name}</h3>
                             <p>Posts: {contributor.postCount}</p>
                         </div>
                     </li>

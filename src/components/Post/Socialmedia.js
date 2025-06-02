@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import './Socialmedia.css';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -194,33 +194,48 @@ const Socialmedia = () => {
         }
     };
 
+    const mostLikedPostRef = useRef(null);
+
+    // Find the most liked post
+    const mostLikedPost = filteredPosts.reduce((max, post) => (post.likes > (max?.likes || 0) ? post : max), null);
+    // Scroll handler
+    const handleHighlightClick = () => {
+        if (mostLikedPostRef.current) {
+            mostLikedPostRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    };
+
+
+
     return (
         <div className="social-media-feed">
-            <div className="search-bar">
-                <div className="search-container">
-                    <input
-                        type="text"
-                        placeholder="Search posts..."
-                        value={searchQuery}
-                        onChange={handleSearch}
-                        className="search-input"
-                    />
-                    <i className="search-icon fas fa-search"></i>
+            <div style={{ flex: 1, paddingLeft: '20px', paddingTop: '20px' }}>
+                <div className="search-bar">
+                    <div className="search-container">
+                        <input
+                            type="text"
+                            placeholder="Search posts..."
+                            value={searchQuery}
+                            onChange={handleSearch}
+                            className="search-input"
+                        />
+                        <i className="search-icon fas fa-search"></i>
+                    </div>
+                </div>
+
+
+                <div
+                >
+                    <Topcontributor />
                 </div>
             </div>
 
             <div className="main-content">
-                {filteredPosts.map(post => (
-                    <div key={post._id} className="post">
+                {[...filteredPosts].reverse().map(post => (
+                    <div key={post._id} className="post"
+                        ref={mostLikedPost && post._id === mostLikedPost._id ? mostLikedPostRef : null}>
                         <div className="post-header">
-                            {/* <img src={post.user.image} alt={post.user.name} className="user-image" />
-                            <div className="user-info">
-                                <h3>{post.user.name}</h3>
-                                <p>{post.user.email}</p>
-                            </div>
-                        </div> */}
-
-                        {post.user && post.user.image ? (
+                            {post.user && post.user.image ? (
                                 <img src={post.user.image} alt={post.user.name} className="user-image" />
                             ) : (
                                 <div className="user-image-placeholder" />
@@ -229,7 +244,7 @@ const Socialmedia = () => {
                                 <h3>{post.user ? post.user.name : "Unknown User"}</h3>
                                 <p>{post.user ? post.user.email : ""}</p>
                             </div>
-                            </div>
+                        </div>
                         <h2>{post.title}</h2>
                         <p>{post.content}</p>
                         <div className="post-images">
@@ -258,13 +273,13 @@ const Socialmedia = () => {
                                 ({post.likes})
                             </button>
                             <button onClick={() => toggleExpandComments(post._id)}>
-                                <FontAwesomeIcon icon={faComment} className='comment-icon'/>
+                                <FontAwesomeIcon icon={faComment} className='comment-icon' />
                                 ({post.comments.length})
                             </button>
                         </div>
                         {expandedComments[post._id] && (
                             <div className="post-comments">
-                                {post.comments.map(comment => (
+                                {/* {post.comments.map(comment => (
                                     <div key={comment._id} className="comment">
                                         <img src={comment.user.image} alt={comment.user.name} className="comment-user-image" />
                                         <div className="comment-content">
@@ -277,10 +292,32 @@ const Socialmedia = () => {
                                                         if (newContent !== null) handleEditComment(post._id, comment._id, newContent);
                                                     }} />
                                                     <FaTrash className="icon delete-icon" onClick={() => handleDeleteComment(post._id, comment._id)} />
+                                                </div> */}
+                                {post.comments.map(comment => (
+                                    <div key={comment._id} className="comment">
+                                        {comment.user && comment.user.image ? (
+                                            <img src={comment.user.image} alt={comment.user.name || "User"} className="comment-user-image" />
+                                        ) : (
+                                            <div className="comment-user-image comment-user-image-placeholder" />
+                                        )}
+                                        <div className="comment-content">
+                                            <h5>{comment.user ? comment.user.name : "Unknown User"}</h5>
+                                            <p>{comment.content}</p>
+                                            {comment.user && comment.user._id === currentUser?._id && (
+                                                <div className="comment-actions">
+                                                    <FaEdit className="icon edit-icon" onClick={() => {
+                                                        const newContent = prompt("Edit your comment", comment.content);
+                                                        if (newContent !== null) handleEditComment(post._id, comment._id, newContent);
+                                                    }} />
+                                                    <FaTrash className="icon delete-icon" onClick={() => handleDeleteComment(post._id, comment._id)} />
                                                 </div>
+
+
+
+
                                             )}
 
-                                            <div className="comment-replies">
+                                            {/* <div className="comment-replies">
                                                 {comment.replies.slice(0, expandedReplies[comment._id] ? comment.replies.length : 1).map(reply => (
                                                     <div key={reply._id} className="reply">
                                                         <img src={reply.user.image} alt={reply.user.name} className="reply-user-image" />
@@ -288,6 +325,37 @@ const Socialmedia = () => {
                                                             <h6>{reply.user.name}</h6>
                                                             <p>{reply.content}</p>
                                                             {reply.user._id === currentUser?._id && (
+                                                                <div className="comment-actions">
+                                                                    <FaEdit className="icon edit-icon" onClick={() => {
+                                                                        const newContent = prompt("Edit your reply", reply.content);
+                                                                        if (newContent !== null) handleEditReply(post._id, comment._id, reply._id, newContent);
+                                                                    }} />
+                                                                    <FaTrash className="icon delete-icon" onClick={() => handleDeleteReply(post._id, comment._id, reply._id)} />
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                                {comment.replies.length > 1 && (
+                                                    <p className="see-more" onClick={() => toggleExpandReplies(comment._id)}>
+                                                        {expandedReplies[comment._id] ? 'See less' : 'See more'}
+                                                    </p>
+                                                )}
+                                            </div> */}
+
+
+                                            <div className="comment-replies">
+                                                {comment.replies.slice(0, expandedReplies[comment._id] ? comment.replies.length : 1).map(reply => (
+                                                    <div key={reply._id} className="reply">
+                                                        {reply.user && reply.user.image ? (
+                                                            <img src={reply.user.image} alt={reply.user.name || "User"} className="reply-user-image" />
+                                                        ) : (
+                                                            <div className="reply-user-image reply-user-image-placeholder" />
+                                                        )}
+                                                        <div className="reply-content">
+                                                            <h6>{reply.user ? reply.user.name : "Unknown User"}</h6>
+                                                            <p>{reply.content}</p>
+                                                            {reply.user && reply.user._id === currentUser?._id && (
                                                                 <div className="comment-actions">
                                                                     <FaEdit className="icon edit-icon" onClick={() => {
                                                                         const newContent = prompt("Edit your reply", reply.content);
@@ -335,10 +403,74 @@ const Socialmedia = () => {
                 ))}
             </div>
 
-            <div className="sidebar">
-                <Topcontributor />
+            <div style={{ padding: '20px' }}>
+                {/* Highlight Most Liked Post as a Card */}
+                {mostLikedPost && (
+                    <div className="highlight-card"
+                        style={{ cursor: 'pointer' }}
+                        onClick={handleHighlightClick}
+                        title="Go to this post"
+                    >
+                        <div className="highlight-header">
+                            <span className="highlight-label">Highlight Post</span>
+                            <span className="highlight-quote">"Inspire everyone with your gourds"</span>
+                        </div>
+                        <div className="highlight-content">
+                            <div className="post-header">
+                                {mostLikedPost.user && mostLikedPost.user.image ? (
+                                    <img src={mostLikedPost.user.image} alt={mostLikedPost.user.name} className="user-image" />
+                                ) : (
+                                    <div className="user-image-placeholder" />
+                                )}
+                                <div className="user-info">
+                                    <h3>{mostLikedPost.user ? mostLikedPost.user.name : "Unknown User"}</h3>
+                                    <p>{mostLikedPost.user ? mostLikedPost.user.email : ""}</p>
+                                </div>
+                            </div>
+                            <h2>{mostLikedPost.title}</h2>
+                            <p>{mostLikedPost.content}</p>
+                            <div className="post-images">
+                                {mostLikedPost.images.length > 1 ? (
+                                    <Carousel showThumbs={false} className="post-carousel">
+                                        {mostLikedPost.images.map(image => (
+                                            <div key={image} className="carousel-image-container">
+                                                <img src={image} alt={mostLikedPost.title} className="post-image" />
+                                            </div>
+                                        ))}
+                                    </Carousel>
+                                ) : (
+                                    mostLikedPost.images.map(image => (
+                                        <div key={image} className="single-image-container">
+                                            <img src={image} alt={mostLikedPost.title} className="post-image" />
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                            <div className="post-actions">
+                                <button
+                                    className={mostLikedPost.likedBy.includes(currentUser?._id) ? 'liked' : 'not-liked'}
+                                    disabled
+                                >
+                                    <FontAwesomeIcon icon={faThumbsUp} className="like-icon" />
+                                    ({mostLikedPost.likes})
+                                </button>
+                                <button disabled>
+                                    <FontAwesomeIcon icon={faComment} className='comment-icon' />
+                                    ({mostLikedPost.comments.length})
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
             </div>
-        </div>
+
+
+
+
+
+
+        </div >
     );
 };
 
