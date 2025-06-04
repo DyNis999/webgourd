@@ -10,6 +10,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faComment } from '@fortawesome/free-solid-svg-icons';
 
+const TEXT_LIMIT = 250;
 const Socialmedia = () => {
     const [posts, setPosts] = useState([]);
     const [commentContent, setCommentContent] = useState('');
@@ -19,6 +20,10 @@ const Socialmedia = () => {
     const [expandedReplies, setExpandedReplies] = useState({});
     const [searchQuery, setSearchQuery] = useState('');
     const currentUser = getUser();
+    const [expandedPosts, setExpandedPosts] = useState({});
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalImages, setModalImages] = useState([]); // store all images
+    const [modalImageIndex, setModalImageIndex] = useState(0); // store current index
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -32,6 +37,55 @@ const Socialmedia = () => {
         };
         fetchPosts();
     }, []);
+
+
+    const toggleExpandPost = (postId) => {
+        setExpandedPosts(prev => ({
+            ...prev,
+            [postId]: !prev[postId]
+        }));
+    };
+
+    const renderContent = (post) => {
+        const content = post.content || "";
+        if (content.length <= TEXT_LIMIT) return <span>{content}</span>;
+        if (expandedPosts[post._id]) {
+            return (
+                <>
+                    {content}
+                    <span className="see-more" onClick={() => toggleExpandPost(post._id)}> See less</span>
+                </>
+            );
+        }
+        return (
+            <>
+                {content.slice(0, TEXT_LIMIT)}...
+                <span className="see-more" onClick={() => toggleExpandPost(post._id)}> See more</span>
+            </>
+        );
+    };
+
+    const openImageModal = (images, index) => {
+        setModalImages(images);
+        setModalImageIndex(index);
+        setModalOpen(true);
+    };
+
+    const closeImageModal = () => {
+        setModalOpen(false);
+        setModalImages([]);
+        setModalImageIndex(0);
+    };
+
+    const showPrevImage = (e) => {
+        e.stopPropagation();
+        setModalImageIndex((prev) => (prev === 0 ? modalImages.length - 1 : prev - 1));
+    };
+
+    const showNextImage = (e) => {
+        e.stopPropagation();
+        setModalImageIndex((prev) => (prev === modalImages.length - 1 ? 0 : prev + 1));
+    };
 
     const handleAddComment = async (postId) => {
         if (!currentUser) {
@@ -230,7 +284,7 @@ const Socialmedia = () => {
                 </div>
             </div>
 
-            <div className="main-content">
+            {/* <div className="main-content">
                 {[...filteredPosts].reverse().map(post => (
                     <div key={post._id} className="post"
                         ref={mostLikedPost && post._id === mostLikedPost._id ? mostLikedPostRef : null}>
@@ -263,7 +317,76 @@ const Socialmedia = () => {
                                     </div>
                                 ))
                             )}
+                        </div> */}
+            <div className="main-content">
+                {[...filteredPosts].reverse().map(post => (
+                    <div key={post._id} className="post"
+                        ref={mostLikedPost && post._id === mostLikedPost._id ? mostLikedPostRef : null}>
+                        <div className="post-header">
+                            {post.user && post.user.image ? (
+                                <img src={post.user.image} alt={post.user.name} className="user-image" />
+                            ) : (
+                                <div className="user-image-placeholder" />
+                            )}
+                            <div className="user-info">
+                                <h3>{post.user ? post.user.name : "Unknown User"}</h3>
+                                <p>{post.user ? post.user.email : ""}</p>
+                            </div>
                         </div>
+                        <h2 className="post-title">{post.title}</h2>
+                        <p className="post-content">{renderContent(post)}</p>
+                        {/* <div className="post-images">
+                            {post.images.length > 1 ? (
+                                <Carousel showThumbs={false} className="post-carousel">
+                                    {post.images.map(image => (
+                                        <div key={image} className="carousel-image-container">
+                                            <img src={image} alt={post.title} className="post-image uniform-image" />
+                                        </div>
+                                    ))}
+                                </Carousel>
+                            ) : (
+                                post.images.map(image => (
+                                    <div key={image} className="single-image-container">
+                                        <img src={image} alt={post.title} className="post-image uniform-image" />
+                                    </div>
+                                ))
+                            )}
+                        </div> */}
+
+
+                        <div className="post-images">
+                            {post.images.length > 1 ? (
+                                <Carousel
+                                    showThumbs={false}
+                                    className="post-carousel"
+                                    onClickItem={idx => openImageModal(post.images, idx)}
+                                >
+                                    {post.images.map((image, idx) => (
+                                        <div key={image} className="carousel-image-container">
+                                            <img
+                                                src={image}
+                                                alt={post.title}
+                                                className="post-image uniform-image"
+                                                style={{ cursor: "pointer" }}
+                                            />
+                                        </div>
+                                    ))}
+                                </Carousel>
+                            ) : (
+                                post.images.map((image, idx) => (
+                                    <div key={image} className="single-image-container">
+                                        <img
+                                            src={image}
+                                            alt={post.title}
+                                            className="post-image uniform-image"
+                                            style={{ cursor: "pointer" }}
+                                            onClick={() => openImageModal(post.images, idx)}
+                                        />
+                                    </div>
+                                ))
+                            )}
+                        </div>
+
                         <div className="post-actions">
                             <button
                                 onClick={() => handleLikePost(post._id)}
@@ -466,9 +589,27 @@ const Socialmedia = () => {
             </div>
 
 
-
-
-
+            {modalOpen && (
+                <div className="image-modal" onClick={closeImageModal}>
+                    <div className="image-modal-content" onClick={e => e.stopPropagation()}>
+                        {modalImages.length > 1 && (
+                            <button className="modal-nav-btn left" onClick={showPrevImage}>&lt;</button>
+                        )}
+                        <img
+                            src={modalImages[modalImageIndex]}
+                            alt="Full Size"
+                            className="modal-full-image Modaluniform-image" // Add uniform-image here
+                        />
+                        {modalImages.length > 1 && (
+                            <button className="modal-nav-btn right" onClick={showNextImage}>&gt;</button>
+                        )}
+                        <button className="close-modal-btn" onClick={closeImageModal}>×</button>
+                        <div style={{ marginTop: 8, color: "#888", fontSize: "0.95em" }}>
+                            {modalImageIndex + 1} / {modalImages.length}
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </div >
     );
