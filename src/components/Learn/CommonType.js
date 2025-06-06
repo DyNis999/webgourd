@@ -7,7 +7,7 @@ import LearnMenu from './LearnMenu';
 const CommonType = () => {
     const backgroundImage = '/images/pngtree-a-green-colour-bottle-gourd-tip-on-the-sunny-day-in-image_15673491.jpg';
     const bitterGourdImage = '/Content/ampalaya111.jpg'; // Update with the correct path
-    const spongeGourdImage = '/Content/patola111.jpg'; // Update with the correct path
+    const spongeGourdImage = '/Content/patola111.JPG'; // Update with the correct path
     const bottleGourdImage = '/Content/upo111.jpg'; // Update with the correct path
 
     const [isContainerVisible, setIsContainerVisible] = useState(false);
