@@ -4,14 +4,14 @@ import LearnMenu from './LearnMenu'
 
 const IssueGourd = () => {
     const backgroundImage = '/images/pngtree-a-green-colour-bottle-gourd-tip-on-the-sunny-day-in-image_15673491.jpg';
-    const aphidsImage = '/content/aphids.jpeg';
-    const squashBugImage = '/content/squashbugs.jpg';
-    const cucumberBeetleImage = '/content/beetle.png';
-    const fruitFlyImage = '/content/fruitfly.jpg';
+    const aphidsImage = '/Content/aphids.jpeg';
+    const squashBugImage = '/Content/squashbugs.jpg';
+    const cucumberBeetleImage = '/Content/beetle.png';
+    const fruitFlyImage = '/Content/fruitfly.jpg';
 
-    const powderyMildewImage = '/content/powmildew.jpg';
-    const downyMildewImage = '/content/dowmildew.jpg';
-    const bacterialWiltImage = '/content/bacteriawilt.jpg';
+    const powderyMildewImage = '/Content/powmildew.jpg';
+    const downyMildewImage = '/Content/dowmildew.jpg';
+    const bacterialWiltImage = '/Content/bacteriawilt.jpg';
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {

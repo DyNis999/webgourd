@@ -4,8 +4,8 @@ import LearnMenu from './LearnMenu';
 
 const Botany = () => {
     const backgroundImage = '/images/pngtree-a-green-colour-bottle-gourd-tip-on-the-sunny-day-in-image_15673491.jpg';
-    const anatomyImage = '/content/anatomy.jpg'; // Update with the correct path
-    const lifeImage = '/content/lifecycle.jpg'; // Update with the correct path
+    const anatomyImage = '/Content/anatomy.jpg'; // Update with the correct path
+    const lifeImage = '/Content/lifecycle.jpg'; // Update with the correct path
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {

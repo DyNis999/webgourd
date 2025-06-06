@@ -8,17 +8,17 @@ const GenderGourd = () => {
 
     // Arrays of images for carousels
     const maleFlowerImages = [
-        '/content/MaleFlower.jpg',
-        '/content/Male Ampalaya.jpg',
-        '/content/Upo Male.jpg'
+        '/Content/MaleFlower.jpg',
+        '/Content/Male Ampalaya.jpg',
+        '/Content/Upo Male.jpg'
     ];
     const femaleFlowerImages = [
-        '/content/FemaleFlower.jpg',
-        '/content/Ampalaya female.jpg',
-        '/content/Upo Female.jpg'
+        '/Content/FemaleFlower.jpg',
+        '/Content/Ampalaya female.jpg',
+        '/Content/Upo Female.jpg'
     ];
-    const handPollinationImage = '/content/hand.jpg';
-    const beePollinationImage = '/content/bee.jpg';
+    const handPollinationImage = '/Content/hand.jpg';
+    const beePollinationImage = '/Content/bee.jpg';
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {

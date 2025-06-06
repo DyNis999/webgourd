@@ -4,9 +4,9 @@ import LearnMenu from './LearnMenu'
 
 const HealthGourd = () => {
     const backgroundImage = '/images/pngtree-a-green-colour-bottle-gourd-tip-on-the-sunny-day-in-image_15673491.jpg';
-    const bitterGourdImage = '/content/ampalaya111.jpg'; // Update with the correct path
-    const spongeGourdImage = '/content/patola111.jpg'; // Update with the correct path
-    const bottleGourdImage = '/content/upo111.jpg'; // Update with the correct path
+    const bitterGourdImage = '/Content/ampalaya111.jpg'; // Update with the correct path
+    const spongeGourdImage = '/Content/patola111.jpg'; // Update with the correct path
+    const bottleGourdImage = '/Content/upo111.jpg'; // Update with the correct path
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
