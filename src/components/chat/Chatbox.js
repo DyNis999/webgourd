@@ -196,7 +196,7 @@ const Chatbox = ({ chat }) => {
       {loading ? (
         <div>Loading...</div>
       ) : error ? (
-        <div>{error}</div>
+        <div className="no-messages">No messages yet. Start the conversation!</div>
       ) : (
         <div
           className="message-list"
@@ -204,6 +204,11 @@ const Chatbox = ({ chat }) => {
           onScroll={handleScroll}
         >
           {messages.map((message) => renderMessage(message))}
+          {/* {messages.length === 0 ? (
+            <div className="no-messages">No messages yet. Start the conversation!</div>
+          ) : (
+            messages.map((message) => renderMessage(message))
+          )} */}
         </div>
       )}
 
