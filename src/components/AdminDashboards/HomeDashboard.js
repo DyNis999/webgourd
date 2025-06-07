@@ -113,12 +113,13 @@ const HomeDashboard = () => {
 
     const rates = Object.keys(groupedData).map((key) => {
       const { totalPollinated, totalCompleted } = groupedData[key];
-      const successRate = totalPollinated > 0 ? (totalCompleted / totalPollinated) * 100 : 0;
+      let successRate = totalPollinated > 0 ? (totalCompleted / totalPollinated) * 100 : 0;
+      successRate = Math.min(successRate, 100); // Cap at 100%
       return { gourdTypePlot: key, successRate: successRate.toFixed(2) };
     });
 
-    const overallRate = totalPollinated > 0 ? (totalCompleted / totalPollinated) * 100 : 0;
-
+    let overallRate = totalPollinated > 0 ? (totalCompleted / totalPollinated) * 100 : 0;
+    overallRate = Math.min(overallRate, 100); // Cap at 100%
     return { rates, overallRate: overallRate.toFixed(2) };
   };
 
@@ -201,7 +202,7 @@ const HomeDashboard = () => {
               <Typography variant="h5" align="center" fontWeight="bold" gutterBottom>
                 SUCCESS RATE
               </Typography>
-              <Box sx={{ overflowX: 'auto',  height: 350 }}>
+              <Box sx={{ overflowX: 'auto', height: 350 }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 16 }}>
                   <thead>
                     <tr style={{ background: '#f0f0f0' }}>
