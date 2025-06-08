@@ -139,7 +139,9 @@ import styled from 'styled-components';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 const StyledPaper = styled(Paper)`
-  padding: 16px;
+  padding: 10px;
+  width: 100%;
+  height: 500px;
   border-radius: 16px;
   background-color: ${grey[100]};
 `;
@@ -230,12 +232,12 @@ const PollinationDashboard = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ marginTop: 4 }}>
+    <Container maxWidth="lg" sx={{ marginTop: 4 }} style={{ height: '400px' }}>
       <StyledTypography variant="h4" sx={{ marginBottom: 4, fontWeight: 'bold' }}>
         Pollination Dashboard
       </StyledTypography>
-      <StyledPaper elevation={3}>
-        <Bar data={chartData} options={options} />
+      <StyledPaper elevation={3} style={{ height: '300px' , width: '100%' }}>
+        <Bar data={chartData} options={{ ...options, maintainAspectRatio: false }} />
       </StyledPaper>
     </Container>
   );

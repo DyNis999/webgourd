@@ -102,7 +102,7 @@ const PollinationDashboard = () => {
       <StyledTypography variant="h4" sx={{ marginBottom: 4, fontWeight: 'bold' }}>
         Completed Pollination Dashboard
       </StyledTypography>
-      <StyledPaper elevation={3}>
+      <StyledPaper elevation={3} >
         <Bar data={chartData} options={options} />
       </StyledPaper>
     </Container>
