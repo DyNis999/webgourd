@@ -300,7 +300,6 @@ const getDesignTokens = (mode) => ({
       }),
   },
 });
-
 const HomeDashboard = () => {
   const [mode, setMode] = useState('light');
   const theme = createTheme(getDesignTokens(mode));
@@ -314,14 +313,15 @@ const HomeDashboard = () => {
     const fetchData = async () => {
       try {
         const pollinatedResponse = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/Adminpollination/week`);
-        const completedResponse = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/Admincompleted/week`);
         const failedResponse = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/Adminfailed/week`);
+        const overallResponse = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/overall-stats`);
 
         const pollinatedData = pollinatedResponse.data;
-        const completedData = completedResponse.data;
         const failedData = failedResponse.data;
+        const overallData = overallResponse.data;
 
-        const { rates, overallRate } = calculateSuccessRates(pollinatedData, completedData, failedData);
+        // Calculate using overall data and group-wise for chart
+        const { rates, overallRate } = calculateSuccessRates(pollinatedData, failedData, overallData);
         setSuccessRates(rates);
         setOverallSuccessRate(overallRate);
       } catch (error) {
@@ -329,7 +329,6 @@ const HomeDashboard = () => {
       }
     };
 
-    // Fetch user and post counts
     const fetchCounts = async () => {
       try {
         const userRes = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/users/count`);
@@ -346,6 +345,45 @@ const HomeDashboard = () => {
     fetchCounts();
   }, []);
 
+  const calculateSuccessRates = (pollinatedData, failedData, overallData) => {
+    const groupedData = {};
+
+    // Group per gourdType-plot
+    pollinatedData.forEach(({ gourdType, plotNo, totalPollinated }) => {
+      const key = `${gourdType || 'Unknown GourdType'}-Plot ${plotNo || 'Undefined'}`;
+      if (!groupedData[key]) {
+        groupedData[key] = { totalPollinated: 0, totalFailed: 0 };
+      }
+      groupedData[key].totalPollinated += totalPollinated || 0;
+    });
+
+    failedData.forEach(({ gourdType, plotNo, totalFailed }) => {
+      const key = `${gourdType || 'Unknown GourdType'}-Plot ${plotNo || 'Undefined'}`;
+      if (!groupedData[key]) {
+        groupedData[key] = { totalPollinated: 0, totalFailed: 0 };
+      }
+      groupedData[key].totalFailed += totalFailed || 0;
+    });
+
+    const rates = Object.entries(groupedData).map(([key, { totalPollinated, totalFailed }]) => {
+      const totalCompleted = Math.max(totalPollinated - totalFailed, 0);
+      const rawRate = totalPollinated > 0 ? (totalCompleted / totalPollinated) * 100 : 0;
+      const clampedRate = Math.min(Math.max(rawRate, 0), 100).toFixed(2);
+      return {
+        gourdTypePlot: key,
+        successRate: clampedRate,
+      };
+    });
+
+    // Compute overall success rate from overallData
+    const totalPollinated = overallData.totalPollinated || 0;
+    const totalCompleted = overallData.totalCompleted || 0;
+    const rawOverall = totalPollinated > 0 ? (totalCompleted / totalPollinated) * 100 : 0;
+    const overallRate = Math.min(Math.max(rawOverall, 0), 100).toFixed(2);
+
+    return { rates, overallRate };
+  };
+
   const donutData = {
     labels: successRates.map(({ gourdTypePlot }) => gourdTypePlot.replace(/-/g, ' ')),
     datasets: [
@@ -359,7 +397,6 @@ const HomeDashboard = () => {
       },
     ],
   };
-
   const donutOptions = {
     responsive: true,
     plugins: {
@@ -374,48 +411,7 @@ const HomeDashboard = () => {
     height: 250,
   };
 
-  const calculateSuccessRates = (pollinatedData, completedData, failedData) => {
-    const groupedData = {};
-    let totalPollinated = 0;
-    let totalCompleted = 0;
 
-    pollinatedData.forEach(({ gourdType, plotNo, totalPollinated: pollinated }) => {
-      const key = `${gourdType || 'Unknown GourdType'}-Plot ${plotNo || 'Undefined'}`;
-      if (!groupedData[key]) {
-        groupedData[key] = { totalPollinated: 0, totalCompleted: 0, totalFailed: 0 };
-      }
-      groupedData[key].totalPollinated += pollinated || 0;
-      totalPollinated += pollinated || 0;
-    });
-
-    completedData.forEach(({ gourdType, plotNo, totalCompleted: completed }) => {
-      const key = `${gourdType || 'Unknown GourdType'}-Plot ${plotNo || 'Undefined'}`;
-      if (!groupedData[key]) {
-        groupedData[key] = { totalPollinated: 0, totalCompleted: 0, totalFailed: 0 };
-      }
-      groupedData[key].totalCompleted += completed || 0;
-      totalCompleted += completed || 0;
-    });
-
-    failedData.forEach(({ gourdType, plotNo, totalFailed }) => {
-      const key = `${gourdType || 'Unknown GourdType'}-Plot ${plotNo || 'Undefined'}`;
-      if (!groupedData[key]) {
-        groupedData[key] = { totalPollinated: 0, totalCompleted: 0, totalFailed: 0 };
-      }
-      groupedData[key].totalFailed += totalFailed || 0;
-    });
-
-    const rates = Object.keys(groupedData).map((key) => {
-      const { totalPollinated, totalCompleted } = groupedData[key];
-      let successRate = totalPollinated > 0 ? (totalCompleted / totalPollinated) * 100 : 0;
-      successRate = Math.min(successRate, 100); // Cap at 100%
-      return { gourdTypePlot: key, successRate: successRate.toFixed(2) };
-    });
-
-    let overallRate = totalPollinated > 0 ? (totalCompleted / totalPollinated) * 100 : 0;
-    overallRate = Math.min(overallRate, 100); // Cap at 100%
-    return { rates, overallRate: overallRate.toFixed(2) };
-  };
 
   const handlePrintAll = async () => {
     const pdf = new jsPDF('p', 'mm', 'a4');
@@ -438,7 +434,7 @@ const HomeDashboard = () => {
       <AdminSidebar>
         <Container maxWidth={false} // <-- Make container full width
           sx={{
-            width: '100%', 
+            width: '100%',
             padding: '40px 0',
             bgcolor: 'background.default',
             minHeight: '100vh'
@@ -595,7 +591,7 @@ const HomeDashboard = () => {
                 <Divider sx={{ my: 2 }} />
 
                 <Typography variant="h5" align="center" fontWeight="bold" gutterBottom>
-                  SUCCESS RATE
+                OVERALL  SUCCESS RATE
                 </Typography>
                 <Box sx={{ overflowX: 'auto', height: 350 }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 16 }}>

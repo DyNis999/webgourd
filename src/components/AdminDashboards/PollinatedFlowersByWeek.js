@@ -234,7 +234,7 @@ const PollinationDashboard = () => {
   return (
     <Container maxWidth="lg" sx={{ marginTop: 4 }} style={{ height: '400px' }}>
       <StyledTypography variant="h4" sx={{ marginBottom: 4, fontWeight: 'bold' }}>
-        Pollination Dashboard
+         Weekly Pollination Dashboard
       </StyledTypography>
       <StyledPaper elevation={3} style={{ height: '300px' , width: '100%' }}>
         <Bar data={chartData} options={{ ...options, maintainAspectRatio: false }} />

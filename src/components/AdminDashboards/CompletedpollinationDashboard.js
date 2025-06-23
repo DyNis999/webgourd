@@ -100,7 +100,7 @@ const PollinationDashboard = () => {
   return (
     <Container maxWidth="lg" sx={{ marginTop: 4 }}>
       <StyledTypography variant="h4" sx={{ marginBottom: 4, fontWeight: 'bold' }}>
-        Completed Pollination Dashboard
+      Weekly Completed Pollination Dashboard
       </StyledTypography>
       <StyledPaper elevation={3} >
         <Bar data={chartData} options={options} />

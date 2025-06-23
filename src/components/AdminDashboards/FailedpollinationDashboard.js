@@ -232,7 +232,7 @@ const FailedPollinationDashboard = () => {
   return (
     <Container maxWidth="lg" sx={{ marginTop: 4 }}>
       <StyledTypography variant="h4" sx={{ marginBottom: 4, fontWeight: 'bold' }}>
-        Failed Pollination Dashboard
+       Weekly Failed Pollination Dashboard
       </StyledTypography>
       <StyledPaper elevation={3}>
         <Line data={chartData} options={options} />
