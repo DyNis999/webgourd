@@ -309,80 +309,93 @@ const HomeDashboard = () => {
   const [userCount, setUserCount] = useState(0);
   const [postCount, setPostCount] = useState(0);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const pollinatedResponse = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/Adminpollination/week`);
-        const failedResponse = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/Adminfailed/week`);
-        const overallResponse = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/overall-stats`);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const pollinatedResponse = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/Adminpollination/week`);
+      const failedResponse = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/Adminfailed/week`);
+      const overallResponse = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/overall-stats`);
 
-        const pollinatedData = pollinatedResponse.data;
-        const failedData = failedResponse.data;
-        const overallData = overallResponse.data;
+      const pollinatedData = pollinatedResponse.data;
+      const failedData = failedResponse.data;
+      const overallData = overallResponse.data;
 
-        // Calculate using overall data and group-wise for chart
-        const { rates, overallRate } = calculateSuccessRates(pollinatedData, failedData, overallData);
-        setSuccessRates(rates);
-        setOverallSuccessRate(overallRate);
-      } catch (error) {
-        console.error('Error fetching dashboard data:', error);
-      }
-    };
+      // ✅ TEMP PATCH: convert failedData into mock harvestedData
+      const convertedHarvestedData = failedData.map(({ gourdType, plotNo, totalFailed }) => ({
+        gourdType,
+        plotNo,
+        totalHarvested: totalFailed // ⚠️ ONLY FOR TESTING UNTIL BACKEND FIXED
+      }));
 
-    const fetchCounts = async () => {
-      try {
-        const userRes = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/users/count`);
-        const postRes = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/posts/count`);
-        setUserCount(userRes.data.count || 0);
-        setPostCount(postRes.data.count || 0);
-      } catch (err) {
-        setUserCount(0);
-        setPostCount(0);
-      }
-    };
-
-    fetchData();
-    fetchCounts();
-  }, []);
-
-  const calculateSuccessRates = (pollinatedData, failedData, overallData) => {
-    const groupedData = {};
-
-    // Group per gourdType-plot
-    pollinatedData.forEach(({ gourdType, plotNo, totalPollinated }) => {
-      const key = `${gourdType || 'Unknown GourdType'}-Plot ${plotNo || 'Undefined'}`;
-      if (!groupedData[key]) {
-        groupedData[key] = { totalPollinated: 0, totalFailed: 0 };
-      }
-      groupedData[key].totalPollinated += totalPollinated || 0;
-    });
-
-    failedData.forEach(({ gourdType, plotNo, totalFailed }) => {
-      const key = `${gourdType || 'Unknown GourdType'}-Plot ${plotNo || 'Undefined'}`;
-      if (!groupedData[key]) {
-        groupedData[key] = { totalPollinated: 0, totalFailed: 0 };
-      }
-      groupedData[key].totalFailed += totalFailed || 0;
-    });
-
-    const rates = Object.entries(groupedData).map(([key, { totalPollinated, totalFailed }]) => {
-      const totalCompleted = Math.max(totalPollinated - totalFailed, 0);
-      const rawRate = totalPollinated > 0 ? (totalCompleted / totalPollinated) * 100 : 0;
-      const clampedRate = Math.min(Math.max(rawRate, 0), 100).toFixed(2);
-      return {
-        gourdTypePlot: key,
-        successRate: clampedRate,
-      };
-    });
-
-    // Compute overall success rate from overallData
-    const totalPollinated = overallData.totalPollinated || 0;
-    const totalCompleted = overallData.totalCompleted || 0;
-    const rawOverall = totalPollinated > 0 ? (totalCompleted / totalPollinated) * 100 : 0;
-    const overallRate = Math.min(Math.max(rawOverall, 0), 100).toFixed(2);
-
-    return { rates, overallRate };
+      // ✅ Use the patched data in success rate calculation
+      const { rates, overallRate } = calculateSuccessRates(pollinatedData, convertedHarvestedData, overallData);
+      setSuccessRates(rates);
+      setOverallSuccessRate(overallRate);
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    }
   };
+
+  const fetchCounts = async () => {
+    try {
+      const userRes = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/users/count`);
+      const postRes = await axios.get(`${process.env.REACT_APP_API}/api/v1/Dashboard/posts/count`);
+      setUserCount(userRes.data.count || 0);
+      setPostCount(postRes.data.count || 0);
+    } catch (err) {
+      setUserCount(0);
+      setPostCount(0);
+    }
+  };
+
+  fetchData();
+  fetchCounts();
+}, []);
+
+const calculateSuccessRates = (pollinatedData, harvestedData, overallData) => {
+  const groupedData = {};
+
+  // Group per gourdType-plot for pollinated flowers
+  pollinatedData.forEach(({ gourdType, plotNo, totalPollinated }) => {
+    const key = `${gourdType || 'Unknown GourdType'}-Plot ${plotNo || 'Undefined'}`;
+    if (!groupedData[key]) {
+      groupedData[key] = { totalPollinated: 0, totalHarvested: 0 };
+    }
+    groupedData[key].totalPollinated += totalPollinated || 0;
+  });
+
+  // Group per gourdType-plot for harvested fruits
+  harvestedData.forEach(({ gourdType, plotNo, totalHarvested }) => {
+    const key = `${gourdType || 'Unknown GourdType'}-Plot ${plotNo || 'Undefined'}`;
+    if (!groupedData[key]) {
+      groupedData[key] = { totalPollinated: 0, totalHarvested: 0 };
+    }
+    groupedData[key].totalHarvested += totalHarvested || 0;
+  });
+
+  const rates = Object.entries(groupedData).map(([key, { totalPollinated, totalHarvested }]) => {
+    const failed = totalPollinated - totalHarvested;
+    const completed = totalHarvested;
+    const successRate = totalPollinated > 0 ? (completed / totalPollinated) * 100 : 0;
+    return {
+      gourdTypePlot: key,
+      successRate: successRate.toFixed(),
+      totalPollinated,
+      totalHarvested,
+      failed
+    };
+  });
+
+  // Overall success rate from totals
+  const totalPollinated = overallData.totalPollinated || 0;
+  const totalHarvested = overallData.totalHarvested || 0;
+  const overallRate = totalPollinated > 0
+    ? ((totalHarvested / totalPollinated) * 100).toFixed()
+    : "0.00";
+
+  return { rates, overallRate };
+};
+
 
   const donutData = {
     labels: successRates.map(({ gourdTypePlot }) => gourdTypePlot.replace(/-/g, ' ')),

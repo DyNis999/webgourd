@@ -49,8 +49,8 @@ const CompletedPollinationDashboard = () => {
     const groupedData = {};
 
     pollinationData.forEach((item) => {
-      const { gourdType, variety, week, year, plotNo, totalCompleted } = item;
-      const key = `${gourdType}-${variety}- PlotNo. ${plotNo}`;
+      const { gourdType, week, year, plotNo, totalCompleted } = item;
+      const key = `${gourdType}- PlotNo. ${plotNo}`;
 
       if (!groupedData[key]) {
         groupedData[key] = [];

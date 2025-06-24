@@ -62,7 +62,7 @@ const Header = () => {
                 <Container>
                     <Navbar.Brand as={Link} to="/" style={{ color: '#FFFFFF' }}>
                         <img
-                            src="./logoNBG.png"
+                            src="/logoNBG.png"
                             alt="Gourdify"
                             className="d-inline-block align-top"
                             style={{ width: '35px', height: '35px' }} // Adjust the width and height as needed
